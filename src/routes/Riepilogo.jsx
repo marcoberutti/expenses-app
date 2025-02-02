@@ -5,6 +5,7 @@ import style from './riepilogo.module.css';
 import API_URL from "../config";
 
 export default function Riepilogo() {
+  
   const [datas, setDatas] = useState([]);
   setDefaultOptions({ locale: it });
 
