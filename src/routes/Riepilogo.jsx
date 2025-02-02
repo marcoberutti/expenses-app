@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { format, setDefaultOptions } from "date-fns";
 import { it } from 'date-fns/locale';
 import style from './riepilogo.module.css';
-import { API_URL } from "../config";
+import API_URL from "../config";
 
 export default function Riepilogo() {
   const [datas, setDatas] = useState([]);

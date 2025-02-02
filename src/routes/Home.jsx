@@ -3,7 +3,7 @@ import style from './home.module.css';
 import { getTime, format, setDefaultOptions } from "date-fns";
 import { it } from 'date-fns/locale';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { API_URL } from "../config";
+import API_URL from "../config";
 
 export default function Home() {
   const [datas, setDatas] = useState();
