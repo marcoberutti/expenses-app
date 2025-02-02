@@ -3,6 +3,7 @@ import style from './home.module.css';
 import { getTime, format, setDefaultOptions } from "date-fns";
 import { it } from 'date-fns/locale';
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { API_URL } from "../config";
 
 export default function Home() {
   const [datas, setDatas] = useState();
@@ -22,9 +23,16 @@ export default function Home() {
   setDefaultOptions({ locale: it });
 
   let now = getTime(new Date());
-  
+
   useEffect(() => {
-    fetch("http://localhost:3001/dati")
+
+    fetch(`${API_URL}/dati`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.API_KEY
+      }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -41,10 +49,11 @@ export default function Home() {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());    
-    fetch("http://localhost:3001/newExpense", {
+    fetch(`${API_URL}/newExpense`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "x-api-key": process.env.API_KEY
       },
       body: JSON.stringify(data)
     })
@@ -60,10 +69,11 @@ export default function Home() {
   }
 
   function handleDeleteData(id){
-    fetch(`http://localhost:3001/deleteExpense/${id}`, {
+    fetch(`${API_URL}/deleteExpense/${id}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "x-api-key": process.env.API_KEY
       }
     })
     .then(res => res.json())

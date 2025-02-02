@@ -2,13 +2,20 @@ import { useEffect, useState } from "react";
 import { format, setDefaultOptions } from "date-fns";
 import { it } from 'date-fns/locale';
 import style from './riepilogo.module.css';
+import { API_URL } from "../config";
 
 export default function Riepilogo() {
   const [datas, setDatas] = useState([]);
   setDefaultOptions({ locale: it });
 
   useEffect(() => {
-    fetch('http://localhost:3001/dati')
+    fetch(`${API_URL}/dati`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.API_KEY
+      }
+    })
     .then(res => res.json())
     .then(data => {
       setDatas(data)
