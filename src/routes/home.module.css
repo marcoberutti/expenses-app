@@ -1,0 +1,90 @@
+.intestazione {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.intestazione div:last-child {
+  font-size: 1.5rem;
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+} 
+
+.intestazione button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.enter {
+  font-size: 1.5rem;
+}
+
+.exit {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.intestazione div:hover {
+  background-color: lightgray;
+}
+
+.table {
+  width: 80%;
+  justify-self: center;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.table th, .table td {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.table th {
+  background-color: rgb(204, 226, 132);
+}
+
+.table tr:nth-child(even) {
+  background-color: lightgray;
+}
+
+.successAlert {
+  background-color: lightgreen;
+  padding: 15px;
+  font-weight: bold;
+}
+
+.table td button {
+  border: none;
+  background-color: transparent;
+}
+
+.table td i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.table td i:hover {
+  color: red;
+  cursor: pointer;
+}
+
+@media (max-width: 620px) {
+  .tableContainer {
+    width: 100%;
+    overflow-x: auto;
+    margin: 10px;
+  }
+  .table {
+    width: 100%;
+    margin: 0 50px 0 80px;
+  }
+}

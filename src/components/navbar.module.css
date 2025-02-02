@@ -1,0 +1,15 @@
+.navbar ul {
+  background-color: blue;
+  display: flex;
+  padding: 15px;
+  justify-content: space-between;
+}
+
+.navlink {
+  color: white;
+  text-decoration: none;
+}
+
+.navlink:hover {
+  color: yellow;
+}
