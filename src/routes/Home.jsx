@@ -30,7 +30,7 @@ export default function Home() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": process.env.API_KEY
+        "x-api-key": process.env.REACT_APP_API_KEY
       }
     })
       .then(response => {
@@ -53,7 +53,7 @@ export default function Home() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": process.env.API_KEY
+        "x-api-key": process.env.REACT_APP_API_KEY
       },
       body: JSON.stringify(data)
     })
@@ -73,7 +73,7 @@ export default function Home() {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": process.env.API_KEY
+        "x-api-key": process.env.REACT_APP_API_KEY
       }
     })
     .then(res => res.json())
