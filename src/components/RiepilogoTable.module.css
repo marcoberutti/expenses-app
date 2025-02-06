@@ -18,6 +18,11 @@
   background-color: lightgray;
 }
 
+.lowBudget {
+  color: red;
+  font-weight: bold;
+}
+
 @media (max-width: 620px) {
   .tableContainer {
     width: 100%;

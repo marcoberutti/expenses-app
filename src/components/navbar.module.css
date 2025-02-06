@@ -1,15 +1,26 @@
 .navbar ul {
   background-color: blue;
   display: flex;
-  padding: 15px;
+  padding: 10px;
   justify-content: space-between;
 }
 
 .navlink {
   color: white;
   text-decoration: none;
+  padding: 5px;
+  text-decoration: none;
 }
 
 .navlink:hover {
-  color: yellow;
+  border-radius: 10px;
+  background-color: rgb(37, 37, 172);
+}
+
+.navlinkActive {
+  border-radius: 10px 10px 0 0;
+  color: white;
+  border-bottom: 3px solid yellow;
+  padding: 5px;
+  text-decoration: none;
 }

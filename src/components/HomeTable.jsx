@@ -1,55 +1,60 @@
 import style from './HomeTable.module.css'
-import format from 'date-fns/format'
+import { useData } from '../dataContext'
+import HomeTableTbody from './HomeTableTbody'
+import { useEffect, useState } from 'react'
+import { format, getYear } from 'date-fns'
+import { it } from 'date-fns/locale'
 
-export default function HomeTable({generateHeaders, datas, columnsToHide, handleDeleteData}) {
+export default function HomeTable({generateHeaders}) {
+
+  const { datas } = useData()
+  const [filteredDatas, setFilteredDatas] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Mese attuale
+  const thisYear = getYear(new Date());
+
+  useEffect(() => {
+    filterDataByMonth(selectedMonth);
+  }, [datas, selectedMonth]); 
+
+  function filterDataByMonth(month) {
+    const startOfMonth = new Date(thisYear, month, 1).getTime();
+    const endOfMonth = new Date(thisYear, month + 1, 1).getTime();
+
+    const newDatas = datas.filter(dato => {
+      const dataDate = new Date(dato.data).getTime(); // Converte dato.data in Date
+      return dataDate >= startOfMonth && dataDate < endOfMonth;
+    });
+
+    setFilteredDatas(newDatas);
+  }
+
+
+  function handleChangeMonth(e) {
+    setSelectedMonth(parseInt(e.target.value));
+  }
+
   return (
-    <table className={style.table}>
-    <thead>
-      <tr>
-        {generateHeaders}
-      </tr>
-    </thead>
-    <tbody>
-    {datas && datas.map(data => (
-      <tr key={data.id}>
-        <td
-          style={{display: columnsToHide[0].visible ? 'table-cell' : 'none'}}>
-          <div className={style.deleteAndDateCell}>
-            <button
-            style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
-            onClick={() => handleDeleteData(data.id)}
-            >
-              <i className="bi-trash"></i>
-            </button>
-            <span>
-              {format(data.data, 'MMM')}
-            </span>
-          </div>
-        </td>
-        <td
-          style={{display: columnsToHide[1].visible ? 'table-cell' : 'none'}}>
-          {data.descrizione}</td>
-        <td
-          style={{display: columnsToHide[2].visible ? 'table-cell' : 'none'}}>
-          {data.Spesa} {data.Spesa !== null && '€'}</td>
-        <td
-          style={{display: columnsToHide[3].visible ? 'table-cell' : 'none'}}>
-          {data.Income} {data.Income !== null && '€'}</td>
-        <td
-          style={{display: columnsToHide[4].visible ? 'table-cell' : 'none'}}>
-          {data.Benzina} {data.Benzina !== null && '€'}</td>
-        <td
-          style={{display: columnsToHide[5].visible ? 'table-cell' : 'none'}}>
-          {data.Extra} {data.Extra !== null && '€'}</td>
-        <td
-          style={{display: columnsToHide[6].visible ? 'table-cell' : 'none'}}>
-          {data.Casa} {data.Casa !== null && '€'}</td>
-        <td
-          style={{display: columnsToHide[7].visible ? 'table-cell' : 'none'}}>
-          {data.Salute} {data.Salute !== null && '€'}</td>
-      </tr>
-    ))}
-    </tbody>
-  </table>
+    <>
+    <div className={style.monthSelectContainer}>
+      <select onChange={handleChangeMonth} value={selectedMonth}>
+        {Array.from({ length: 12 }, (_, i) => (
+          <option key={i} value={i}>
+            {format(new Date(thisYear,i, 1), "MMMM",{locale: it})}
+          </option>
+        ))}
+      </select>
+    </div>
+
+      <table className={style.table}>
+        <thead>
+          <tr>
+            {generateHeaders}
+          </tr>
+        </thead>
+        <HomeTableTbody
+          datas={filteredDatas}
+        />
+      </table>
+    </>
   )
 }

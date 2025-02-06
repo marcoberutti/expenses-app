@@ -1,9 +1,28 @@
+import { useData } from '../dataContext';
 import style from './HomeForm.module.css'
 
-export default function HomeForm({inserisciDati,handleRadioChange, select, now}){
+export default function HomeForm(){
+  const { inserisciDati, handleRadioChange, select, now } = useData();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+  
+    const data = {
+      tipo: formData.get('tipo'),
+      descrizione: formData.get('descrizione'),
+      importo: parseFloat(formData.get('importo')),
+      tipologia: formData.get('tipologia'),
+      data: now, // Oggi, se è il caso
+    };
+  
+    inserisciDati(data)
+  };
+  
+
   return (
     <div className={style.formContainer}>
-      <form method="post" onSubmit={(e) => inserisciDati(e)} className={style.form}>
+      <form method="post" onSubmit={handleSubmit} className={style.form}>
         <div>
           <label htmlFor="spesa">uscita</label>
           <input type="radio" name="tipo" id="spesa" value="outcome"
