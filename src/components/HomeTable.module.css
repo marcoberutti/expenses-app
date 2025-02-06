@@ -66,7 +66,19 @@
 
   .table {
     width: 100%;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    margin-left: 10px;
+  }
+  .tableWithInput {
+    margin-left: 150px;
+  }
+
+  .table th, .table td {
+    border: 1px solid black;
+    padding: 2px;
+    width: fit-content;
+    height: 40px; /* Altezza fissa per le righe */
+    min-height: 40px; /* Altezza minima */
   }
 
   .deleteAndDateCell{

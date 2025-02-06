@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useData } from "../dataContext"
 import style from './HomeTable.module.css'
 import { format } from "date-fns";
+import { it } from "date-fns/locale";
 
-export default function HomeTableTbody ({datas}){
+export default function HomeTableTbody ({datas, editingRow, setEditingRow}){
 
   const {columnsToHide, rimuoviDati, modificaDati} = useData()
 
-  const [editingRow, setEditingRow] = useState(null)
   const [formData, setFormData] = useState({
     descrizione: '',
     spesa: '',
@@ -130,7 +130,7 @@ export default function HomeTableTbody ({datas}){
             </button>            
             }
             <span>
-              {format(data.data, 'MMM')}
+              {format(data.data, 'MMM', {locale: it})}
             </span>
           </div>
         </td>

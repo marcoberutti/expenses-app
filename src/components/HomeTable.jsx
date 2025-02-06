@@ -11,6 +11,7 @@ export default function HomeTable({generateHeaders}) {
   const [filteredDatas, setFilteredDatas] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Mese attuale
   const thisYear = getYear(new Date());
+  const [editingRow, setEditingRow] = useState(null)
 
   useEffect(() => {
     filterDataByMonth(selectedMonth);
@@ -45,13 +46,15 @@ export default function HomeTable({generateHeaders}) {
       </select>
     </div>
 
-      <table className={style.table}>
-        <thead>
+    <table className={`${style.table} ${editingRow ? style.tableWithInput : ''}`}>
+    <thead>
           <tr>
             {generateHeaders}
           </tr>
         </thead>
         <HomeTableTbody
+          editingRow={editingRow}
+          setEditingRow={setEditingRow}
           datas={filteredDatas}
         />
       </table>

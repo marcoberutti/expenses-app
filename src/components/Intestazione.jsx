@@ -22,10 +22,10 @@ export default function Intestazione({title, columnsToHide, handleToggleColumns}
                 <span>{column.nome}</span>
               </span>
             </div> 
-            <div><button className={modal === true ? style.exit : style.enter} onClick={()=>setModal(!modal)}>{modal === true ? "x" : "+"}</button></div>
           </>
         : null
       )}
+        <div><button className={modal === true ? style.exit : style.enter} onClick={()=>setModal(!modal)}>{modal === true ? "x" : "+"}</button></div>
     </div>
   )
 }

@@ -6,7 +6,6 @@ import HomeForm from "../components/HomeForm";
 import { useData } from "../dataContext";
 import Loader from "../components/Loader";
 import Intestazione from "../components/Intestazione";
-import Message from "../components/Message";
 
 export default function Home() {
 

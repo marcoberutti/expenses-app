@@ -7,13 +7,14 @@ export default function HomeForm(){
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    const dataInserita = formData.get('data');
   
     const data = {
       tipo: formData.get('tipo'),
       descrizione: formData.get('descrizione'),
       importo: parseFloat(formData.get('importo')),
       tipologia: formData.get('tipologia'),
-      data: now, // Oggi, se è il caso
+      data: dataInserita ? dataInserita : now,
     };
   
     inserisciDati(data)
@@ -31,19 +32,23 @@ export default function HomeForm(){
           />
         </div>
         <div>
-        <label htmlFor="income">entrata</label>
-        <input type="radio" name="tipo" id="income" value="entrata"
-          onChange={handleRadioChange}
-          checked={select === false}
-        />
+          <label htmlFor="income">entrata</label>
+          <input type="radio" name="tipo" id="income" value="entrata"
+            onChange={handleRadioChange}
+            checked={select === false}
+          />
         </div>
         <div className={style.inputContainer}>
-        <label htmlFor="descrizione">Descrizione</label>
-        <input type="text" name="descrizione" id="descrizione"/>
+          <label htmlFor="descrizione">Descrizione</label>
+          <input type="text" name="descrizione" id="descrizione"/>
         </div>
         <div className={style.inputContainer}>
-        <label htmlFor="importo">Importo {select ? 'speso' : 'entrata'}</label>
-        <input type="number" name="importo" id="importo"/>
+          <label htmlFor="importo">Importo {select ? 'speso' : 'entrata'}</label>
+          <input type="number" name="importo" id="importo"/>
+        </div>
+        <div>
+          <label htmlFor="data">Data</label>
+          <input type="date" name="data" id="data"/>
         </div>
         <div className={style.inputContainerSelect}>
           {select &&

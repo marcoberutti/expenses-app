@@ -5,11 +5,12 @@ import { useData } from "../dataContext";
 import Loader from "../components/Loader";
 import {dataReducer, initialState} from "../reducers/chartReducer";
 import Intestazione from "../components/Intestazione";
+import HomeForm from "../components/HomeForm";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function Grafico() {
-  const { datas, isLoading, fetchData } = useData();
+  const { datas, isLoading, fetchData, columnsToHide, handleToggleColumns, modal } = useData();
   const [state, dispatch] = useReducer(dataReducer, initialState);
   const { graficoData, options } = state;
 
@@ -29,7 +30,14 @@ export default function Grafico() {
     <div>
       {isLoading ? <Loader/> :
           <>
-          <Intestazione title = "Grafico spese per quest'anno"/>
+          <Intestazione
+            title = "Grafico"
+            columnsToHide = {columnsToHide}
+            handleToggleColumns = {handleToggleColumns}
+          />
+          {modal ? 
+            <HomeForm/>
+          :
           <div style={{ width: "100%", maxWidth: "600px", margin: "0 auto", height: "60vh" }}>
             {graficoData?.labels.length > 0  ? (
               <Bar data={graficoData} options={options} />
@@ -37,6 +45,7 @@ export default function Grafico() {
               <Loader/>
             }
           </div>
+          }
           </>
       }
     </div>
