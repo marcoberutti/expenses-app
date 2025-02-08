@@ -9,7 +9,7 @@ import RiepilogoTable from "../components/RiepilogoTable";
 
 export default function Riepilogo() {
 
-    const { datas, isLoading, fetchData, modal, message, setModal, inserisciDati, handleRadioChange, select, now } = useData();
+    const { datas, isLoading, fetchData, modal, message, inserisciDati, handleRadioChange, select, now, handleToggleModals } = useData();
   
     useEffect(() => {
       if (datas.length === 0) {
@@ -26,13 +26,13 @@ export default function Riepilogo() {
       <Intestazione
           title = "Riepilogo annuo"
           message = {message}
-          setModal = {setModal}
           modal = {modal}
+          handleToggleModals={handleToggleModals}
       />
-      {modal ? 
-        <HomeForm inserisciDati={inserisciDati} handleRadioChange={handleRadioChange} select={select} now={now}/>
-      :
+      {modal === "normal" ? 
         <RiepilogoTable/>
+      :
+        <HomeForm inserisciDati={inserisciDati} handleRadioChange={handleRadioChange} select={select} now={now}/>
       }
       </>
     }

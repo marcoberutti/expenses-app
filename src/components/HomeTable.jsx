@@ -7,11 +7,11 @@ import { it } from 'date-fns/locale'
 
 export default function HomeTable({generateHeaders}) {
 
-  const { datas } = useData()
+  const { datas, handleToggleModals } = useData()
   const [filteredDatas, setFilteredDatas] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Mese attuale
   const thisYear = getYear(new Date());
-  const [editingRow, setEditingRow] = useState(null)
+
 
   useEffect(() => {
     filterDataByMonth(selectedMonth);
@@ -29,7 +29,6 @@ export default function HomeTable({generateHeaders}) {
     setFilteredDatas(newDatas);
   }
 
-
   function handleChangeMonth(e) {
     setSelectedMonth(parseInt(e.target.value));
   }
@@ -46,16 +45,15 @@ export default function HomeTable({generateHeaders}) {
       </select>
     </div>
 
-    <table className={`${style.table} ${editingRow ? style.tableWithInput : ''}`}>
+    <table className={style.table}>
     <thead>
           <tr>
             {generateHeaders}
           </tr>
         </thead>
         <HomeTableTbody
-          editingRow={editingRow}
-          setEditingRow={setEditingRow}
-          datas={filteredDatas}
+          handleToggleModals={handleToggleModals}
+          filteredDatas={filteredDatas}
         />
       </table>
     </>

@@ -6,11 +6,10 @@ import { useEffect } from "react";
 export default function Navbar({isLogged}) {
 
   const { setModal, setIsLogged } = useData();
-  const location = useLocation();
 
   useEffect(() => {
-    setModal(false)
-  }, [location]);
+    setModal("normal")
+  }, []);
 
   function handleLogOut(){
     localStorage.removeItem("Token")

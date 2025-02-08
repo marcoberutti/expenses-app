@@ -2,7 +2,7 @@ import style from "./Intestazione.module.css"
 import { useData } from "../dataContext";
 
 export default function Intestazione({title, columnsToHide, handleToggleColumns}){
-  const {modal, setModal, message} = useData();
+  const {modal, message, handleToggleModals} = useData();
 
   return (
 
@@ -11,7 +11,6 @@ export default function Intestazione({title, columnsToHide, handleToggleColumns}
       {message !== '' && <h4 className={style.successAlert}>{message}</h4> }
       {columnsToHide && columnsToHide.map(column =>
         column.visible === false ? 
-          <>
             <div key={column.nome}>
               <span>
                 <input 
@@ -21,11 +20,10 @@ export default function Intestazione({title, columnsToHide, handleToggleColumns}
                 />
                 <span>{column.nome}</span>
               </span>
-            </div> 
-          </>
+            </div>
         : null
       )}
-        <div><button className={modal === true ? style.exit : style.enter} onClick={()=>setModal(!modal)}>{modal === true ? "x" : "+"}</button></div>
+        <div><button className={modal !== "normal" ? style.exit : style.enter} onClick={handleToggleModals}>{modal !== "normal" ? "x" : "+"}</button></div>
     </div>
   )
 }

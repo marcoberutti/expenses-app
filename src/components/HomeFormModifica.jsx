@@ -1,9 +1,21 @@
+import { format } from 'date-fns';
 import { useData } from '../dataContext';
 import style from './HomeForm.module.css'
+import { useEffect, useState } from 'react';
 
-export default function HomeForm(setFormData){
-  const { inserisciDati, handleRadioChange, select } = useData();
-  const today = new Date().toISOString().split('T')[0];
+export default function HomeFormModifica({setFormData, rowId}){
+  const { modificaDati, handleRadioChange, datasForUpdate, select } = useData();
+  const [selectDefaultVal, setSelectDefVal] = useState();
+
+  useEffect(() => {
+    const excludeKeys = ["id", "descrizione", "data"];
+    const filteredEntriesForSelect = Object.entries(datasForUpdate).filter(([key])=> !excludeKeys.includes(key))
+
+    if(filteredEntriesForSelect.length === 1){
+      const singleValue = filteredEntriesForSelect[0][0];
+      setSelectDefVal(singleValue.toLowerCase())
+    }
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,14 +29,21 @@ export default function HomeForm(setFormData){
       data: formData.get('data')
     };
   
-    inserisciDati(data)
+    modificaDati(data, datasForUpdate.id)
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "tipologia"){
+      setSelectDefVal(value)
+    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
   
 
   return (
     <>
-
-    <h1>Nuova spesa</h1>
+    <h1>Modifica spesa</h1>
     <div className={style.formContainer}>
       <form method="post" onSubmit={handleSubmit} className={style.form}>
         <div>
@@ -46,18 +65,28 @@ export default function HomeForm(setFormData){
           <input 
             type="text" 
             name="descrizione" 
-            onChange={(e) => setFormData(prev => ({ ...prev, descrizione: e.target.value }))}
-            id="descrizione"/>
+            onChange={handleInputChange}
+            id="descrizione"
+            defaultValue={datasForUpdate.descrizione || ""}
+            />
         </div>
         <div className={style.inputContainer}>
-          <label htmlFor="importo">Importo {select ? 'speso' : 'entrata'}</label>
-          <input
+          <label htmlFor="importo">Importo</label>
+          <input 
             type="number" 
             name="importo" 
             id="importo" 
             step="0.01" 
+            onChange={handleInputChange}
             min="0"
-            onChange={(e) => setFormData(prev => ({ ...prev, importo: e.target.value }))}
+            defaultValue={
+              datasForUpdate.Benzina ||
+              datasForUpdate.Casa ||
+              datasForUpdate.Extra ||
+              datasForUpdate.Income ||
+              datasForUpdate.Salute ||
+              datasForUpdate.Spesa
+            }
             />
         </div>
         <div>
@@ -66,15 +95,18 @@ export default function HomeForm(setFormData){
             type="date" 
             name="data" 
             id="data" 
-            value={today}
-            onChange={(e) => setFormData(prev => ({ ...prev, data: e.target.value }))}
-          />
+            onChange={handleInputChange}
+            defaultValue={format(datasForUpdate.data, "yyyy-MM-dd")}/>
         </div>
         <div className={style.inputContainerSelect}>
-          {select &&
+          {!datasForUpdate.Income &&
           <>
             <label htmlFor="tipologia">Tipologia</label>
-            <select name="tipologia" id="">
+            <select 
+              name="tipologia" 
+              onChange={handleInputChange}
+              value={selectDefaultVal}
+            >
               <option value="spesa">Spesa</option>
               <option value="benzina">Benzina</option>
               <option value="extra">Extra</option>

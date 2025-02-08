@@ -5,17 +5,14 @@ import Grafico from './routes/Grafico';
 import Home from './routes/Home';
 import './App.css';
 import { Route, Routes } from 'react-router';
-import { useData } from './dataContext';
 
 function App() {
-
-  const { datas, isLoading, fetchData, riepilogo } = useData();
 
   const router = createBrowserRouter([
     {
       path: "*",
       element: (
-        <LayoutRoutes datas={datas} isLoading={isLoading} refreshData={fetchData} riepilogo={riepilogo}>
+        <LayoutRoutes>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/riepilogo" element={<Riepilogo />} />

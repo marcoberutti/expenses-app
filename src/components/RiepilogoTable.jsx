@@ -64,7 +64,7 @@ export default function RiepilogoTable() {
 
           return (
             <tr key={i}>
-              <td>{format(new Date(2024, i, 1), 'MMMM')}</td>
+              <td>{format(new Date(2024, i, 1), "MMM")}</td>
               {categories.map(cat => <td key={`${i}-${cat}`}>{totals[cat]}</td>)}
               <td key={`${i}-totaleIncome`} className={budgetMese < 200 && budgetMese > 0 ? style.lowBudget : ""}>
                 {incomeMese?.[mese] !== 0 && (budgetMese || 0)}
@@ -73,7 +73,7 @@ export default function RiepilogoTable() {
           );
         })}
         <tr>
-          <td>Gran total:</td>
+          <td>Gran tot:</td>
           {["Income", "Spesa", "Benzina", "Extra", "Casa", "Salute"].map((category, index) => (
             <td key={`total-${index}`}>
               {datas && datas

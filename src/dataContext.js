@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import API_URL from "./config";
-import { getTime, getYear } from "date-fns";
+import { getYear } from "date-fns";
 import { useInsertDataApi } from "./hooks/useInsertDataApi";
 import { useMessage } from "./hooks/useMessage";
 import { useDeleteDataApi } from "./hooks/useDeleteDataApi";
@@ -17,8 +17,7 @@ export const DataProvider = ({ children }) => {
   const { handleLogin } = useLoginApi()
   const [datas, setDatas] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [modal, setModal] = useState(false);
-  const [now, setNow] = useState(getTime(new Date()));
+  const [modal, setModal] = useState("normal");
   const [select, setSelect] = useState(true);
   const [columnsToHide, setColumnsToHide] = useState([
     {nome: "Data", visible: true},
@@ -31,6 +30,7 @@ export const DataProvider = ({ children }) => {
     {nome: "Salute", visible: true},
   ]);
   const [isLogged, setIsLogged] = useState(!!localStorage.getItem("token"));
+  const [datasForUpdate, setDatasForUpdate] = useState({})
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
@@ -49,7 +49,6 @@ export const DataProvider = ({ children }) => {
       .catch((error) => console.error("Errore nel fetch:", error))
       .finally(() => setIsLoading(false));
   }, []);
-
   const inserisciDati = (e) => {
     insertData(e)
     .then(data => {
@@ -60,7 +59,6 @@ export const DataProvider = ({ children }) => {
       setTemporaryMessage(error || "Errore nell'inserimento dei dati!");
     });
   };
-
   const rimuoviDati = (id) => {
     deleteData(id)
     .then(data => {
@@ -69,16 +67,13 @@ export const DataProvider = ({ children }) => {
       setTemporaryMessage(data.message)
     })
   }
-
   const modificaDati = (data, id) => {
     writeData(data, id)
     .then(data => {
-      console.log(data)
       fetchData();
       setTemporaryMessage(data.message)
     })
   }
-
   const loginData = (data) => {
     handleLogin(data)
     .then(data => {
@@ -89,10 +84,29 @@ export const DataProvider = ({ children }) => {
       }
     })
   }
-
   const handleRadioChange = (event) => {
     const { value } = event.target;
-    setSelect(value === "outcome"); // Aggiorna lo stato basandoti sul valore
+    setSelect(value === "outcome");
+  };
+  const handleToggleModals = () => {
+    switch (modal) {
+      case "modifica":
+      setModal("normal")
+      break
+      case "form":
+      setModal("normal")
+      break
+      case "normal":
+      setModal("form")
+      break
+      default:
+    }
+  };
+  const getDataForUpdateForm = (data) => {
+    const filteredObj = Object.fromEntries(
+      Object.entries(data).filter(([key, val]) => val !== null)
+    )
+    setDatasForUpdate(filteredObj)
   };
 
   const value = {
@@ -103,9 +117,7 @@ export const DataProvider = ({ children }) => {
     isLoading, 
     modal, 
     setModal, 
-    fetchData, 
-    now, 
-    setNow,
+    fetchData,
     select,
     setSelect,
     inserisciDati, 
@@ -114,7 +126,10 @@ export const DataProvider = ({ children }) => {
     handleRadioChange,
     isLogged,
     setIsLogged,
-    loginData
+    loginData,
+    handleToggleModals,
+    getDataForUpdateForm,
+    datasForUpdate
   }
 
 

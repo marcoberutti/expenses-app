@@ -1,4 +1,6 @@
-import {  useEffect } from "react";
+// TODO sistemare message che sia globale
+// TODO questo posso anche metterlo direttamente in hometable come ho fatto con modifica dati????: 
+import {  useEffect, useState } from "react";
 import style from './home.module.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import HomeTable from "../components/HomeTable";
@@ -6,24 +8,29 @@ import HomeForm from "../components/HomeForm";
 import { useData } from "../dataContext";
 import Loader from "../components/Loader";
 import Intestazione from "../components/Intestazione";
+import HomeFormModifica from "../components/HomeFormModifica";
 
 export default function Home() {
 
   const { datas, isLoading, fetchData, modal, rimuoviDati, columnsToHide, setColumnsToHide } = useData();
+  const [formData, setFormData] = useState({
+    descrizione: '',
+    spesa: '',
+    income: '',
+    benzina: '',
+    extra: '',
+    casa: '',
+    salute: ''
+  });
 
   useEffect(() => {
     if (datas.length === 0) {
       fetchData();
     }
   }, []);
-
-  // TODO questo posso anche metterlo direttamente in hometable come ho fatto con modifica dati????: 
-  // TODO sistemare message che sia globale
-
   function handleDeleteData(id){
     rimuoviDati(id)
   }
-
   function handleToggleColumns(e){
     let columnName = e.target.nextSibling.textContent;
     setColumnsToHide(prevItems => 
@@ -32,7 +39,6 @@ export default function Home() {
       )
     )
   };
-
   function generateHeaders(){
     return columnsToHide.map((column, index) =>(
       <th key={index} style={{display: column.visible ? 'table-cell' : 'none'}}>
@@ -46,6 +52,30 @@ export default function Home() {
       </th>
     ))
   }
+  function setWhatModalSays(){
+    switch (modal) {
+      case "modifica":
+        return <HomeFormModifica 
+          setFormData={setFormData}
+          formData={formData}
+        /> 
+      case "form":
+        return <HomeForm 
+          setFormData={setFormData}
+        />
+      case "normal":
+        return (<div className={style.tableContainer}>
+        <HomeTable 
+          generateHeaders={generateHeaders()}
+          columnsToHide={columnsToHide} 
+          handleDeleteData={handleDeleteData}
+          setFormData={setFormData}
+          formData={formData}
+        />
+      </div>)
+      default:
+    }
+  }
 
   return (
     <div>
@@ -56,17 +86,7 @@ export default function Home() {
           columnsToHide = {columnsToHide}
           handleToggleColumns = {handleToggleColumns}
         />
-        {modal ? 
-          <HomeForm/>
-        :
-          <div className={style.tableContainer}>
-            <HomeTable 
-              generateHeaders={generateHeaders()}
-              columnsToHide={columnsToHide} 
-              handleDeleteData={handleDeleteData} 
-            />
-          </div>
-        }
+        {setWhatModalSays()}
       </div>
     }
     </div>
