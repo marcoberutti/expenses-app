@@ -1,12 +1,9 @@
-import { useData } from "../dataContext"
 import style from './HomeTable.module.css'
+import { useData } from "../dataContext"
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
-
-import { format } from "date-fns";
-import { it } from "date-fns/locale";
 
 export default function HomeTableTbody ({filteredDatas}){
 
@@ -27,7 +24,7 @@ export default function HomeTableTbody ({filteredDatas}){
                 }}
               }
             >
-              <i className="bi-trash"></i>
+              <i className={`bi-trash ${style.trash}`} style={{fontSize:"1rem"}}></i>
             </IconButton>
             <IconButton size="small"
             style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
@@ -41,13 +38,8 @@ export default function HomeTableTbody ({filteredDatas}){
             setModal("modifica")}
             }
             >
-            <i className="bi-pen"></i>
+              <i className={`bi-pen ${style.pen}`} style={{fontSize:"1rem"}}></i>
             </IconButton>
-            <span>
-              <strong>
-                {format(data.data, 'MMM', {locale: it})}
-              </strong>
-            </span>
           </div>
         </TableCell>
           <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"

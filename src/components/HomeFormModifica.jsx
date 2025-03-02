@@ -8,6 +8,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { format } from "date-fns";
 import SelectxFormModifica from "./SelectxFormModifica";
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
 
 export default function HomeFormModifica() {
   const { modificaDati, datasForUpdate, setFormData, formData } = useData();
@@ -98,29 +100,27 @@ export default function HomeFormModifica() {
               }
               onChange={handleInputChange}
             />
-          </div>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Data"
-              format="DD/MM/YYYY"
-              value={
-                formData.data
-                  ? dayjs(formData.data)
-                  : datasForUpdate?.data
-                  ? dayjs(datasForUpdate.data)
-                  : null
-              }
-              onChange={handleInputChange}
-              slotProps={{
-                textField: {
-                  variant: "standard",
-                  required: true,
-                  name: "data",
-                },
-              }}
-            />
-          </LocalizationProvider>
-          <div className={style.inputContainerSelect}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Data"
+                format="DD/MM/YYYY"
+                value={
+                  formData.data
+                    ? dayjs(formData.data)
+                    : datasForUpdate?.data
+                    ? dayjs(datasForUpdate.data)
+                    : null
+                }
+                onChange={handleInputChange}
+                slotProps={{
+                  textField: {
+                    variant: "standard",
+                    required: true,
+                    name: "data",
+                  },
+                }}
+              />
+            </LocalizationProvider>
             {!datasForUpdate?.Income && (
               <SelectxFormModifica
                 handleInputChange={handleInputChange}
@@ -129,9 +129,22 @@ export default function HomeFormModifica() {
                 setFormData={setFormData}
               />
             )}
-          </div>
-          <div>
-            <button type="submit">Inserisci</button>
+            <Button 
+              color="info" 
+              variant="contained" 
+              endIcon={<SendIcon />} 
+              type="submit"
+              sx={{
+                width: '50%',
+                fontSize: ".8rem",
+                alignSelf: "center",
+                bgcolor: "background.paper",
+                '&:hover': { bgcolor: "info.dark" }
+              }}
+            >
+              Inserisci
+            </Button>
+
           </div>
         </form>
       </div>

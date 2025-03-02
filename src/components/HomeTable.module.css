@@ -10,6 +10,14 @@
   align-items: center;
 }
 
+.pen:hover {
+  color: green;
+}
+
+.trash:hover {
+  color: red;
+}
+
 @media (max-width: 620px) {
 
   .deleteAndDateCell{

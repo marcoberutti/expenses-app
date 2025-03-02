@@ -2,8 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid gray;
-  width: 370px;
+  width: 80%;
   min-width: calc(150px + 15px);
   padding: 20px;
   justify-self: center;
@@ -38,6 +37,7 @@ input:focus {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 40px;
 }
 
 .inputContainerSelect {

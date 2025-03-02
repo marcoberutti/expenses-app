@@ -26,7 +26,7 @@ export const DataProvider = ({ children }) => {
   const [columnsToHide, setColumnsToHide] = useState([
     {nome: "Data", visible: true},
     {nome: "Descr.", visible: true},
-    {nome: "Spese", visible: true},
+    {nome: "Spesa", visible: true},
     {nome: "Entrate", visible: true},
     {nome: "Benzina", visible: true},
     {nome: "Extra", visible: true},

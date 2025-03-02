@@ -1,31 +1,37 @@
-.navbar {
-  height: 55px;
-}
-
 .navbar ul {
   display: flex;
-  padding: 10px;
+  padding: 8px;
   justify-content: space-between;
 }
 .navlink {
   color: white;
-  text-decoration: none;
-  padding: 5px;
+  width: 45px;
+  height: 45px;
   text-decoration: none;
   font-size: 1rem;
-  }
-  
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .navlink:hover {
-  border-radius: 12px;
+  border-radius: 50%;
   background-color: rgba(128, 128, 128, 0.169);
 }
 
 .navlinkActive {
-  border-radius: 10px 10px 0 0;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
   color: white;
-  border-bottom: 3px solid yellow;
-  padding: 5px;
+  border: 2px solid rgba(177, 177, 131, 0.664);
+  background-color: rgb(142, 142, 142);
+  padding: 8px;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
 } 

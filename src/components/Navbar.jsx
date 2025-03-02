@@ -27,17 +27,20 @@ export default function Navbar({isLogged}) {
   return (
     <AppBar position="static">
     <Container maxWidth="xl">
-      <Toolbar disableGutters sx={{justifyContent: 'space-evenly', width: '100%'}}>
+      <Toolbar disableGutters sx={{justifyContent: 'space-between', width: '100%'}}>
         { isLogged ?
         <>
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/">Home</NavLink>
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/riepilogo">Riepilogo</NavLink>
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/grafico">Grafico</NavLink>
-          <FormControl component="fieldset">
+          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/"><i class="bi bi-house"></i></NavLink>
+          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/riepilogo"><i class="bi bi-table"></i></NavLink>
+          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/grafico"><i class="bi bi-graph-up-arrow"></i></NavLink>
+          <FormControl component="fieldset" style={{border:"2px solid gray", paddingLeft:"20px", borderRadius:"10px"}}>
             <FormGroup aria-label="position" row>
               <FormControlLabel
                 value="end"
-                label={theme}
+                label={theme === "dark" ? 
+                <i class="bi bi-moon-stars" style={{fontSize:"1rem"}}></i> : 
+                <i class="bi bi-brightness-high" style={{fontSize:"1rem"}}></i>
+                }
                 sx={{
                   "& .MuiFormControlLabel-label": { fontSize: "1.2rem" } // Aumenta la dimensione del testo della label
                 }}
@@ -51,7 +54,7 @@ export default function Navbar({isLogged}) {
               />
             </FormGroup>
           </FormControl>
-          <NavLink className={style.navlink} onClick={handleLogOut}>Log out</NavLink>
+          <NavLink className={style.navlink} onClick={handleLogOut}><i class="bi bi-person-x" style={{fontSize:"1.3rem"}}></i></NavLink>
         </>
         :
           <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/">Login</NavLink>

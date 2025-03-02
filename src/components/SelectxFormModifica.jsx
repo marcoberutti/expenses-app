@@ -73,7 +73,7 @@ export default function SelectxFormModifica({handleInputChange, datasForUpdate, 
   const Button = React.forwardRef(function Button(props, ref) {
     const { ownerState, ...other } = props;
     return (
-      <button type="button" {...other} ref={ref}>
+      <button type="button" {...other} ref={ref} style={{width:"60%", alignSelf:"center"}}>
         {other.children}
         <UnfoldMoreRoundedIcon />
       </button>
@@ -90,7 +90,8 @@ export default function SelectxFormModifica({handleInputChange, datasForUpdate, 
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 0.875rem;
       box-sizing: border-box;
-      min-width: 200px;
+      min-width: 60%;
+      width: 60%;
       padding: 8px 12px;
       border-radius: 8px;
       text-align: left;
@@ -133,8 +134,9 @@ export default function SelectxFormModifica({handleInputChange, datasForUpdate, 
     font-size: 0.875rem;
     box-sizing: border-box;
     padding: 6px;
-    margin: 12px 0;
-    min-width: 100px;
+    margin: 12px 36%;
+    min-width: 150px;
+    align-self: center;
     border-radius: 12px;
     overflow: auto;
     outline: 0;
