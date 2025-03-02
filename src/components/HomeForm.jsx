@@ -41,7 +41,7 @@ export default function HomeForm(){
     <>
       <h1>Nuova spesa</h1>
       <form method="post" onSubmit={handleSubmit}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 5, mx:20 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 5, mx:5 }}>
           <RadioGroup
               defaultValue="outcome"
               name="tipo">

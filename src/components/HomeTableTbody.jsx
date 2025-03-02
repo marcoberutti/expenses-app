@@ -16,7 +16,7 @@ export default function HomeTableTbody ({filteredDatas}){
     <TableBody>
     {filteredDatas && filteredDatas.map(data => (
       <TableRow key={data.id}>
-        <TableCell align="center"
+        <TableCell  sx={{p:0}} align="center"
           style={{display: columnsToHide[0].visible ? 'table-cell' : 'none'}}>
           <div className={style.deleteAndDateCell}>
             <IconButton size="small"
@@ -50,26 +50,26 @@ export default function HomeTableTbody ({filteredDatas}){
             </span>
           </div>
         </TableCell>
-          <TableCell align="center"
+          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
             style={{display: columnsToHide[1].visible ? 'table-cell' : 'none'}}>
             {data.descrizione}
             </TableCell>
-          <TableCell align="center"
+          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
             style={{display: columnsToHide[2].visible ? 'table-cell' : 'none'}}>
             {data.Spesa && `${data.Spesa} €`}</TableCell>
-          <TableCell align="center"
+          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
             style={{display: columnsToHide[3].visible ? 'table-cell' : 'none'}}>
             {data.Income && `${data.Income} €`}</TableCell>
-          <TableCell align="center"
+          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
             style={{display: columnsToHide[4].visible ? 'table-cell' : 'none'}}>
             {data.Benzina && `${data.Benzina} €`}</TableCell>
-          <TableCell align="center"
+          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
             style={{display: columnsToHide[5].visible ? 'table-cell' : 'none'}}>
             {data.Extra && `${data.Extra} €`}</TableCell>
-          <TableCell align="center"
+          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
             style={{display: columnsToHide[6].visible ? 'table-cell' : 'none'}}>
             {data.Casa && `${data.Casa} €`}</TableCell>
-          <TableCell align="center"
+          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
             style={{display: columnsToHide[7].visible ? 'table-cell' : 'none'}}>
             {data.Salute && `${data.Salute} €`}</TableCell>
       </TableRow>

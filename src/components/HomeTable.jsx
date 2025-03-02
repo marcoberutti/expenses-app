@@ -262,7 +262,7 @@ export default function HomeTable({ generateHeaders }) {
   `;
 
   return (
-    <>
+    <div>
       <Select onChange={handleChangeMonth} value={selectedMonth}>
         {Array.from({ length: 12 }, (_, i) => (
           <Option key={i} value={i}>
@@ -283,6 +283,6 @@ export default function HomeTable({ generateHeaders }) {
           />
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 }

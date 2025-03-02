@@ -30,14 +30,15 @@ export default function Home() {
   };
   function generateHeaders(){
     return columnsToHide.map((column, index) =>(
-      <TableCell align="center" key={index} style={{display: column.visible ? 'table-cell' : 'none'}}>
+      <TableCell align="center" key={index} style={{display: column.visible ? 'table-cell' : 'none'}} sx={{p:0}}>
+        <span><strong>{column.nome}</strong></span>
+        <br/>
         <input 
         type="checkbox"
         checked={column.visible}
         onChange={(e)=> handleToggleColumns(e)
         }
         />
-        <span><strong>{column.nome}</strong></span>
       </TableCell>
     ))
   }

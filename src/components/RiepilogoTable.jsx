@@ -48,18 +48,17 @@ export default function RiepilogoTable() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Mese</TableCell>
-            <TableCell>Tot Income</TableCell>
-            <TableCell>Tot Spesa</TableCell>
-            <TableCell>Tot Benzina</TableCell>
-            <TableCell>Tot Extra</TableCell>
-            <TableCell>Tot Casa</TableCell>
-            <TableCell>Tot Salute</TableCell>
-            <TableCell>Budget Rimasto</TableCell>
+            <TableCell align="center" sx={{p:0}}>Mese</TableCell>
+            <TableCell align="center" sx={{p:0}}>Tot Income</TableCell>
+            <TableCell align="center" sx={{p:0}}>Tot Spesa</TableCell>
+            <TableCell align="center" sx={{p:0}}>Tot Benzina</TableCell>
+            <TableCell align="center" sx={{p:0}}>Tot Extra</TableCell>
+            <TableCell align="center" sx={{p:0}}>Tot Casa</TableCell>
+            <TableCell align="center" sx={{p:0}}>Tot Salute</TableCell>
+            <TableCell align="center" sx={{p:0}}>Budget Rimasto</TableCell>
           </TableRow>
         </TableHead>
         <TableBody
-          sx={{p:10}}
         >
           {datas && Array.from({ length: 12 }, (_, i) => {
             const mese = (i + 1).toString().padStart(2, '0');
@@ -81,9 +80,9 @@ export default function RiepilogoTable() {
 
             return (
               <TableRow key={i}>
-                <TableCell>{format(new Date(2024, i, 1), "MMM")}</TableCell>
-                {categories.map(cat => <TableCell key={`${i}-${cat}`}>{totals[cat]}</TableCell>)}
-                <TableCell key={`${i}-totaleIncome`} className={
+                <TableCell align="center" sx={{p:0}}>{format(new Date(2024, i, 1), "MMM")}</TableCell>
+                {categories.map(cat => <TableCell align="center" sx={{p:1}} key={`${i}-${cat}`}>{totals[cat]}</TableCell>)}
+                <TableCell align="center" sx={{p:0}} key={`${i}-totaleIncome`} className={
                   budgetMese > 200 ? 
                     style.highBudget : 
                     budgetMese < 200 && budgetMese > 0 ? 
@@ -97,15 +96,15 @@ export default function RiepilogoTable() {
             );
           })}
           <TableRow>
-            <TableCell>Gran tot:</TableCell>
+            <TableCell align="center" sx={{p:0}}>Gran tot:</TableCell>
             {["Income", "Spesa", "Benzina", "Extra", "Casa", "Salute"].map((category, index) => (
-              <TableCell key={`total-${index}`}>
+              <TableCell align="center" key={`total-${index}`} sx={{p:0}}>
                 {datas && datas
                   .filter(dato => dato[category] !== null)
                   .reduce((acc, curr) => acc + (parseFloat(curr[category]) || 0), 0)}
               </TableCell>
             ))}
-            <TableCell className={                
+            <TableCell align="center" sx={{p:0}} className={                
               totalYearBudgetBalance > 1800 ? 
                 style.highBudget : 
                 totalYearBudgetBalance < 1800 && totalYearBudgetBalance > 0 ? 
