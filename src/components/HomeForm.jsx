@@ -1,94 +1,144 @@
 import { useData } from '../dataContext';
-import style from './HomeForm.module.css'
+import Box from '@mui/material/Box';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import Button from '@mui/material/Button';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
-export default function HomeForm(setFormData){
-  const { inserisciDati, handleRadioChange, select } = useData();
-  const today = new Date().toISOString().split('T')[0];
+export default function HomeForm(){
+  const { inserisciDati, handleRadioChange, select, setFormData, formData } = useData();
+  const today = dayjs();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-  
-    const data = {
-      tipo: formData.get('tipo'),
-      descrizione: formData.get('descrizione'),
-      importo: parseFloat(formData.get('importo')),
-      tipologia: formData.get('tipologia'),
-      data: formData.get('data')
-    };
-  
-    inserisciDati(data)
+
+    inserisciDati({
+      tipo: e.target.tipo.value,
+      descrizione: e.target.descrizione.value,
+      importo: parseFloat(e.target.importo.value),
+      tipologia: select ? e.target.tipologia?.value || "" : "",
+      data: formData.data || today.format("YYYY-MM-DD")
+    });
+
+    setFormData({
+      descrizione: "",
+      importo: "",
+      tipologia: "",
+      data: today.format("YYYY-MM-DD")
+    });
   };
-  
 
   return (
     <>
-
-    <h1>Nuova spesa</h1>
-    <div className={style.formContainer}>
-      <form method="post" onSubmit={handleSubmit} className={style.form}>
-        <div>
-          <label htmlFor="spesa">uscita</label>
-          <input type="radio" name="tipo" id="spesa" value="outcome"
-            onChange={handleRadioChange}
-            checked={select === true}
-          />
-        </div>
-        <div>
-          <label htmlFor="income">entrata</label>
-          <input type="radio" name="tipo" id="income" value="entrata"
-            onChange={handleRadioChange}
-            checked={select === false}
-          />
-        </div>
-        <div className={style.inputContainer}>
-          <label htmlFor="descrizione">Descrizione</label>
-          <input 
-            type="text" 
+      <h1>Nuova spesa</h1>
+      <form method="post" onSubmit={handleSubmit}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 5, mx:20 }}>
+          <RadioGroup
+              defaultValue="outcome"
+              name="tipo">
+            <FormControlLabel 
+              value="outcome" 
+              onChange={handleRadioChange}
+              checked={select === true}
+              control={<Radio />} 
+              label="Uscita" />
+            <FormControlLabel 
+              value="income" 
+              onChange={handleRadioChange}
+              checked={select === false}
+              control={<Radio />} 
+              label="Entrata" />
+          </RadioGroup>
+          <TextField 
+            required
+            variant="standard"
+            label="Descrizione" 
             name="descrizione" 
+            value={formData?.descrizione || ""}
             onChange={(e) => setFormData(prev => ({ ...prev, descrizione: e.target.value }))}
-            id="descrizione"/>
-        </div>
-        <div className={style.inputContainer}>
-          <label htmlFor="importo">Importo {select ? 'speso' : 'entrata'}</label>
-          <input
-            type="number" 
-            name="importo" 
-            id="importo" 
-            step="0.01" 
-            min="0"
-            onChange={(e) => setFormData(prev => ({ ...prev, importo: e.target.value }))}
-            />
-        </div>
-        <div>
-          <label htmlFor="data">Data</label>
-          <input 
-            type="date" 
-            name="data" 
-            id="data" 
-            value={today}
-            onChange={(e) => setFormData(prev => ({ ...prev, data: e.target.value }))}
           />
-        </div>
-        <div className={style.inputContainerSelect}>
+          <TextField 
+            required
+            variant="standard"
+            label="Importo" 
+            name="importo"
+            step="0.01"
+            type="number"
+            value={formData?.importo || ""}
+            onChange={(e) => setFormData(prev => ({ ...prev, importo: e.target.value }))}
+          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker 
+              label="Data"
+              format='DD/MM/YYYY'
+              value={formData?.data ? dayjs(formData.data) : today}
+              onChange={(newValue) => {
+                setFormData(prev => ({ 
+                  ...prev, 
+                  data: newValue ? dayjs(newValue).format("YYYY-MM-DD") : today.format("YYYY-MM-DD")
+                }));
+              }}              
+              slotProps={{
+                textField: { 
+                  variant: "standard", 
+                  required: true,
+                  name: "data" // Add name attribute here for consistency
+                }
+              }}
+            />
+          </LocalizationProvider>
           {select &&
-          <>
-            <label htmlFor="tipologia">Tipologia</label>
-            <select name="tipologia" id="">
-              <option value="spesa">Spesa</option>
-              <option value="benzina">Benzina</option>
-              <option value="extra">Extra</option>
-              <option value="casa">Casa</option>
-              <option value="salute">Salute</option>
-            </select>
-          </>
+            <FormControl variant="standard" sx={{ minWidth: 120 }} required>
+              <InputLabel id="demo-simple-select-standard-label">Tipo di spesa</InputLabel>
+              <Select
+                style={{color: 'rgba(255, 255, 255, 0.7)' }}
+                id="demo-simple-select-standard"
+                name="tipologia"
+                value={formData?.tipologia || ""}
+                onChange={(e) => setFormData(prev => ({ ...prev, tipologia: e.target.value }))}
+                MenuProps={{
+                  disablePortal: true,
+                  PaperProps: {
+                    style: {
+                      backgroundColor: '#121212',
+                      border: '1px solid rgba(255, 255, 255, 0.7)'
+                    },
+                  },
+                  MenuListProps: {
+                    style: {
+                      padding: 0,
+                      backgroundColor: '#121212',
+                      border: 'none',
+                    }
+                  } 
+                }}
+              >
+                {["spesa", "benzina", "extra", "casa", "salute"].map((item) => (
+                  <MenuItem 
+                    key={item} 
+                    value={item}
+                    style={{ backgroundColor: '#121212', color: 'rgba(255, 255, 255, 0.7)' }}
+                  >
+                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           }
-        </div>
-        <div>
-          <button type="submit">Inserisci</button>
-        </div>
+          <Button type="submit" variant="contained" color="inherit"
+          sx={{width:100}}
+          >Inserisci</Button>
+        </Box>
       </form>
-    </div>
     </>
   )
 }

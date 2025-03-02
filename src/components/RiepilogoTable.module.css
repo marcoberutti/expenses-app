@@ -1,35 +1,20 @@
-.table {
-  width: 80%;
-  justify-self: center;
-  border-collapse: collapse;
-  text-align: center;
-}
 
-.table th, .table td {
-  border: 1px solid black;
-  padding: 2px;
-}
 
-.table th {
-  background-color: rgb(204, 226, 132);
-}
-
-.table tr:nth-child(even) {
-  background-color: lightgray;
+.highBudget {
+  color: green!important;
+  font-weight: bold!important;
 }
 
 .lowBudget {
-  color: red;
-  font-weight: bold;
+  color: yellow!important;
+  font-weight: bold!important;
 }
 
-@media (max-width: 620px) {
-  .tableContainer {
-    width: 100%;
-    overflow-x: auto;
-  }
-  .table {
-    width: 100%;
-    font-size: 0.8rem;
-  }
+.zeroBudget {
+  font-weight: bold!important;
+}
+
+.underZeroBudget {
+  color: red!important;
+  font-weight: bold!important;
 }

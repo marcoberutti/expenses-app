@@ -1,49 +1,27 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useData } from "../dataContext";
 import { Select as BaseSelect, selectClasses } from "@mui/base/Select";
 import { Option as BaseOption, optionClasses } from "@mui/base/Option";
 import { styled } from "@mui/system";
 import UnfoldMoreRoundedIcon from "@mui/icons-material/UnfoldMoreRounded";
 import { CssTransition } from "@mui/base/Transitions";
 import { PopupContext } from "@mui/base/Unstable_Popup";
-import Paper from "@mui/material/Paper";
-import TableContainer from "@mui/material/TableContainer";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import HomeTableTbody from "./HomeTableTbody";
-import TableRow from "@mui/material/TableRow";
-import { useEffect, useState } from "react";
-import { format, getYear } from "date-fns";
-import { it } from "date-fns/locale";
+import {useState, useEffect} from 'react'
 
-export default function HomeTable({ generateHeaders }) {
-  const { datas, handleToggleModals } = useData();
-  const [filteredDatas, setFilteredDatas] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const thisYear = getYear(new Date());
+export default function SelectxFormModifica({handleInputChange, datasForUpdate, setFormData}) {
 
-  useEffect(() => {
-    filterDataByMonth(selectedMonth);
-  }, [datas, selectedMonth]);
 
-  function filterDataByMonth(month) {
-    const startOfMonth = new Date(thisYear, month, 1).getTime();
-    const endOfMonth = new Date(thisYear, month + 1, 1).getTime();
-
-    const newDatas = datas.filter((dato) => {
-      const dataDate = new Date(dato.data).getTime();
-      return dataDate >= startOfMonth && dataDate < endOfMonth;
-    });
-
-    setFilteredDatas(newDatas);
+  const getCurrentTipologia = () => {
+    if (!datasForUpdate) return "";
+    
+    if (datasForUpdate.Spesa) return "Spesa";
+    if (datasForUpdate.Benzina) return "Benzina";
+    if (datasForUpdate.Extra) return "Extra";
+    if (datasForUpdate.Casa) return "Casa";
+    if (datasForUpdate.Salute) return "Salute";
   }
-
-  function handleChangeMonth(event, newValue) {
-    if (newValue !== null) {
-      setSelectedMonth(newValue);
-    }
-  }
+  
+  const [selectedValue, setSelectedValue] = useState("");
 
   const Select = React.forwardRef(function CustomSelect(props, ref) {
     const slots = {
@@ -68,7 +46,7 @@ export default function HomeTable({ generateHeaders }) {
       root: PropTypes.elementType,
     }),
   };
-  
+
   const blue = {
     100: '#DAECFF',
     200: '#99CCF3',
@@ -78,7 +56,7 @@ export default function HomeTable({ generateHeaders }) {
     700: '#0059B2',
     900: '#003A75',
   };
-  
+
   const grey = {
     50: '#F3F6F9',
     100: '#E5EAF2',
@@ -109,17 +87,17 @@ export default function HomeTable({ generateHeaders }) {
   
   const StyledButton = styled(Button, { shouldForwardProp: () => true })(
     ({ theme }) => `
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.875rem;
-    box-sizing: border-box;
-    min-width: 200px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    text-align: left;
-    line-height: 1.5;
-    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.875rem;
+      box-sizing: border-box;
+      min-width: 200px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-align: left;
+      line-height: 1.5;
+      background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'}!important;
+      border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]}!important;
+      color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]}!important;
     position: relative;
     box-shadow: 0 2px 4px ${
       theme.palette.mode === 'dark' ? 'rgba(0,0,0, 0.5)' : 'rgba(0,0,0, 0.05)'
@@ -135,8 +113,8 @@ export default function HomeTable({ generateHeaders }) {
   
     &.${selectClasses.focusVisible} {
       outline: 0;
-      border-color: ${blue[400]};
-      box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[700] : blue[200]};
+      border-color: ${grey[400]}!important;
+      box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? grey[700] : grey[200]}!important;
     }
   
     & > svg {
@@ -147,7 +125,7 @@ export default function HomeTable({ generateHeaders }) {
       right: 10px;
     }
     `,
-  );
+  );  
   
   const Listbox = styled('ul')(
     ({ theme }) => `
@@ -156,16 +134,16 @@ export default function HomeTable({ generateHeaders }) {
     box-sizing: border-box;
     padding: 6px;
     margin: 12px 0;
-    min-width: 200px;
+    min-width: 100px;
     border-radius: 12px;
     overflow: auto;
     outline: 0;
-    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'} !important;
+    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]} !important;
+    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]} !important;
     box-shadow: 0 2px 4px ${
       theme.palette.mode === 'dark' ? 'rgba(0,0,0, 0.5)' : 'rgba(0,0,0, 0.05)'
-    };
+    } !important;
     
     .closed & {
       opacity: 0;
@@ -221,68 +199,66 @@ export default function HomeTable({ generateHeaders }) {
     list-style: none;
     padding: 8px;
     border-radius: 8px;
-    cursor: default;
+    cursor: pointer;
   
     &:last-of-type {
       border-bottom: none;
     }
   
     &.${optionClasses.selected} {
-      background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
-      color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
+      background-color: ${theme.palette.mode === 'dark' ? grey[700] : grey[200]} !important;
+      color: ${theme.palette.mode === 'dark' ? grey[100] : grey[900]} !important;
     }
   
     &.${optionClasses.highlighted} {
-      background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
-      color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+      background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]} !important;
+      color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]} !important;
     }
   
     &:focus-visible {
-      outline: 3px solid ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
+      outline: 3px solid ${grey[600]} !important;
+      outline-offset: 2px !important;
     }
-    
+  
     &.${optionClasses.highlighted}.${optionClasses.selected} {
-      background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
-      color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
+      background-color: ${theme.palette.mode === 'dark' ? grey[700] : grey[200]} !important;
+      color: ${theme.palette.mode === 'dark' ? grey[100] : grey[900]} !important;
     }
-  
-    &.${optionClasses.disabled} {
-      color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
+
+    &:hover {
+      background: ${theme.palette.mode === 'dark' ? grey[800] : grey[50]};
+      border-color: ${theme.palette.mode === 'dark' ? grey[600] : grey[300]};
     }
-  
-    &:hover:not(.${optionClasses.disabled}) {
-      background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
-      color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-    }
-    `,
+  `
   );
   
   const Popup = styled('div')`
     z-index: 1;
   `;
 
+  useEffect(() => {
+    const newTipologia = getCurrentTipologia();
+    if (newTipologia && newTipologia !== selectedValue) {
+      setSelectedValue(newTipologia);
+    }
+  }, [datasForUpdate]);
+
+  const handleSelectChange = (event) => {
+    setSelectedValue(event.target.textContent);
+    setFormData((prev) => ({ ...prev, tipologia: event.target.textContent }));
+  };
+
   return (
-    <>
-      <Select onChange={handleChangeMonth} value={selectedMonth}>
-        {Array.from({ length: 12 }, (_, i) => (
-          <Option key={i} value={i}>
-            {format(new Date(thisYear, i, 1), "MMMM", { locale: it })}
-          </Option>
-        ))}
-      </Select>
-      <br/>
-      <br/>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>{generateHeaders}</TableRow>
-          </TableHead>
-          <HomeTableTbody
-            handleToggleModals={handleToggleModals}
-            filteredDatas={filteredDatas}
-          />
-        </Table>
-      </TableContainer>
-    </>
+    <Select
+      name="tipologia"
+      onChange={handleSelectChange}
+      value={selectedValue}
+    >
+      <Option value="Spesa">Spesa</Option>
+      <Option value="Benzina">Benzina</Option>
+      <Option value="Extra">Extra</Option>
+      <Option value="Casa">Casa</Option>
+      <Option value="Salute">Salute</Option>
+    </Select>
   );
 }

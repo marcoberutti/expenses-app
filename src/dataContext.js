@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import API_URL from "./config";
 import { getYear } from "date-fns";
 import { useInsertDataApi } from "./hooks/useInsertDataApi";
@@ -10,6 +10,10 @@ import { useLoginApi } from "./hooks/useLoginApi"
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme || "dark";
+  });
   const { message, setTemporaryMessage } = useMessage();
   const { insertData } = useInsertDataApi();
   const { deleteData } = useDeleteDataApi();
@@ -31,6 +35,25 @@ export const DataProvider = ({ children }) => {
   ]);
   const [isLogged, setIsLogged] = useState(!!localStorage.getItem("token"));
   const [datasForUpdate, setDatasForUpdate] = useState({})
+  const [formData, setFormData] = useState({
+    descrizione: '',
+    spesa: '',
+    income: '',
+    benzina: '',
+    extra: '',
+    casa: '',
+    salute: '',
+    data: ''
+  });
+
+  const handleSetTheme = (e) => {
+    setTheme(e.target.checked ? "dark" : "light")
+  }
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]); 
+  
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
@@ -72,6 +95,7 @@ export const DataProvider = ({ children }) => {
     .then(data => {
       fetchData();
       setTemporaryMessage(data.message)
+      setModal("normal")
     })
   }
   const loginData = (data) => {
@@ -129,7 +153,11 @@ export const DataProvider = ({ children }) => {
     loginData,
     handleToggleModals,
     getDataForUpdateForm,
-    datasForUpdate
+    datasForUpdate,
+    formData,
+    setFormData,
+    handleSetTheme,
+    theme,
   }
 
 

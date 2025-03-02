@@ -1,5 +1,10 @@
 import { useData } from "../dataContext"
 import style from './HomeTable.module.css'
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import IconButton from '@mui/material/IconButton';
+
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 
@@ -8,13 +13,13 @@ export default function HomeTableTbody ({filteredDatas}){
   const {columnsToHide, rimuoviDati, getDataForUpdateForm, setModal, setSelect} = useData()
 
   return (
-    <tbody>
+    <TableBody>
     {filteredDatas && filteredDatas.map(data => (
-      <tr key={data.id}>
-        <td
+      <TableRow key={data.id}>
+        <TableCell align="center"
           style={{display: columnsToHide[0].visible ? 'table-cell' : 'none'}}>
           <div className={style.deleteAndDateCell}>
-            <button
+            <IconButton size="small"
               style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
               onClick={() => {
                 if (window.confirm("cancellare davvero?")) {
@@ -23,8 +28,8 @@ export default function HomeTableTbody ({filteredDatas}){
               }
             >
               <i className="bi-trash"></i>
-            </button>
-            <button
+            </IconButton>
+            <IconButton size="small"
             style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
             onClick={()=>{
             if(data.Income){
@@ -37,36 +42,38 @@ export default function HomeTableTbody ({filteredDatas}){
             }
             >
             <i className="bi-pen"></i>
-            </button>
+            </IconButton>
             <span>
-              {format(data.data, 'MMM', {locale: it})}
+              <strong>
+                {format(data.data, 'MMM', {locale: it})}
+              </strong>
             </span>
           </div>
-        </td>
-          <td
+        </TableCell>
+          <TableCell align="center"
             style={{display: columnsToHide[1].visible ? 'table-cell' : 'none'}}>
             {data.descrizione}
-            </td>
-          <td
+            </TableCell>
+          <TableCell align="center"
             style={{display: columnsToHide[2].visible ? 'table-cell' : 'none'}}>
-            {data.Spesa && `${data.Spesa} €`}</td>
-          <td
+            {data.Spesa && `${data.Spesa} €`}</TableCell>
+          <TableCell align="center"
             style={{display: columnsToHide[3].visible ? 'table-cell' : 'none'}}>
-            {data.Income && `${data.Income} €`}</td>
-          <td
+            {data.Income && `${data.Income} €`}</TableCell>
+          <TableCell align="center"
             style={{display: columnsToHide[4].visible ? 'table-cell' : 'none'}}>
-            {data.Benzina && `${data.Benzina} €`}</td>
-          <td
+            {data.Benzina && `${data.Benzina} €`}</TableCell>
+          <TableCell align="center"
             style={{display: columnsToHide[5].visible ? 'table-cell' : 'none'}}>
-            {data.Extra && `${data.Extra} €`}</td>
-          <td
+            {data.Extra && `${data.Extra} €`}</TableCell>
+          <TableCell align="center"
             style={{display: columnsToHide[6].visible ? 'table-cell' : 'none'}}>
-            {data.Casa && `${data.Casa} €`}</td>
-          <td
+            {data.Casa && `${data.Casa} €`}</TableCell>
+          <TableCell align="center"
             style={{display: columnsToHide[7].visible ? 'table-cell' : 'none'}}>
-            {data.Salute && `${data.Salute} €`}</td>
-      </tr>
+            {data.Salute && `${data.Salute} €`}</TableCell>
+      </TableRow>
     ))}
-    </tbody>
+    </TableBody>
   )
 }

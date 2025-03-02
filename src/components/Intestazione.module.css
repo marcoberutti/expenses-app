@@ -5,27 +5,27 @@
   padding: 0 20px;
 }
 
-
-.intestazione div:last-child {
-  font-size: 1.5rem;
+.intestazione button {
+  font-size: 1.3rem;
   width: 20px;
   height: 20px;
-  border: 1px solid black;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-} 
-
-.intestazione button {
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.84);
   border: none;
   cursor: pointer;
 }
 
+.intestazione button:hover {
+  background-color: antiquewhite;
+}
+
 .enter {
   font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .exit {
@@ -33,15 +33,10 @@
   font-weight: bold;
 }
 
-.intestazione div:hover {
-  background-color: lightgray;
-}
-
-
 .successAlert {
   position: absolute;
   top: 20px;
-  background-color: lightgreen;
+  background-color: rgb(160, 228, 160);
   padding: 15px;
   font-weight: bold;
   border-radius: 10px;

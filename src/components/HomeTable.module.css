@@ -4,58 +4,6 @@
   margin:0 15px 15px 0;
 }
 
-.table {
-  width: 80%;
-  justify-self: center;
-  border-collapse: collapse;
-  text-align: center;
-  font-size: 1rem;
-  box-sizing: border-box; /* Aggiungi box-sizing per evitare problemi di layout */
-}
-
-.table th, .table td {
-  border: 1px solid black;
-  padding: 5px;
-  height: 40px; /* Altezza fissa per le righe */
-  min-height: 40px; /* Altezza minima */
-}
-
-.table th {
-  background-color: rgb(204, 226, 132);
-}
-
-.table input[type="text"] {
-  height: 10px;
-  width: 80%;
-  padding: 5px;
-}
-
-.table tr:nth-child(even) {
-  background-color: lightgray;
-}
-
-.table td button {
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-}
-
-.table td button i {
-  font-size: 0.8rem;
-}
-
-.table td button:first-child i:hover {
-  color: red;
-}
-
-.table td button:nth-child(2) i:hover {
-  color: rgb(0, 140, 255);
-}
-
-.table td button:nth-child(3) i:hover {
-  color: rgb(87, 244, 48);
-}
-
 .deleteAndDateCell {
   display: flex; 
   justify-content: space-evenly;
@@ -63,22 +11,6 @@
 }
 
 @media (max-width: 620px) {
-
-  .table {
-    width: 100%;
-    font-size: 0.8rem;
-  }
-  .tableWithInput {
-    margin-left: 150px;
-  }
-
-  .table th, .table td {
-    border: 1px solid black;
-    padding: 2px;
-    width: fit-content;
-    height: 40px; /* Altezza fissa per le righe */
-    min-height: 40px; /* Altezza minima */
-  }
 
   .deleteAndDateCell{
     display: flex;

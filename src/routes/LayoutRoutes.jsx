@@ -1,34 +1,44 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import style from './layoutRoutes.module.css';
-import { DataProvider, useData } from "../dataContext"; // Importa il DataProvider
+import { useData } from "../dataContext"; // Importa il DataProvider
 import Login from "../components/Login";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 export default function LayoutRoutes({ children }) {
 
-  const { loginData, isLogged, setIsLogged } = useData();
+  const { loginData, isLogged, setIsLogged, theme } = useData();
 
   useEffect(() => {
     if (localStorage.getItem("Token") && !isLogged) {
       setIsLogged(true);
     }
   }, []);
-  
+
+  const darkTheme = useMemo(() =>
+    createTheme({
+        palette: {
+            mode: theme,
+        },
+    }), [theme]
+  );
 
   return (
-    <DataProvider>
-      <Navbar isLogged={isLogged}/>
-      { isLogged ? 
-          <div className={style.mainContainer}>
-            <div className={style.outlet}>
-              {children}
+      <ThemeProvider theme={darkTheme} key={theme}>
+      <CssBaseline />
+        <Navbar isLogged={isLogged}/>
+        { isLogged ? 
+            <div className={style.mainContainer}>
+              <div className={style.outlet}>
+                {children}
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
-          :
-          <Login handleLogin={loginData}/>
-      }
-    </DataProvider>
+            :
+            <Login handleLogin={loginData}/>
+        }
+      </ThemeProvider>
   );
 }

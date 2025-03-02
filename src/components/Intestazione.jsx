@@ -7,7 +7,7 @@ export default function Intestazione({title, columnsToHide, handleToggleColumns}
   return (
 
     <div className={style.intestazione}>
-      <h3>{title}</h3>
+      <h3 className={style.titoloIntestazione}>{title}</h3>
       {message !== '' && <h4 className={style.successAlert}>{message}</h4> }
       {columnsToHide && columnsToHide.map(column =>
         column.visible === false ? 
@@ -23,7 +23,9 @@ export default function Intestazione({title, columnsToHide, handleToggleColumns}
             </div>
         : null
       )}
-        <div><button className={modal !== "normal" ? style.exit : style.enter} onClick={handleToggleModals}>{modal !== "normal" ? "x" : "+"}</button></div>
+        <button className={modal !== "normal" ? style.exit : style.enter} onClick={handleToggleModals}>
+          {modal !== "normal" ? "x" : "+"}
+        </button>
     </div>
   )
 }

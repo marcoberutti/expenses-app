@@ -6,6 +6,7 @@ import Loader from "../components/Loader";
 import Intestazione from "../components/Intestazione";
 import HomeForm from "../components/HomeForm";
 import RiepilogoTable from "../components/RiepilogoTable";
+import style from './table.module.css'
 
 export default function Riepilogo() {
 
@@ -30,7 +31,9 @@ export default function Riepilogo() {
           handleToggleModals={handleToggleModals}
       />
       {modal === "normal" ? 
-        <RiepilogoTable/>
+        <div className={style.tableRiepilogoContainer}>
+          <RiepilogoTable/>
+        </div>
       :
         <HomeForm inserisciDati={inserisciDati} handleRadioChange={handleRadioChange} select={select} now={now}/>
       }
