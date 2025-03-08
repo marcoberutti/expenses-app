@@ -16,7 +16,7 @@ export default function HomeFormModifica() {
   const [selectDefaultVal, setSelectDefVal] = useState("");
 
   useEffect(() => {
-    if (!datasForUpdate) return; // Se datasForUpdate è nullo, esci
+    if (!datasForUpdate) return;
 
     const excludeKeys = ["id", "descrizione", "data"];
     const filteredEntriesForSelect = Object.entries(datasForUpdate).filter(
@@ -29,7 +29,7 @@ export default function HomeFormModifica() {
     }
 
     // Determina la tipologia (outcome o income)
-    const outcomeKey = ["Benzina", "Spesa", "Extra", "Casa", "Salute"].find(
+    const outcomeKey = ["Benzina", "Spesa", "Extra", "Casa", "Salute", "Investimenti", "tasse"].find(
       (key) => datasForUpdate[key] !== undefined
     );
     const outcomeValue = outcomeKey ? outcomeKey : "income"; // Se uno dei valori è presente, usa quello, altrimenti "income"
@@ -90,13 +90,19 @@ export default function HomeFormModifica() {
               name="importo"
               step="0.01"
               type="number"
+              inputProps={{ 
+                step: "0.01",
+                lang: "en-US" // or your specific locale to ensure proper decimal handling
+              }}
               defaultValue={
                 datasForUpdate?.Benzina ||
                 datasForUpdate?.Casa ||
                 datasForUpdate?.Extra ||
                 datasForUpdate?.Income ||
                 datasForUpdate?.Salute ||
-                datasForUpdate?.Spesa
+                datasForUpdate?.Spesa  ||
+                datasForUpdate?.Investimenti ||
+                datasForUpdate?.tasse
               }
               onChange={handleInputChange}
             />

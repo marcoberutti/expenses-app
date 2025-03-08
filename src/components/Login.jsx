@@ -1,14 +1,12 @@
 import { Container, FormControl, Button, Typography} from '@mui/material';
 import { useState } from 'react';
 
-export default function MyForm({ handleLogin }) {
+export default function Login({ handleLogin }) {
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
-
-  
 
   function handleChange(e){
     setFormData({

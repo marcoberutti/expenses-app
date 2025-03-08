@@ -263,13 +263,15 @@ export default function HomeTable({ generateHeaders }) {
 
   return (
     <div>
-      <Select onChange={handleChangeMonth} value={selectedMonth}>
-        {Array.from({ length: 12 }, (_, i) => (
-          <Option key={i} value={i}>
-            {format(new Date(thisYear, i, 1), "MMMM", { locale: it })}
-          </Option>
-        ))}
-      </Select>
+      <div style={{display: "flex", justifyContent:"center", alignItems: "center"}}>
+        <Select onChange={handleChangeMonth} value={selectedMonth}>
+          {Array.from({ length: 12 }, (_, i) => (
+            <Option key={i} value={i}>
+              {format(new Date(thisYear, i, 1), "MMMM", { locale: it })}
+            </Option>
+          ))}
+        </Select>
+        </div>
       <br/>
       <br/>
       <TableContainer component={Paper}>

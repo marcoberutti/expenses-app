@@ -1,15 +1,23 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import API_URL from "./config";
 import { getYear } from "date-fns";
-import { useInsertDataApi } from "./hooks/useInsertDataApi";
+
+import { useLoginApi } from "./hooks/useLoginApi"
 import { useMessage } from "./hooks/useMessage";
+import { useInsertDataApi } from "./hooks/useInsertDataApi";
 import { useDeleteDataApi } from "./hooks/useDeleteDataApi";
 import { useWriteDataApi } from "./hooks/useWriteDataApi";
-import { useLoginApi } from "./hooks/useLoginApi"
+
+import { useNewProductApi } from "./hooks/useNewProductApi";
+import { useDeleteProductApi } from "./hooks/useDeleteProductApi";
+import { usePopulateProductApi } from "./hooks/usePopulateListaProdotti";
+import { useGetProductsApi } from "./hooks/useGetProductsApi";
 
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
+
+  const [listaSpesa, setListaSpesa] = useState([]);
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     return savedTheme || "dark";
@@ -17,10 +25,17 @@ export const DataProvider = ({ children }) => {
   const { message, setTemporaryMessage } = useMessage();
   const { insertData } = useInsertDataApi();
   const { deleteData } = useDeleteDataApi();
+
+  const { newProduct } = useNewProductApi();
+  const { deleteProduct } = useDeleteProductApi();
+  const { populateProduct } = usePopulateProductApi();
+  const { getProducts } = useGetProductsApi();
+  const [products, setProducts] = useState([]);
+
   const { writeData } = useWriteDataApi();
   const { handleLogin } = useLoginApi()
   const [datas, setDatas] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [modal, setModal] = useState("normal");
   const [select, setSelect] = useState(true);
   const [columnsToHide, setColumnsToHide] = useState([
@@ -32,6 +47,8 @@ export const DataProvider = ({ children }) => {
     {nome: "Extra", visible: true},
     {nome: "Casa", visible: true},
     {nome: "Salute", visible: true},
+    {nome: "Investimenti", visible: true},
+    {nome: "Tasse", visible: true},
   ]);
   const [isLogged, setIsLogged] = useState(!!localStorage.getItem("token"));
   const [datasForUpdate, setDatasForUpdate] = useState({})
@@ -43,7 +60,9 @@ export const DataProvider = ({ children }) => {
     extra: '',
     casa: '',
     salute: '',
-    data: ''
+    data: '',
+    investimenti: '',
+    tasse:'',
   });
 
   const handleSetTheme = (e) => {
@@ -54,7 +73,6 @@ export const DataProvider = ({ children }) => {
     localStorage.setItem("theme", theme);
   }, [theme]); 
   
-
   const fetchData = useCallback(() => {
     setIsLoading(true);
     fetch(`${API_URL}/dati`,{
@@ -85,7 +103,6 @@ export const DataProvider = ({ children }) => {
   const rimuoviDati = (id) => {
     deleteData(id)
     .then(data => {
-      console.log(data)
       fetchData();
       setTemporaryMessage(data.message)
     })
@@ -133,6 +150,49 @@ export const DataProvider = ({ children }) => {
     setDatasForUpdate(filteredObj)
   };
 
+  const fetchListSpesa = useCallback(async () => {
+    setIsLoading(true);
+    await getProducts()
+    .then((data) => {
+      setProducts(data)
+    })
+
+    fetch(`${API_URL}/getListSpesa`,{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.REACT_APP_API_KEY
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setListaSpesa(data);
+
+      })
+      .catch((error) => console.error("Errore nel fetch:", error))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const deleteProductList = (id) => {
+    deleteProduct(id)
+    .then(data => {
+      fetchListSpesa();
+      setTemporaryMessage(data.message)
+      setModal("normal")
+    })
+  }
+
+  const addProductList = (prodotto, prezzo) => {
+    populateProduct(prodotto,prezzo)
+    newProduct(prodotto, prezzo)
+    .then(data => {
+      fetchListSpesa();
+      setTemporaryMessage(data.message)
+      setModal("normal")
+    })
+  }
+  
+
   const value = {
     columnsToHide,
     setColumnsToHide,
@@ -158,6 +218,11 @@ export const DataProvider = ({ children }) => {
     setFormData,
     handleSetTheme,
     theme,
+    fetchListSpesa,
+    listaSpesa,
+    deleteProductList,
+    addProductList,
+    products
   }
 
 

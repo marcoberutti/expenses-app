@@ -35,6 +35,8 @@ const dataReducer = (state = initialState, action) => {
           existingMonth.totExtra += parseFloat(dato.Extra) || 0;
           existingMonth.totCasa += parseFloat(dato.Casa) || 0;
           existingMonth.totSalute += parseFloat(dato.Salute) || 0;
+          existingMonth.totInvest += parseFloat(dato.Investimenti) || 0;
+          existingMonth.totTasse += parseFloat(dato.tasse) || 0;
         } else {
           acc.push({
             mese: month,
@@ -44,6 +46,8 @@ const dataReducer = (state = initialState, action) => {
             totExtra: parseFloat(dato.Extra) || 0,
             totCasa: parseFloat(dato.Casa) || 0,
             totSalute: parseFloat(dato.Salute) || 0,
+            totInvest: parseFloat(dato.Investimenti) || 0,
+            totTasse: parseFloat(dato.tasse) || 0,
           });
         }
         return acc;
@@ -60,6 +64,8 @@ const dataReducer = (state = initialState, action) => {
       const extra = newRiepilogo.map(item => item.totExtra);
       const casa = newRiepilogo.map(item => item.totCasa);
       const salute = newRiepilogo.map(item => item.totSalute);
+      const investimenti = newRiepilogo.map(item => item.totInvest);
+      const tasse = newRiepilogo.map(item => item.totTasse);
 
       const graficoData = {
         labels: mesi,
@@ -70,6 +76,8 @@ const dataReducer = (state = initialState, action) => {
           { label: "Extra", data: extra, backgroundColor: "rgba(153, 102, 255, 0.6)" },
           { label: "Casa", data: casa, backgroundColor: "rgba(54, 162, 235, 0.6)" },
           { label: "Salute", data: salute, backgroundColor: "rgba(255, 159, 64, 0.6)" },
+          { label: "Investimenti", data: investimenti, backgroundColor: "rgba(7, 232, 86, 0.88)" },
+          { label: "Tasse", data: tasse, backgroundColor: "rgba(236, 10, 10, 0.9)" },
         ],
       };
 

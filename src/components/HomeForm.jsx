@@ -39,9 +39,9 @@ export default function HomeForm(){
 
   return (
     <>
-      <h1>Nuova spesa</h1>
+      <h2 style={{textAlign:"center"}}>Nuova spesa</h2>
       <form method="post" onSubmit={handleSubmit}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 5, mx:5 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 4, mx:5 }}>
           <RadioGroup
               defaultValue="outcome"
               name="tipo">
@@ -119,14 +119,21 @@ export default function HomeForm(){
                       backgroundColor: '#121212',
                       border: 'none',
                     }
-                  } 
+                  }
                 }}
               >
-                {["spesa", "benzina", "extra", "casa", "salute"].map((item) => (
-                  <MenuItem 
-                    key={item} 
+                {["spesa", "benzina", "extra", "casa", "salute","investimenti", "tasse"].map((item) => (
+                  <MenuItem
+                    key={item}
                     value={item}
-                    style={{ backgroundColor: '#121212', color: 'rgba(255, 255, 255, 0.7)' }}
+                    sx={{
+                      backgroundColor: '#121212',
+                      color: 'rgba(255, 255, 255, 0.7)',
+                      '&:hover': {
+                        backgroundColor: 'rgba(233, 232, 232, 0.18)',
+                        color: 'white'
+                      },
+                    }}
                   >
                     {item.charAt(0).toUpperCase() + item.slice(1)}
                   </MenuItem>

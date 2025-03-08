@@ -48,14 +48,16 @@ export default function RiepilogoTable() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell align="center" sx={{p:0}}>Mese</TableCell>
-            <TableCell align="center" sx={{p:0}}>Tot Income</TableCell>
-            <TableCell align="center" sx={{p:0}}>Tot Spesa</TableCell>
-            <TableCell align="center" sx={{p:0}}>Tot Benzina</TableCell>
-            <TableCell align="center" sx={{p:0}}>Tot Extra</TableCell>
-            <TableCell align="center" sx={{p:0}}>Tot Casa</TableCell>
-            <TableCell align="center" sx={{p:0}}>Tot Salute</TableCell>
-            <TableCell align="center" sx={{p:0}}>Budget Rimasto</TableCell>
+            <TableCell align="center" sx={{p:1}}>Mese</TableCell>
+            <TableCell align="center" sx={{p:1}}>Tot Income</TableCell>
+            <TableCell align="center" sx={{p:1}}>Tot Spesa</TableCell>
+            <TableCell align="center" sx={{p:1}}>Tot Benzina</TableCell>
+            <TableCell align="center" sx={{p:1}}>Tot Extra</TableCell>
+            <TableCell align="center" sx={{p:1}}>Tot Casa</TableCell>
+            <TableCell align="center" sx={{p:1}}>Tot Salute</TableCell>
+            <TableCell align="center" sx={{p:1}}>Tot Invest</TableCell>
+            <TableCell align="center" sx={{p:1}}>Tot Tasse</TableCell>
+            <TableCell align="center" sx={{p:1}}>Budget Rimasto</TableCell>
           </TableRow>
         </TableHead>
         <TableBody
@@ -64,7 +66,7 @@ export default function RiepilogoTable() {
             const mese = (i + 1).toString().padStart(2, '0');
             const filteredData = datas.filter(dato => format(dato.data, 'MM') === mese);
 
-            let categories = ["Income", "Spesa", "Benzina", "Extra", "Casa", "Salute"];
+            let categories = ["Income", "Spesa", "Benzina", "Extra", "Casa", "Salute", "Investimenti", "tasse"];
 
             const totals = categories.reduce((acc, category) => {
               acc[category] = filteredData.reduce((sum, item) =>
@@ -72,7 +74,7 @@ export default function RiepilogoTable() {
               return acc;
             }, {});
 
-            const totalExpenses = ["Spesa", "Benzina", "Extra", "Casa", "Salute"].reduce((sum, category) => {
+            const totalExpenses = ["Spesa", "Benzina", "Extra", "Casa", "Salute", "Investimenti", "tasse"].reduce((sum, category) => {
               return sum + (totals[category] || 0);
             }, 0);
 
@@ -81,7 +83,7 @@ export default function RiepilogoTable() {
             return (
               <TableRow key={i}>
                 <TableCell align="center" sx={{p:0}}>{format(new Date(2024, i, 1), "MMM")}</TableCell>
-                {categories.map(cat => <TableCell align="center" sx={{p:1}} key={`${i}-${cat}`}>{totals[cat]}</TableCell>)}
+                {categories.map(cat => <TableCell align="center" sx={{p:1}} key={`${i}-${cat}`}>{parseFloat(totals[cat])}</TableCell>)}
                 <TableCell align="center" sx={{p:0}} key={`${i}-totaleIncome`} className={
                   budgetMese > 200 ? 
                     style.highBudget : 
@@ -97,7 +99,7 @@ export default function RiepilogoTable() {
           })}
           <TableRow>
             <TableCell align="center" sx={{p:0}}>Gran tot:</TableCell>
-            {["Income", "Spesa", "Benzina", "Extra", "Casa", "Salute"].map((category, index) => (
+            {["Income", "Spesa", "Benzina", "Extra", "Casa", "Salute", "Investimenti", "tasse"].map((category, index) => (
               <TableCell align="center" key={`total-${index}`} sx={{p:0}}>
                 {datas && datas
                   .filter(dato => dato[category] !== null)

@@ -19,6 +19,8 @@ export default function SelectxFormModifica({handleInputChange, datasForUpdate, 
     if (datasForUpdate.Extra) return "Extra";
     if (datasForUpdate.Casa) return "Casa";
     if (datasForUpdate.Salute) return "Salute";
+    if (datasForUpdate.Investimenti) return "Investimenti";
+    if (datasForUpdate.tasse) return "tasse";
   }
   
   const [selectedValue, setSelectedValue] = useState("");
@@ -261,6 +263,8 @@ export default function SelectxFormModifica({handleInputChange, datasForUpdate, 
       <Option value="Extra">Extra</Option>
       <Option value="Casa">Casa</Option>
       <Option value="Salute">Salute</Option>
+      <Option value="Investimenti">Investimenti</Option>
+      <Option value="tasse">tasse</Option>
     </Select>
   );
 }

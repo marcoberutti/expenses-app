@@ -5,39 +5,37 @@
   padding: 0 20px;
 }
 
-.intestazione button {
-  font-size: 1.3rem;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+.iconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.iconCircle {
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.84);
-  border: none;
-  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: white;
+  color: black;
 }
 
-.intestazione button:hover {
-  background-color: antiquewhite;
+.iconCircle:first-child {
+  font-size: 1.3rem;
 }
 
-.enter {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.exit {
-  font-size: 1rem;
-  font-weight: bold;
+.iconCircle:hover {
+  background-color: rgb(234, 212, 183);
 }
 
 .successAlert {
   position: absolute;
   top: 20px;
-  background-color: rgb(160, 228, 160);
-  padding: 15px;
+  background-color: rgba(34, 231, 64, 0.778);
+  padding: 5px;
   font-weight: bold;
   border-radius: 10px;
 }

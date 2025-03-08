@@ -1,6 +1,7 @@
 import {  useEffect } from "react";
 import TableCell from '@mui/material/TableCell';
 import "bootstrap-icons/font/bootstrap-icons.css";
+import style from "./home.module.css"
 import HomeTable from "../components/HomeTable";
 import HomeForm from "../components/HomeForm";
 import { useData } from "../dataContext";
@@ -21,7 +22,6 @@ export default function Home() {
     rimuoviDati(id)
   }
   function handleToggleColumns(e){
-    console.dir(e.target)
     let columnName = e.target.nextSibling.textContent;
     setColumnsToHide(prevItems => 
       prevItems.map(item =>
@@ -35,19 +35,23 @@ export default function Home() {
         {(() => {
           switch (column.nome) {
             case "Descr.":
-              return <i className="bi bi-journal-text"><div><strong>{column.nome}</strong></div></i>;
+              return <i className="bi bi-journal-text"></i>;
             case "Entrate":
-              return <i class="bi bi-cash-coin"><div><strong>{column.nome}</strong></div></i>
+              return <i className={`bi bi-cash-coin ${style.income}`}></i>
             case "Spesa":
-              return <i class="bi bi-cart"><div><strong>{column.nome}</strong></div></i>
+              return <i className="bi bi-cart"></i>
             case "Benzina":
-              return <i className="bi bi-fuel-pump"><div><strong>{column.nome}</strong></div></i>;
+              return <i className="bi bi-fuel-pump"></i>;
             case "Extra":
-              return <i className="bi bi-plus-circle"><div><strong>{column.nome}</strong></div></i>;
+              return <i className="bi bi-plus-circle"></i>;
             case "Casa":
-              return <i className="bi bi-plus-circle"><div><strong>{column.nome}</strong></div></i>;
+              return <i className="bi bi-house"></i>;
             case "Salute":
-              return <i className="bi bi-plus-circle"><div><strong>{column.nome}</strong></div></i>;
+              return <i className="bi bi-heart-pulse"></i>;
+            case "Investimenti":
+              return <i className={`bi bi-currency-dollar ${style.income}`}></i>
+            case "Tasse":
+              return <i className={`bi bi-cash-coin ${style.taxes}`}></i>;
             default:
               return null;
           }

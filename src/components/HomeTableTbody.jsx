@@ -13,7 +13,7 @@ export default function HomeTableTbody ({filteredDatas}){
     <TableBody>
     {filteredDatas && filteredDatas.map(data => (
       <TableRow key={data.id}>
-        <TableCell  sx={{p:0}} align="center"
+        <TableCell  sx={{p:0, width:'25px'}} align="center"
           style={{display: columnsToHide[0].visible ? 'table-cell' : 'none'}}>
           <div className={style.deleteAndDateCell}>
             <IconButton size="small"
@@ -42,28 +42,25 @@ export default function HomeTableTbody ({filteredDatas}){
             </IconButton>
           </div>
         </TableCell>
-          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
-            style={{display: columnsToHide[1].visible ? 'table-cell' : 'none'}}>
-            {data.descrizione}
+          <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px'}} align="center">
+            {data.descrizione.length > 8 ? data.descrizione.substring(0,8) + "..." : data.descrizione}
             </TableCell>
-          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
-            style={{display: columnsToHide[2].visible ? 'table-cell' : 'none'}}>
+          <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px'}} align="center">
             {data.Spesa && `${data.Spesa} €`}</TableCell>
-          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
-            style={{display: columnsToHide[3].visible ? 'table-cell' : 'none'}}>
+          <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px'}} align="center">
             {data.Income && `${data.Income} €`}</TableCell>
-          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
-            style={{display: columnsToHide[4].visible ? 'table-cell' : 'none'}}>
+          <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px'}} align="center">
             {data.Benzina && `${data.Benzina} €`}</TableCell>
-          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
-            style={{display: columnsToHide[5].visible ? 'table-cell' : 'none'}}>
+          <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px'}} align="center">
             {data.Extra && `${data.Extra} €`}</TableCell>
-          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
-            style={{display: columnsToHide[6].visible ? 'table-cell' : 'none'}}>
+          <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px'}} align="center">
             {data.Casa && `${data.Casa} €`}</TableCell>
-          <TableCell  sx={{p:0, fontSize:'0.8rem'}} align="center"
-            style={{display: columnsToHide[7].visible ? 'table-cell' : 'none'}}>
+          <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px'}} align="center">
             {data.Salute && `${data.Salute} €`}</TableCell>
+          <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px'}} align="center">
+            {data.Investimenti && `${data.Investimenti} €`}</TableCell>
+          <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px'}} align="center">
+            {data.tasse && `${data.tasse} €`}</TableCell>
       </TableRow>
     ))}
     </TableBody>
