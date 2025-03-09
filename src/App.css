@@ -13,3 +13,8 @@ body, root, html, ul {
 h1 {
   text-align: center;
 }
+
+.fc-day-today {
+  background-color: rgba(30, 199, 250, 0.5) !important; /* Giallo chiaro */
+  border-radius: 5px;
+}

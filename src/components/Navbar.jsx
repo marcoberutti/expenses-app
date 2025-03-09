@@ -6,6 +6,8 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Badge, { badgeClasses } from '@mui/material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { format } from "date-fns";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Switch from '@mui/material/Switch';
@@ -51,6 +53,26 @@ export default function Navbar({isLogged}) {
             <IconButton>
               <ShoppingCartIcon fontSize="small" sx={{color:"white"}}/>
               <CartBadge badgeContent={listaSpesa && listaSpesa.length} color={theme === "dark" ? "primary" : "info"} overlap="circular" />
+            </IconButton>
+          </NavLink>
+          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/calendar">
+            <IconButton>
+              <CalendarMonthIcon fontSize="small" sx={{color:"white"}}/>
+              <CartBadge
+                badgeContent={format(new Date(), "d/MM")}
+                color={theme === "dark" ? "primary" : "info"}
+                overlap="circular"
+                sx={{
+                  "& .MuiBadge-badge": {
+                    fontSize: ".8rem", // 🔹 Rende il testo più grande
+                    width: "52px", // 🔹 Aumenta la dimensione del badge
+                    height: "25px", // 🔹 Aumenta l'altezza del badge
+                    borderRadius: "50%", // 🔹 Mantiene la forma circolare
+                    padding: "10px",
+                    right: "-17px"
+                  }
+                }}
+              />
             </IconButton>
           </NavLink>
           <FormControl component="fieldset" style={{border:"2px solid gray", paddingLeft:"5px", borderRadius:"10px"}}>

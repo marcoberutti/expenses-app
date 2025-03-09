@@ -13,11 +13,15 @@ import { useDeleteProductApi } from "./hooks/useDeleteProductApi";
 import { usePopulateProductApi } from "./hooks/usePopulateListaProdotti";
 import { useGetProductsApi } from "./hooks/useGetProductsApi";
 
+import { useCreateEventApi } from "./hooks/useCreateEventApi";
+import { useWriteEventApi } from "./hooks/useWriteEventApi";
+
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
 
   const [listaSpesa, setListaSpesa] = useState([]);
+  const [eventi, setEventi] = useState([])
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     return savedTheme || "dark";
@@ -31,6 +35,9 @@ export const DataProvider = ({ children }) => {
   const { populateProduct } = usePopulateProductApi();
   const { getProducts } = useGetProductsApi();
   const [products, setProducts] = useState([]);
+
+  const { createEvent } = useCreateEventApi();
+  const { writeEvent } = useWriteEventApi();
 
   const { writeData } = useWriteDataApi();
   const { handleLogin } = useLoginApi()
@@ -191,7 +198,46 @@ export const DataProvider = ({ children }) => {
       setModal("normal")
     })
   }
+
+  const fetchEvents = useCallback(() => {
+    setIsLoading(true);
+    fetch(`${API_URL}/getEvents`,{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.REACT_APP_API_KEY
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setEventi(data)
+      })
+      .catch((error) => console.error("Errore nel fetch:", error))
+      .finally(() => setIsLoading(false));
+  }, []);
   
+  const inserisciEvento = (titolo, data, colore) => {
+    createEvent(titolo, data, colore)
+    .then(data => {
+      fetchEvents();
+      setTemporaryMessage(data.message || "Dati inseriti ok!");
+    })
+    .catch((error) => {
+      setTemporaryMessage(error || "Errore nell'inserimento dei dati!");
+    });
+  };
+
+  const modificaEvento = (data, id) => {
+    console.log(data, id)
+    writeEvent(data, id)
+    .then(data => {
+      fetchEvents();
+      setTemporaryMessage(data.message || "Dati modificati correttamente");
+    })
+    .catch((error) => {
+      setTemporaryMessage(error || "Errore nella modifica dei dati!");
+    });
+  };
 
   const value = {
     columnsToHide,
@@ -222,7 +268,11 @@ export const DataProvider = ({ children }) => {
     listaSpesa,
     deleteProductList,
     addProductList,
-    products
+    products,
+    inserisciEvento,
+    eventi,
+    fetchEvents,
+    modificaEvento
   }
 
 

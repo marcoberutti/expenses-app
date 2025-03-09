@@ -50,7 +50,7 @@ export default function ListaSpesa(){
     e.preventDefault();
     let prezzoMedio = await getPrice(newProduct)
 
-    addProductList(newProduct, prezzoMedio);
+    addProductList(newProduct, parseFloat(prezzoMedio).toFixed(2));
     setNewProduct("");
 
   }
@@ -129,6 +129,7 @@ export default function ListaSpesa(){
           ))}
         </List>
       )}
+      <div>scrivere il prezzo, magari con un ocr dello scontrino?? che popola una tabella a parte??</div>
     </>
   )
 }

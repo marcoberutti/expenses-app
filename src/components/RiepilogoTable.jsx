@@ -26,19 +26,18 @@ export default function RiepilogoTable() {
     for (const item of datas) {
       if (item.Income) {
         const mese = format(new Date(item.data), "MM");
-        const valore = parseFloat(item.Income) || 0;
+        const valore = parseInt(item.Income) || 0;
         incomeMese[mese] += valore;
       }
     }
-
     setIncomePerMese(incomeMese);
   }, [datas]);
 
   const totalYearBudgetBalance = Object.keys(incomeMese).reduce((total, mese) => {
-    const totalExpenses = ["Spesa", "Benzina", "Extra", "Casa", "Salute"].reduce((sum, category) => {
+    const totalExpenses = ["Spesa", "Benzina", "Extra", "Casa", "Salute", "Investimenti", "tasse"].reduce((sum, category) => {
       return sum + (datas
         .filter(dato => format(new Date(dato.data), "MM") === mese)
-        .reduce((acc, curr) => acc + (parseFloat(curr[category]) || 0), 0));
+        .reduce((acc, curr) => acc + (parseInt(curr[category]) || 0), 0));
     }, 0);
     return total + ((incomeMese[mese] || 0) - totalExpenses);
     }, 0)
@@ -70,7 +69,7 @@ export default function RiepilogoTable() {
 
             const totals = categories.reduce((acc, category) => {
               acc[category] = filteredData.reduce((sum, item) =>
-                sum + (parseFloat(item[category]) || 0), 0);
+                sum + (parseInt(item[category]) || 0), 0);
               return acc;
             }, {});
 
@@ -83,7 +82,7 @@ export default function RiepilogoTable() {
             return (
               <TableRow key={i}>
                 <TableCell align="center" sx={{p:0}}>{format(new Date(2024, i, 1), "MMM")}</TableCell>
-                {categories.map(cat => <TableCell align="center" sx={{p:1}} key={`${i}-${cat}`}>{parseFloat(totals[cat])}</TableCell>)}
+                {categories.map(cat => <TableCell align="center" sx={{p:1}} key={`${i}-${cat}`}>{totals[cat] && parseInt(totals[cat])}</TableCell>)}
                 <TableCell align="center" sx={{p:0}} key={`${i}-totaleIncome`} className={
                   budgetMese > 200 ? 
                     style.highBudget : 
@@ -92,7 +91,7 @@ export default function RiepilogoTable() {
                       budgetMese === 0 ? 
                         style.zeroBudget : 
                         budgetMese < 0 && style.underZeroBudget}>
-                  {incomeMese?.[mese] !== 0 && (budgetMese || 0)}
+                  {incomeMese?.[mese] !== 0 && (parseInt(budgetMese) || 0)}
                 </TableCell>
               </TableRow>
             );
@@ -103,7 +102,7 @@ export default function RiepilogoTable() {
               <TableCell align="center" key={`total-${index}`} sx={{p:0}}>
                 {datas && datas
                   .filter(dato => dato[category] !== null)
-                  .reduce((acc, curr) => acc + (parseFloat(curr[category]) || 0), 0)}
+                  .reduce((acc, curr) => acc + (parseInt(curr[category]) || 0), 0)}
               </TableCell>
             ))}
             <TableCell align="center" sx={{p:0}} className={                
@@ -114,7 +113,7 @@ export default function RiepilogoTable() {
                   totalYearBudgetBalance === 0 ? 
                     style.zeroBudget : 
                     totalYearBudgetBalance < 0 && style.underZeroBudget}>
-            {totalYearBudgetBalance}
+            {parseInt(totalYearBudgetBalance)}
             </TableCell>
           </TableRow>
         </TableBody>
