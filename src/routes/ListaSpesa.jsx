@@ -9,6 +9,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Loader from "../components/Loader"
+import API_URL from '../config'
 
 export default function ListaSpesa(){
 
@@ -26,7 +27,7 @@ export default function ListaSpesa(){
     if (!newProduct.trim()) return;
     
     try {
-      const response = await fetch(`http://localhost:3001/api/supermercato/${newProduct}`, {
+      const response = await fetch(`${API_URL}/supermercato/${newProduct}`, {
         method:"POST"
       });
       if (!response.ok) {
