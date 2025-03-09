@@ -8,6 +8,7 @@ import HomeForm from "../components/HomeForm";
 import RiepilogoTable from "../components/RiepilogoTable";
 import style from './table.module.css'
 
+
 export default function Riepilogo() {
 
     const { datas, isLoading, fetchData, modal, message, inserisciDati, handleRadioChange, select, now, handleToggleModals } = useData();
