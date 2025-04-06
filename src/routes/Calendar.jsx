@@ -10,7 +10,7 @@ import NewEventModal from '../components/NewEventModal';
 import itLocale from '@fullcalendar/core/locales/it';
 
 export default function Calendar() {
-  const {eventi, inserisciEvento, fetchEvents, modificaEvento, } = useData();
+  const {eventi, inserisciEvento, fetchEvents, modificaEvento, openModal, setOpenModal, openModalModifica, setOpenModalModifica} = useData();
   const calendarRef = useRef(null)
 
   useEffect(() => {
@@ -19,8 +19,6 @@ export default function Calendar() {
     }
   }, [])
 
-  const [openModal, setOpenModal] = useState(false);
-  const [openModalModifica, setOpenModalModifica] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -51,7 +49,7 @@ export default function Calendar() {
     setOpenModalModifica(true)
   }
 
-  const addEvent = (eventName, selectedColor) => {
+  const addEvent = (eventName, selectedDate, selectedColor) => {
     
     if (!eventName || !selectedDate) return;
   
@@ -59,7 +57,7 @@ export default function Calendar() {
       ? selectedDate.replace("T", " ").substring(0, 19)
       : `${selectedDate} 00:00:00`;
   
-    inserisciEvento(eventName, formattedStart,selectedColor);
+    inserisciEvento(eventName, formattedStart, selectedColor);
   
     setOpenModal(false);
   };
@@ -85,11 +83,10 @@ export default function Calendar() {
           meridiem: false // Imposta a `false` per rimuovere "AM/PM"
         }} 
       />
-      <CalendarModal open={openModal} handleClose={() => setOpenModal(false)} addEvent={addEvent} />
+      <CalendarModal open={openModal} addEvent={addEvent} />
       {selectedEvent && (
       <NewEventModal
         open={openModalModifica}
-        handleClose={() => setOpenModalModifica(false)}
         event={selectedEvent}
       />
       )}

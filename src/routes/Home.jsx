@@ -31,7 +31,7 @@ export default function Home() {
   };
   function generateHeaders(){
     return columnsToHide.map((column, index) =>(
-      <TableCell align="center" key={index} style={{display: column.visible ? 'table-cell' : 'none'}} sx={{p:0}}>
+      <TableCell align="center" key={index} style={{display: column.visible ? 'table-cell' : 'none'}} sx={{p:1}}>
         {(() => {
           switch (column.nome) {
             case "Descr.":

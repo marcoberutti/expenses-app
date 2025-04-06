@@ -1,12 +1,3 @@
-.cellaConValore:hover {
-  background-color: rgb(88, 88, 88);
-  color: rgb(241, 212, 174);
-  cursor: pointer;
-}
-
-.cellaSenzaValore {
-  color: transparent!important;
-}
 
 .highBudget {
   color: green!important;
@@ -25,4 +16,29 @@
 .underZeroBudget {
   color: red!important;
   font-weight: bold!important;
+}
+
+.colorRed {
+  color: red;
+  font-weight: 900;
+}
+
+.colorGreen {
+  color: green;
+  font-weight: 900;
+}
+
+.colorBlue {
+  color: rgb(5, 134, 239);
+  font-weight: 900;
+}
+
+.cellaSenzaValore {
+  color: transparent!important;
+}
+
+.cellaConValore:hover {
+  background-color: rgb(88, 88, 88);
+  color: rgb(241, 212, 174);
+  cursor: pointer;
 }

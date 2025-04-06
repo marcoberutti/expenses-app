@@ -21,6 +21,18 @@ const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
 
+  const colors = ["#FF5733", "#4287f5", "#00cc66", "#FFD700", "#8A2BE2", "#E91E63", "#FF9800", "#4CAF50"];
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 3,
+  };
   const [listaSpesa, setListaSpesa] = useState([]);
   const [eventi, setEventi] = useState([])
   const [theme, setTheme] = useState(() => {
@@ -77,6 +89,8 @@ export const DataProvider = ({ children }) => {
     tasse:'',
   });
   const [modalRiepilogo, setModalRiepilogo] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalModifica, setOpenModalModifica] = useState(false);
 
   const handleSetTheme = (e) => {
     setTheme(e.target.checked ? "dark" : "light")
@@ -287,6 +301,12 @@ export const DataProvider = ({ children }) => {
     setModalRiepilogo,
     filterDataRiepilogo,
     filteredRiepilogoDatas,
+    openModal,
+    setOpenModal,
+    colors,
+    style,
+    openModalModifica,
+    setOpenModalModifica,
   }
 
 

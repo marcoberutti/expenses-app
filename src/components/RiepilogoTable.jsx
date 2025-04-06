@@ -40,7 +40,7 @@ export default function RiepilogoTable() {
         .reduce((acc, curr) => acc + (parseInt(curr[category]) || 0), 0));
     }, 0);
     return total + ((incomeMese[mese] || 0) - totalExpenses);
-    }, 0)
+  }, 0)
 
   function convertMonthNameToDate(monthName) {
     const year = getYear(new Date()); // Ottieni l'anno corrente
@@ -63,20 +63,19 @@ export default function RiepilogoTable() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell align="center" sx={{p:1}}>Mese</TableCell>
-            <TableCell align="center" sx={{p:1}}>Tot Income</TableCell>
-            <TableCell align="center" sx={{p:1}}>Tot Spesa</TableCell>
-            <TableCell align="center" sx={{p:1}}>Tot Benzina</TableCell>
-            <TableCell align="center" sx={{p:1}}>Tot Extra</TableCell>
-            <TableCell align="center" sx={{p:1}}>Tot Casa</TableCell>
-            <TableCell align="center" sx={{p:1}}>Tot Salute</TableCell>
-            <TableCell align="center" sx={{p:1}}>Tot Invest</TableCell>
-            <TableCell align="center" sx={{p:1}}>Tot Tasse</TableCell>
-            <TableCell align="center" sx={{p:1}}>Budget Rimasto</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Mese</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Income</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Spesa</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Benzina</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Extra</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Casa</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Salute</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Invest</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Tasse</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Budget Rimasto</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody
-        >
+        <TableBody>
           {datas && Array.from({ length: 12 }, (_, i) => {
             const mese = (i + 1).toString().padStart(2, '0');
             const filteredData = datas.filter(dato => format(dato.data, 'MM') === mese);
@@ -102,12 +101,35 @@ export default function RiepilogoTable() {
                   const value = parseInt(totals[cat]) || 0;
                   const isClickable = value > 0;
 
+                  const getClassName = (category, val) => {
+                    switch(category) {
+                      case "Income":
+                        return val < 1600 ? style.colorRed : style.colorGreen;
+                      case "Spesa":
+                        return val > 350 ? style.colorRed : style.colorGreen;
+                      case "Benzina":
+                        return val > 250 ? style.colorRed : style.colorGreen;
+                      case "Extra":
+                        return val > 400 ? style.colorRed : style.colorGreen;
+                      case "Casa":
+                        return val > 800 ? style.colorRed : style.colorGreen;
+                      case "Salute":
+                        return val > 200 ? style.colorRed : style.colorGreen;
+                      case "Investimenti":
+                        return style.colorBlue
+                      case "tasse":
+                        return val > 100 ? style.colorRed : style.colorGreen;
+                      default:
+                        return "";
+                    }
+                  }
+                  
                   return (
                     <TableCell
                       align="center"
                       sx={{ p: 1, border:"1px solid #494949" }}
-                      className={isClickable ? style.cellaConValore : style.cellaSenzaValore}
                       key={`${i}-${cat}`}
+                      className={`${getClassName(cat, value)} ${isClickable ? style.cellaConValore : style.cellaSenzaValore}`}
                       onClick={isClickable ? (e) => handleClick(e, cat) : undefined}
                     >
                       {isClickable ? value : 0}
@@ -122,7 +144,7 @@ export default function RiepilogoTable() {
                       budgetMese === 0 ? 
                         style.zeroBudget : 
                         budgetMese < 0 && style.underZeroBudget}>
-                  {incomeMese?.[mese] !== 0 && (parseInt(budgetMese) || 0)}
+                  {incomeMese?.[mese] !== 0 && (parseInt(budgetMese) || "")}
                 </TableCell>
               </TableRow>
             );
@@ -136,7 +158,7 @@ export default function RiepilogoTable() {
                   .reduce((acc, curr) => acc + (parseInt(curr[category]) || 0), 0)}
               </TableCell>
             ))}
-            <TableCell align="center" sx={{p:1, border:"1px solid #494949"}} className={                
+            <TableCell align="center" sx={{p:1, border:"1px solid #494949"}} className={          
               totalYearBudgetBalance > 1800 ? 
                 style.highBudget : 
                 totalYearBudgetBalance < 1800 && totalYearBudgetBalance > 0 ? 
@@ -144,7 +166,7 @@ export default function RiepilogoTable() {
                   totalYearBudgetBalance === 0 ? 
                     style.zeroBudget : 
                     totalYearBudgetBalance < 0 && style.underZeroBudget}>
-            {parseInt(totalYearBudgetBalance)}
+              {parseInt(totalYearBudgetBalance)}
             </TableCell>
           </TableRow>
         </TableBody>

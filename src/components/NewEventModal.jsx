@@ -1,62 +1,72 @@
 import { useState } from "react";
 import { Box, Button, Typography, Modal, TextField, IconButton } from "@mui/material";
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import "dayjs/locale/it"; // Import Italian locale
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
 import { useData } from "../dataContext";
 
-// Stile del modal
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-const colors = ["#FF5733", "#4287f5", "#00cc66", "#FFD700", "#8A2BE2", "#E91E63", "#FF9800", "#4CAF50"];
-
-export default function NewEventModal({ open, handleClose, event }) {
+export default function CalendarModal({ open, addEvent }) {
+  const {eventi, inserisciEvento, fetchEvents, modificaEvento, openModal, setOpenModal, colors, style} = useData();
+  
   const [eventName, setEventName] = useState("");
   const [selectedColor, setSelectedColor] = useState(colors[0]); // Colore di default
-  const {modificaEvento } = useData();
-
+  const [date, setDate] = useState(null); // Data di default
+  
   const handleSubmit = () => {
-    if (eventName.trim() !== "") {
-
-      console.log(event)
-
-      const updatedEvent = {
-        title: eventName,
-        start: event.start,
-        color: selectedColor
-      }
-
-      modificaEvento(updatedEvent, event.id)
-      handleClose();
-
+    if (eventName.trim() !== "" && date) {
+      const formattedDate = date.toISOString(); // Formatta la data come stringa ISO
+      addEvent(eventName, formattedDate, selectedColor);
+      setEventName("");
+      setSelectedColor(colors[0]);
+      setDate(null);
+      setOpenModal(false);
     }
   };
-
+  
+  const handleClose = () => {
+    setEventName("");
+    setSelectedColor(colors[0]);
+    setDate(null);
+    setOpenModal(false);
+  };
+  
+  const handleDateChange = (newDate) => {
+    const data = dayjs(newDate).utc();
+    setDate(data);
+  };
+  
   return (
     <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title">
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6">
-          Modifica evento
-        </Typography>
+        <div style={{display:"flex", justifyContent:"space-between"}}>
+          <Typography id="modal-modal-title" variant="h6">
+            Nuovo evento
+          </Typography>
+          <button onClick={()=> handleClose()} style={{fontSize:"2rem", color:"white", backgroundColor:"transparent", border:"none", cursor:"pointer"}}><i className="bi bi-x"></i></button>
+        </div>
         <TextField
           fullWidth
           label="Nome evento"
           variant="outlined"
-          defaultValue={event.title}
+          value={eventName}
           onChange={(e) => setEventName(e.target.value)}
           sx={{ mt: 2 }}
         />
-
-        {/* Color Picker con pallini */}
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
+          <StaticTimePicker
+            onChange={handleDateChange}
+            defaultValue={dayjs()}
+            ampm={false} // Use 24-hour format for Italy
+            views={['hours', 'minutes']}
+            ampmInClock={false}
+          />
+        </LocalizationProvider>
         <Typography variant="body1" sx={{ mt: 2 }}>
-          Seleziona un nuovo colore:
+          Seleziona un colore:
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
           {colors.map((color) => (
@@ -64,8 +74,8 @@ export default function NewEventModal({ open, handleClose, event }) {
               key={color}
               onClick={() => setSelectedColor(color)}
               sx={{
-                width: 30,
-                height: 30,
+                width: 20,
+                height: 20,
                 bgcolor: color,
                 border: selectedColor === color ? "2px solid white" : "none",
                 transform: selectedColor === color ? "scale(1.5)" : "none",
@@ -74,7 +84,7 @@ export default function NewEventModal({ open, handleClose, event }) {
             />
           ))}
         </Box>
-
+        
         <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2 }}>
           Aggiungi
         </Button>

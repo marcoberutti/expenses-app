@@ -10,7 +10,7 @@
 
 .closeContainer {
   display: flex;
-  justify-content: end;
+  justify-content: space-evenly;
   align-items: center;
 }
 
