@@ -3,68 +3,65 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import CalendarModal from '../components/CalendarModal';
-import { useData } from '../dataContext';
-import {format} from 'date-fns'
 import NewEventModal from '../components/NewEventModal';
+import { useData } from '../dataContext';
+import { format } from 'date-fns';
+import ModifyEventModal from '../components/ModifyEventModal';
 import itLocale from '@fullcalendar/core/locales/it';
 
 export default function Calendar() {
-  const {eventi, inserisciEvento, fetchEvents, modificaEvento, openModal, setOpenModal, openModalModifica, setOpenModalModifica} = useData();
-  const calendarRef = useRef(null)
-
+  const { eventi, inserisciEvento, fetchEvents, modificaEvento, openModal, setOpenModal, openModalModifica, setOpenModalModifica } = useData();
+  const calendarRef = useRef(null);
+  
   useEffect(() => {
-    if(eventi.length === 0){
-      fetchEvents()
+    if (eventi.length === 0) {
+      fetchEvents();
     }
-  }, [])
-
+  }, []);
+  
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
-
+  
   const handleEventDrop = (info) => {
     const formattedDate = format(info.event.start, "yyyy-MM-dd HH:mm:ss");
-
+    
     const updatedEvent = {
       title: info.event.title,
       start: formattedDate,
       color: info.event.backgroundColor
     };
-  
-    modificaEvento(updatedEvent, info.event.id)
+    
+    modificaEvento(updatedEvent, info.event.id);
   };
-
+  
   const handleDateClick = (info) => {
     setSelectedDate(info.dateStr);
     setOpenModal(true);
   };
-
+  
   const handleEventClick = (info) => {
-    setSelectedEvent({
+    const eventData = {
       id: info.event.id,
       title: info.event.title,
       start: info.event.startStr,
       color: info.event.backgroundColor || "#007bff"
-    }); 
-    setOpenModalModifica(true)
-  }
-
-  const addEvent = (eventName, selectedDate, selectedColor) => {
+    };
     
-    if (!eventName || !selectedDate) return;
-  
-    let formattedStart = selectedDate.includes("T")
-      ? selectedDate.replace("T", " ").substring(0, 19)
-      : `${selectedDate} 00:00:00`;
-  
-    inserisciEvento(eventName, formattedStart, selectedColor);
-  
-    setOpenModal(false);
+    setSelectedEvent(eventData);
+    setOpenModalModifica(true);
   };
   
-
+  // Reset selectedEvent when modal closes
+  useEffect(() => {
+    if (!openModalModifica) {
+      // Optional: Reset selectedEvent when modal is closed
+      // Uncomment if you want this behavior
+      // setSelectedEvent(null);
+    }
+  }, [openModalModifica]);
+  
   return (
-    <div  style={{ height: "90vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ height: "90vh", display: "flex", flexDirection: "column" }}>
       <FullCalendar
         ref={calendarRef}
         height="100%"
@@ -81,14 +78,14 @@ export default function Calendar() {
           hour: '2-digit',
           minute: '2-digit',
           meridiem: false // Imposta a `false` per rimuovere "AM/PM"
-        }} 
+        }}
       />
-      <CalendarModal open={openModal} addEvent={addEvent} />
+      <NewEventModal open={openModal} selectedDate={selectedDate} />
       {selectedEvent && (
-      <NewEventModal
-        open={openModalModifica}
-        event={selectedEvent}
-      />
+        <ModifyEventModal
+          open={openModalModifica}
+          event={selectedEvent}
+        />
       )}
     </div>
   );
