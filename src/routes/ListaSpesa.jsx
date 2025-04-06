@@ -59,11 +59,11 @@ export default function ListaSpesa(){
 
   return (
     <>
-      <div style={{display:"flex", justifyContent:"space-evenly", alignItems:"center"}}>
-        <div>
+      <div style={{display:"flex", justifyContent:"space-evenly", alignItems:"center", flexDirection:"column"}}>
+        <div style={{display:"flex", justifyContent:"space-evenly", alignItems:"center", width:"100%"}}>
           <h3>Lista della spesa</h3>
           <p>
-            Totale indicativo: {" "}
+            Tot indicativo: {" "}
             {Array.isArray(listaSpesa) && listaSpesa.length > 0 
               ? listaSpesa.reduce((tot, prod) => tot + (parseFloat(prod.prezzo) || 0), 0).toFixed(2) 
               : "0.00"} €
@@ -71,35 +71,35 @@ export default function ListaSpesa(){
         </div>
         <form method="post" onSubmit={handleSubmit}>
           <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-          <Autocomplete
-            disablePortal
-            id="standard-basic"
-            freeSolo // Permette di digitare un valore non presente nella lista
-            options={products.map(product => product.prodotto)}
-            sx={{ mb: 1, width: 300 }}
-            value={newProduct}
-            onChange={(event, newValue) => {
-              if (typeof newValue === "string") {
-                setNewProduct(newValue); // Se è una stringa, la impostiamo
-              }
-              console.log("Nuovo valore selezionato o digitato:", newValue);
-            }}
-            onInputChange={(event, newInputValue) => {
-              setNewProduct(newInputValue); // Permette di scrivere nel campo senza problemi
-              console.log("Nuovo valore digitato:", newInputValue);
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label="Nuovo prodotto" variant="standard" />
-            )}
-            slotProps={{
-              listbox: {
-                sx: {
-                  bgcolor: '#201f1f',
-                  color: 'text.primary'
+            <Autocomplete
+              disablePortal
+              id="standard-basic"
+              freeSolo // Permette di digitare un valore non presente nella lista
+              options={products.map(product => product.prodotto)}
+              sx={{ mb: 1, width: 300 }}
+              value={newProduct}
+              onChange={(event, newValue) => {
+                if (typeof newValue === "string") {
+                  setNewProduct(newValue); // Se è una stringa, la impostiamo
                 }
-              }
-            }}
-          />
+                console.log("Nuovo valore selezionato o digitato:", newValue);
+              }}
+              onInputChange={(event, newInputValue) => {
+                setNewProduct(newInputValue); // Permette di scrivere nel campo senza problemi
+                console.log("Nuovo valore digitato:", newInputValue);
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Nuovo prodotto" variant="standard" />
+              )}
+              slotProps={{
+                listbox: {
+                  sx: {
+                    bgcolor: '#201f1f',
+                    color: 'text.primary'
+                  }
+                }
+              }}
+            />
             <IconButton type="submit" style={{width:"40px", height:"40px"}}>
               <i className="bi bi-send"></i>
             </IconButton>
@@ -110,7 +110,7 @@ export default function ListaSpesa(){
       {!listaSpesa ? (
         <Loader />
       ) : (
-        <List sx={{ width: "65%", bgcolor: "background.paper", marginLeft:"50px"}} aria-label="lista-spesa">
+        <List sx={{ width: "65%", bgcolor: "background.paper", margin: "0 auto"}} aria-label="lista-spesa">
           {listaSpesa.map((item) => (
             <ListItem key={item.data} disablePadding onClick={() => deleteProductList(item.id)} divider={true}>
               <ListItemButton>
@@ -130,7 +130,6 @@ export default function ListaSpesa(){
           ))}
         </List>
       )}
-      <div>scrivere il prezzo, magari con un ocr dello scontrino?? che popola una tabella a parte??</div>
     </>
   )
 }

@@ -1,4 +1,12 @@
+.cellaConValore:hover {
+  background-color: rgb(88, 88, 88);
+  color: rgb(241, 212, 174);
+  cursor: pointer;
+}
 
+.cellaSenzaValore {
+  color: transparent!important;
+}
 
 .highBudget {
   color: green!important;

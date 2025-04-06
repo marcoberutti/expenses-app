@@ -7,11 +7,11 @@ import Intestazione from "../components/Intestazione";
 import HomeForm from "../components/HomeForm";
 import RiepilogoTable from "../components/RiepilogoTable";
 import style from './table.module.css'
-
+import ModalRiepilogo from "../components/ModalRiepilogo";
 
 export default function Riepilogo() {
 
-    const { datas, isLoading, fetchData, modal, message, inserisciDati, handleRadioChange, select, now, handleToggleModals } = useData();
+    const { datas, isLoading, fetchData, modal, message, inserisciDati, handleRadioChange, select, now, handleToggleModals, modalRiepilogo } = useData();
   
     useEffect(() => {
       if (datas.length === 0) {
@@ -33,7 +33,8 @@ export default function Riepilogo() {
       />
       {modal === "normal" ? 
         <div className={style.tableRiepilogoContainer}>
-          <RiepilogoTable/>
+          {modalRiepilogo === true ? <ModalRiepilogo/> : <RiepilogoTable/>}
+          
         </div>
       :
         <HomeForm inserisciDati={inserisciDati} handleRadioChange={handleRadioChange} select={select} now={now}/>

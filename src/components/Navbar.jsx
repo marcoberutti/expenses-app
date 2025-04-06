@@ -59,17 +59,16 @@ export default function Navbar({isLogged}) {
             <IconButton>
               <CalendarMonthIcon fontSize="small" sx={{color:"white"}}/>
               <CartBadge
-                badgeContent={format(new Date(), "d/MM")}
+                badgeContent={format(new Date(), "d")}
                 color={theme === "dark" ? "primary" : "info"}
                 overlap="circular"
                 sx={{
                   "& .MuiBadge-badge": {
                     fontSize: ".8rem", // 🔹 Rende il testo più grande
-                    width: "52px", // 🔹 Aumenta la dimensione del badge
-                    height: "25px", // 🔹 Aumenta l'altezza del badge
+                    width: "20px", // 🔹 Aumenta la dimensione del badge
+                    height: "20px", // 🔹 Aumenta l'altezza del badge
                     borderRadius: "50%", // 🔹 Mantiene la forma circolare
-                    padding: "10px",
-                    right: "-17px"
+                    padding: "10px"
                   }
                 }}
               />
@@ -80,18 +79,18 @@ export default function Navbar({isLogged}) {
               <FormControlLabel
                 value="end"
                 label={theme === "dark" ? 
-                <i className="bi bi-moon-stars" style={{fontSize:"1rem"}}></i> : 
-                <i className="bi bi-brightness-high" style={{fontSize:"1rem"}}></i>
+                <i className="bi bi-moon-stars" style={{fontSize:".8rem"}}></i> : 
+                <i className="bi bi-brightness-high" style={{fontSize:".8rem"}}></i>
                 }
                 sx={{
-                  "& .MuiFormControlLabel-label": { fontSize: "1.2rem"}, 
+                  "& .MuiFormControlLabel-label": { fontSize: ".8rem"}, 
                   "marginRight": "5px"
                 }}
                 labelPlacement="end"
                 control={
                 <Switch 
                   checked={theme === "dark"}
-                  color="primary" 
+                  color="primary"
                   onChange={handleSetTheme}
                 />}
               />

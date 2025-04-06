@@ -7,12 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from '@mui/material/TableBody';
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import { format } from 'date-fns';
+import { format, parse, getMonth, getYear, endOfMonth } from 'date-fns';
 import style from './RiepilogoTable.module.css'
 
 export default function RiepilogoTable() {
 
-  const { datas } = useData();
+  const { datas, setModalRiepilogo, filterDataRiepilogo } = useData();
   const [incomeMese, setIncomePerMese] = useState({});
 
   useEffect(() => {
@@ -41,6 +41,22 @@ export default function RiepilogoTable() {
     }, 0);
     return total + ((incomeMese[mese] || 0) - totalExpenses);
     }, 0)
+
+  function convertMonthNameToDate(monthName) {
+    const year = getYear(new Date()); // Ottieni l'anno corrente
+    const parsedDate = parse(monthName, 'MMM', new Date(year, 0)); // 'MMM' è il formato per i nomi dei mesi abbreviati
+    const month = getMonth(parsedDate); // Ottieni il mese (0-11)
+    const endMonth = endOfMonth(new Date(year, month))
+    const beginMonth = new Date(year, month, 1, 0,0,0)
+    return [endMonth, beginMonth]
+  }
+
+  function handleClick(e, cat){
+    setModalRiepilogo(true)
+    let mese = e.target.parentNode.firstChild.textContent
+    let [fine, inizio] = convertMonthNameToDate(mese)
+    filterDataRiepilogo(inizio, fine, cat)
+  }
 
   return (
     <TableContainer component={Paper} sx={{ paddingBottom: 4 }}>
@@ -81,9 +97,24 @@ export default function RiepilogoTable() {
 
             return (
               <TableRow key={i}>
-                <TableCell align="center" sx={{p:0}}>{format(new Date(2024, i, 1), "MMM")}</TableCell>
-                {categories.map(cat => <TableCell align="center" sx={{p:1}} key={`${i}-${cat}`}>{totals[cat] && parseInt(totals[cat])}</TableCell>)}
-                <TableCell align="center" sx={{p:0}} key={`${i}-totaleIncome`} className={
+                <TableCell align="center" sx={{p:0, border:"1px solid #494949"}}>{format(new Date(2024, i, 1), "MMM")}</TableCell>
+                {categories.map(cat => {
+                  const value = parseInt(totals[cat]) || 0;
+                  const isClickable = value > 0;
+
+                  return (
+                    <TableCell
+                      align="center"
+                      sx={{ p: 1, border:"1px solid #494949" }}
+                      className={isClickable ? style.cellaConValore : style.cellaSenzaValore}
+                      key={`${i}-${cat}`}
+                      onClick={isClickable ? (e) => handleClick(e, cat) : undefined}
+                    >
+                      {isClickable ? value : 0}
+                    </TableCell>
+                  );
+                })}
+                <TableCell align="center" sx={{p:0, border:"1px solid #494949"}} key={`${i}-totaleIncome`} className={
                   budgetMese > 200 ? 
                     style.highBudget : 
                     budgetMese < 200 && budgetMese > 0 ? 
@@ -97,15 +128,15 @@ export default function RiepilogoTable() {
             );
           })}
           <TableRow>
-            <TableCell align="center" sx={{p:0}}>Gran tot:</TableCell>
+            <TableCell align="center" sx={{p:1, border:"1px solid #494949"}}>Gran tot:</TableCell>
             {["Income", "Spesa", "Benzina", "Extra", "Casa", "Salute", "Investimenti", "tasse"].map((category, index) => (
-              <TableCell align="center" key={`total-${index}`} sx={{p:0}}>
+              <TableCell align="center" key={`total-${index}`} sx={{p:1, border:"1px solid #494949"}}>
                 {datas && datas
                   .filter(dato => dato[category] !== null)
                   .reduce((acc, curr) => acc + (parseInt(curr[category]) || 0), 0)}
               </TableCell>
             ))}
-            <TableCell align="center" sx={{p:0}} className={                
+            <TableCell align="center" sx={{p:1, border:"1px solid #494949"}} className={                
               totalYearBudgetBalance > 1800 ? 
                 style.highBudget : 
                 totalYearBudgetBalance < 1800 && totalYearBudgetBalance > 0 ? 

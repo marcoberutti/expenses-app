@@ -263,7 +263,7 @@ export default function HomeTable({ generateHeaders }) {
 
   return (
     <div>
-      <div style={{display: "flex", justifyContent:"center", alignItems: "center"}}>
+      <div style={{display: "flex", justifyContent:"space-evenly", alignItems: "center"}}>
         <Select onChange={handleChangeMonth} value={selectedMonth}>
           {Array.from({ length: 12 }, (_, i) => (
             <Option key={i} value={i}>
@@ -271,7 +271,7 @@ export default function HomeTable({ generateHeaders }) {
             </Option>
           ))}
         </Select>
-        </div>
+      </div>
       <br/>
       <br/>
       <TableContainer component={Paper}>

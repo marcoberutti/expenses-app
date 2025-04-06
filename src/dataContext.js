@@ -12,6 +12,7 @@ import { useNewProductApi } from "./hooks/useNewProductApi";
 import { useDeleteProductApi } from "./hooks/useDeleteProductApi";
 import { usePopulateProductApi } from "./hooks/usePopulateListaProdotti";
 import { useGetProductsApi } from "./hooks/useGetProductsApi";
+import { useFilterRiepilogoApi } from "./hooks/useFilterRiepilogoApi";
 
 import { useCreateEventApi } from "./hooks/useCreateEventApi";
 import { useWriteEventApi } from "./hooks/useWriteEventApi";
@@ -40,7 +41,11 @@ export const DataProvider = ({ children }) => {
   const { writeEvent } = useWriteEventApi();
 
   const { writeData } = useWriteDataApi();
-  const { handleLogin } = useLoginApi()
+  const { handleLogin } = useLoginApi();
+
+  const { getFilteredRiepilogo } = useFilterRiepilogoApi();
+  const [filteredRiepilogoDatas, setFilteredRiepilogoDatas] = useState([])
+
   const [datas, setDatas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modal, setModal] = useState("normal");
@@ -71,6 +76,7 @@ export const DataProvider = ({ children }) => {
     investimenti: '',
     tasse:'',
   });
+  const [modalRiepilogo, setModalRiepilogo] = useState(false)
 
   const handleSetTheme = (e) => {
     setTheme(e.target.checked ? "dark" : "light")
@@ -228,7 +234,6 @@ export const DataProvider = ({ children }) => {
   };
 
   const modificaEvento = (data, id) => {
-    console.log(data, id)
     writeEvent(data, id)
     .then(data => {
       fetchEvents();
@@ -238,7 +243,12 @@ export const DataProvider = ({ children }) => {
       setTemporaryMessage(error || "Errore nella modifica dei dati!");
     });
   };
-
+  const filterDataRiepilogo = useCallback((inizio, fine, categoria) => {
+    if (!inizio || !fine || !categoria) return;
+    getFilteredRiepilogo(inizio, fine, categoria)
+    .then(res => setFilteredRiepilogoDatas(res))
+  }, []);
+  
   const value = {
     columnsToHide,
     setColumnsToHide,
@@ -272,7 +282,11 @@ export const DataProvider = ({ children }) => {
     inserisciEvento,
     eventi,
     fetchEvents,
-    modificaEvento
+    modificaEvento,
+    modalRiepilogo,
+    setModalRiepilogo,
+    filterDataRiepilogo,
+    filteredRiepilogoDatas,
   }
 
 
