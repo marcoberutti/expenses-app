@@ -21,6 +21,8 @@ const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
 
+  const [valoriOutcome, setValoriOutcome] = useState(["Spesa", "Benzina", "Extra", "Casa", "Salute","Investimenti", "tasse", "cucito_out"])
+  const [valoriIncome, setValoriIncome] = useState(["Income", "cucito_in"])
   const colors = ["#FF5733", "#4287f5", "#00cc66", "#FFD700", "#8A2BE2", "#E91E63", "#FF9800", "#4CAF50"];
   const style = {
     position: "absolute",
@@ -61,7 +63,7 @@ export const DataProvider = ({ children }) => {
   const [datas, setDatas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modal, setModal] = useState("normal");
-  const [select, setSelect] = useState(true);
+  const [select, setSelect] = useState("outcome");
   const [columnsToHide, setColumnsToHide] = useState([
     {nome: "Data", visible: true},
     {nome: "Descr.", visible: true},
@@ -117,6 +119,7 @@ export const DataProvider = ({ children }) => {
       .catch((error) => console.error("Errore nel fetch:", error))
       .finally(() => setIsLoading(false));
   }, []);
+
   const inserisciDati = (e) => {
     insertData(e)
     .then(data => {
@@ -124,8 +127,12 @@ export const DataProvider = ({ children }) => {
       setTemporaryMessage(data.message || "Dati inseriti ok!");
     })
     .catch((error) => {
-      setTemporaryMessage(error || "Errore nell'inserimento dei dati!");
+      const message = typeof error === 'string'
+        ? error
+        : error?.message || "Errore nell'inserimento dei dati!";
+      setTemporaryMessage(message);
     });
+
   };
   const rimuoviDati = (id) => {
     deleteData(id)
@@ -154,7 +161,7 @@ export const DataProvider = ({ children }) => {
   }
   const handleRadioChange = (event) => {
     const { value } = event.target;
-    setSelect(value === "outcome");
+    setSelect(value)
   };
   const handleToggleModals = () => {
     switch (modal) {
@@ -307,6 +314,8 @@ export const DataProvider = ({ children }) => {
     style,
     openModalModifica,
     setOpenModalModifica,
+    valoriOutcome,
+    valoriIncome,
   }
 
 

@@ -7,23 +7,27 @@ import UnfoldMoreRoundedIcon from "@mui/icons-material/UnfoldMoreRounded";
 import { CssTransition } from "@mui/base/Transitions";
 import { PopupContext } from "@mui/base/Unstable_Popup";
 import {useState, useEffect} from 'react'
+import { useData } from "../dataContext";
 
-export default function SelectxFormModifica({handleInputChange, datasForUpdate, setFormData}) {
-
+export default function SelectxFormModifica({datasForUpdate, setFormData}) {
 
   const getCurrentTipologia = () => {
     if (!datasForUpdate) return "";
     
     if (datasForUpdate.Spesa) return "Spesa";
+    if (datasForUpdate.Income) return "Income";
     if (datasForUpdate.Benzina) return "Benzina";
     if (datasForUpdate.Extra) return "Extra";
     if (datasForUpdate.Casa) return "Casa";
     if (datasForUpdate.Salute) return "Salute";
     if (datasForUpdate.Investimenti) return "Investimenti";
     if (datasForUpdate.tasse) return "tasse";
+    if (datasForUpdate.cucito_in) return "cucito_in";
+    if (datasForUpdate.cucito_out) return "cucito_out";
   }
   
   const [selectedValue, setSelectedValue] = useState("");
+  const {valoriOutcome, valoriIncome, select} = useData();
 
   const Select = React.forwardRef(function CustomSelect(props, ref) {
     const slots = {
@@ -241,15 +245,13 @@ export default function SelectxFormModifica({handleInputChange, datasForUpdate, 
   `;
 
   useEffect(() => {
-    const newTipologia = getCurrentTipologia();
-    if (newTipologia && newTipologia !== selectedValue) {
-      setSelectedValue(newTipologia);
-    }
-  }, [datasForUpdate]);
+    setSelectedValue(getCurrentTipologia()); // Ricalcola il valore selezionato se necessario
+  }, [select, datasForUpdate]); // Includi 'select' come dipendenza
 
-  const handleSelectChange = (event) => {
-    setSelectedValue(event.target.textContent);
-    setFormData((prev) => ({ ...prev, tipologia: event.target.textContent }));
+  const handleSelectChange = (newValue) => {
+    console.log("Valore selezionato:", newValue);
+    setSelectedValue(newValue);
+    setFormData((prev) => ({ ...prev, tipologia: newValue }));
   };
 
   return (
@@ -258,13 +260,19 @@ export default function SelectxFormModifica({handleInputChange, datasForUpdate, 
       onChange={handleSelectChange}
       value={selectedValue}
     >
-      <Option value="Spesa">Spesa</Option>
-      <Option value="Benzina">Benzina</Option>
-      <Option value="Extra">Extra</Option>
-      <Option value="Casa">Casa</Option>
-      <Option value="Salute">Salute</Option>
-      <Option value="Investimenti">Investimenti</Option>
-      <Option value="tasse">tasse</Option>
+      {select === "outcome" ? 
+      valoriOutcome.map((valore) => (
+        <Option key={valore} value={valore}>
+          {valore}
+        </Option>
+      ))
+      :
+      valoriIncome.map((valore) => (
+        <Option key={valore} value={valore}>
+          {valore}
+        </Option>
+      ))
+    }
     </Select>
   );
 }

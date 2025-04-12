@@ -33,10 +33,14 @@ export default function HomeTable({ generateHeaders }) {
 
     const newDatas = datas.filter((dato) => {
       const dataDate = new Date(dato.data).getTime();
-      return dataDate >= startOfMonth && dataDate < endOfMonth;
-    });
+      return dataDate >= startOfMonth && dataDate < endOfMonth
+    })
 
-    setFilteredDatas(newDatas);
+    const datasWithoutCucito = newDatas.filter(dato => {
+      return dato.cucito_in === null && dato.cucito_out === null
+    })
+
+    setFilteredDatas(datasWithoutCucito);
   }
 
   function handleChangeMonth(event, newValue) {

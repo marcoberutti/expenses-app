@@ -1,9 +1,8 @@
-import style from './HomeTable.module.css'
 import { useData } from "../dataContext"
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import IconButton from '@mui/material/IconButton';
+import DeleteWriteCellComponent from './DeleteWriteCellComponent';
 
 export default function HomeTableTbody ({filteredDatas}){
 
@@ -13,35 +12,7 @@ export default function HomeTableTbody ({filteredDatas}){
     <TableBody>
     {filteredDatas && filteredDatas.map(data => (
       <TableRow key={data.id}>
-        <TableCell  sx={{p:0, width:'25px', border:"1px solid #494949"}} align="center"
-          style={{display: columnsToHide[0].visible ? 'table-cell' : 'none'}}>
-          <div className={style.deleteAndDateCell}>
-            <IconButton size="small"
-              style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
-              onClick={() => {
-                if (window.confirm("cancellare davvero?")) {
-                  rimuoviDati(data.id);
-                }}
-              }
-            >
-              <i className={`bi-trash ${style.trash}`} style={{fontSize:"1rem"}}></i>
-            </IconButton>
-            <IconButton size="small"
-            style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
-            onClick={()=>{
-            if(data.Income){
-              setSelect(false)
-            } else {
-              setSelect(true)
-            }
-            getDataForUpdateForm(data)
-            setModal("modifica")}
-            }
-            >
-              <i className={`bi-pen ${style.pen}`} style={{fontSize:"1rem"}}></i>
-            </IconButton>
-          </div>
-        </TableCell>
+          <DeleteWriteCellComponent dato={data}/>
           <TableCell  sx={{p:0, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
             {data.descrizione.length > 8 ? data.descrizione.substring(0,8) + "..." : data.descrizione}
             </TableCell>

@@ -12,8 +12,9 @@ import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 
 export default function HomeFormModifica() {
-  const { modificaDati, datasForUpdate, setFormData, formData } = useData();
+  const { modificaDati, datasForUpdate, setFormData, formData, valoriOutcome, valoriIncome } = useData();
   const [selectDefaultVal, setSelectDefVal] = useState("");
+
 
   useEffect(() => {
     if (!datasForUpdate) return;
@@ -29,7 +30,7 @@ export default function HomeFormModifica() {
     }
 
     // Determina la tipologia (outcome o income)
-    const outcomeKey = ["Benzina", "Spesa", "Extra", "Casa", "Salute", "Investimenti", "tasse"].find(
+    const outcomeKey = valoriOutcome.find(
       (key) => datasForUpdate[key] !== undefined
     );
     const outcomeValue = outcomeKey ? outcomeKey : "income"; // Se uno dei valori è presente, usa quello, altrimenti "income"
@@ -53,7 +54,6 @@ export default function HomeFormModifica() {
       descrizione: e.target.descrizione.value,
       importo: parseFloat(e.target.importo.value),
     };
-    console.log(newFormData);
     modificaDati(newFormData, datasForUpdate.id)
   };
 
@@ -102,7 +102,9 @@ export default function HomeFormModifica() {
                 datasForUpdate?.Salute ||
                 datasForUpdate?.Spesa  ||
                 datasForUpdate?.Investimenti ||
-                datasForUpdate?.tasse
+                datasForUpdate?.tasse ||
+                datasForUpdate?.cucito_out ||
+                datasForUpdate?.cucito_in
               }
               onChange={handleInputChange}
             />
@@ -123,29 +125,38 @@ export default function HomeFormModifica() {
                     variant: "standard",
                     required: true,
                     name: "data",
+                    InputProps: {
+                      sx:{
+                          '& .MuiIconButton-root': {
+                            backgroundColor: 'gray', // Cambia il colore qui
+                            '&:hover': { // Stile per lo stato di hover (opzionale)
+                              backgroundColor: "darkgray !important",
+                            },
+                          },
+                        }
+                    },
                   },
                 }}
               />
             </LocalizationProvider>
-            {!datasForUpdate?.Income && (
-              <SelectxFormModifica
-                handleInputChange={handleInputChange}
-                datasForUpdate={datasForUpdate}
-                formData={formData}
-                setFormData={setFormData}
-              />
-            )}
-            <Button 
-              color="info" 
-              variant="contained" 
-              endIcon={<SendIcon />} 
+            <SelectxFormModifica
+              handleInputChange={handleInputChange}
+              datasForUpdate={datasForUpdate}
+              formData={formData}
+              setFormData={setFormData}
+            />
+            <Button
+              variant="contained"
+              endIcon={<SendIcon />}
               type="submit"
               sx={{
-                width: '50%',
+                width: '30% !important',
                 fontSize: ".8rem",
                 alignSelf: "center",
-                bgcolor: "background.paper",
-                '&:hover': { bgcolor: "info.dark" }
+                backgroundColor: "gray !important", // Applica direttamente il backgroundColor
+                '&:hover': { // Stile per lo stato di hover (opzionale)
+                  backgroundColor: "darkgray !important",
+                },
               }}
             >
               Inserisci

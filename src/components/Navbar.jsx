@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Badge, { badgeClasses } from '@mui/material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
+import GestureIcon from '@mui/icons-material/Gesture';
 import { format } from "date-fns";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AppBar from '@mui/material/AppBar';
@@ -42,13 +43,18 @@ export default function Navbar({isLogged}) {
 
   return (
     <AppBar position="static">
-    <Container maxWidth="xl">
+    <Container maxWidth="xl"sx={{padding:0}}>
       <Toolbar disableGutters sx={{justifyContent: 'space-between', width: '100%'}}>
         { isLogged ?
         <>
           <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/"><i className="bi bi-house"></i></NavLink>
           <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/riepilogo"><i className="bi bi-table"></i></NavLink>
           <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/grafico"><i className="bi bi-graph-up-arrow"></i></NavLink>
+          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/page_cucito">
+            <IconButton>
+              <GestureIcon fontSize="small" sx={{color:"white"}}/>
+            </IconButton>
+          </NavLink>
           <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/lista_spesa">
             <IconButton>
               <ShoppingCartIcon fontSize="small" sx={{color:"white"}}/>
@@ -74,14 +80,10 @@ export default function Navbar({isLogged}) {
               />
             </IconButton>
           </NavLink>
-          <FormControl component="fieldset" style={{border:"2px solid gray", paddingLeft:"5px", borderRadius:"10px"}}>
+          <FormControl component="fieldset" style={{marginLeft:"10px"}}>
             <FormGroup aria-label="position" row>
               <FormControlLabel
                 value="end"
-                label={theme === "dark" ? 
-                <i className="bi bi-moon-stars" style={{fontSize:".8rem"}}></i> : 
-                <i className="bi bi-brightness-high" style={{fontSize:".8rem"}}></i>
-                }
                 sx={{
                   "& .MuiFormControlLabel-label": { fontSize: ".8rem"}, 
                   "marginRight": "5px"

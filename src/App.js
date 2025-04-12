@@ -7,6 +7,7 @@ import Grafico from './routes/Grafico';
 import Home from './routes/Home';
 import ListaSpesa from './routes/ListaSpesa';
 import Calendar from './routes/Calendar';
+import Cucito from './routes/Cucito';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/riepilogo" element={<Riepilogo />} />
                   <Route path="/grafico" element={<Grafico />} />
+                  <Route path="/page_cucito" element={<Cucito />} />
                   <Route path="/lista_spesa" element={<ListaSpesa />} />
                   <Route path="/calendar" element={<Calendar />} />
               </Routes>

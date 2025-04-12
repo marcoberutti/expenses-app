@@ -13,10 +13,21 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 
 export default function HomeForm(){
-  const { inserisciDati, handleRadioChange, select, setFormData, formData } = useData();
+  const { inserisciDati, handleRadioChange, select, setFormData, formData,valoriOutcome, valoriIncome } = useData();
   const today = dayjs();
+
+  const [valoriDropdown, setValoriDropdown] = useState([])
+
+  useEffect(() => {
+    if (select === "outcome") {
+      setValoriDropdown(valoriOutcome);
+    } else if (select === "income") {
+      setValoriDropdown(valoriIncome);
+    }
+  }, [select]); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,24 +50,36 @@ export default function HomeForm(){
 
   return (
     <>
-      <h2 style={{textAlign:"center"}}>Nuova spesa</h2>
+      <h2 style={{textAlign:"center", margin:"5px 0"}}>Nuova spesa</h2>
       <form method="post" onSubmit={handleSubmit}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 4, mx:5 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mx:5 }}>
           <RadioGroup
               defaultValue="outcome"
               name="tipo">
-            <FormControlLabel 
-              value="outcome" 
-              onChange={handleRadioChange}
-              checked={select === true}
-              control={<Radio />} 
-              label="Uscita" />
-            <FormControlLabel 
-              value="income" 
-              onChange={handleRadioChange}
-              checked={select === false}
-              control={<Radio />} 
-              label="Entrata" />
+            <Box sx={{ display: "flex", justifyContent: "space-evenly", marginTop:"15px"}}>
+              <FormControlLabel 
+                value="outcome" 
+                onChange={handleRadioChange}
+                checked={select === "outcome"}
+                control={<Radio />} 
+                label="Uscita" 
+                sx={{
+                  '& .MuiFormControlLabel-label': {
+                    fontSize: '0.9rem', // Imposta la dimensione del font desiderata
+                  },
+                }}/>
+              <FormControlLabel 
+                value="income" 
+                onChange={handleRadioChange}
+                checked={select === "income"}
+                control={<Radio />} 
+                label="Entrata" 
+                sx={{
+                  '& .MuiFormControlLabel-label': {
+                    fontSize: '0.9rem', // Imposta la dimensione del font desiderata
+                  },
+                }}/>
+            </Box>
           </RadioGroup>
           <TextField 
             required
@@ -96,9 +119,10 @@ export default function HomeForm(){
               }}
             />
           </LocalizationProvider>
-          {select &&
             <FormControl variant="standard" sx={{ minWidth: 120 }} required>
-              <InputLabel id="demo-simple-select-standard-label">Tipo di spesa</InputLabel>
+              <InputLabel id="demo-simple-select-standard-label">{
+                select === "outcome" ? "Tipo di spesa" : "Tipo di income"
+              }</InputLabel>
               <Select
                 style={{color: 'rgba(255, 255, 255, 0.7)' }}
                 id="demo-simple-select-standard"
@@ -122,7 +146,7 @@ export default function HomeForm(){
                   }
                 }}
               >
-                {["spesa", "benzina", "extra", "casa", "salute","investimenti", "tasse"].map((item) => (
+                {valoriDropdown.map((item) => (
                   <MenuItem
                     key={item}
                     value={item}
@@ -135,12 +159,11 @@ export default function HomeForm(){
                       },
                     }}
                   >
-                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                    {item.charAt(0) + item.slice(1)}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-          }
           <Button type="submit" variant="contained" color="inherit"
           sx={{width:100}}
           >Inserisci</Button>
