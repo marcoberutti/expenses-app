@@ -1,4 +1,4 @@
-import { useData } from "../dataContext";
+import { useData } from "../../dataContext";
 import style from "./HomeForm.module.css";
 import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
@@ -14,7 +14,6 @@ import SendIcon from '@mui/icons-material/Send';
 export default function HomeFormModifica() {
   const { modificaDati, datasForUpdate, setFormData, formData, valoriOutcome, valoriIncome } = useData();
   const [selectDefaultVal, setSelectDefVal] = useState("");
-
 
   useEffect(() => {
     if (!datasForUpdate) return;
@@ -50,7 +49,7 @@ export default function HomeFormModifica() {
     e.preventDefault();
     const newFormData = {
       ...formData,
-      tipo: datasForUpdate.Income ? "income" : "outcome",
+      tipologia: e.target.tipologia.value,
       descrizione: e.target.descrizione.value,
       importo: parseFloat(e.target.importo.value),
     };
@@ -60,7 +59,7 @@ export default function HomeFormModifica() {
   const handleInputChange = (e) => {
     if (!e) return;
     
-    if (e.$d instanceof Date) {
+    if (e.$d && e.$d instanceof Date) {
       const formattedDate = format(e.$d, "yyyy-MM-dd HH:mm:ss");
       setFormData((prev) => ({ ...prev, data: formattedDate }));
     } else if (e.target) {
@@ -150,7 +149,7 @@ export default function HomeFormModifica() {
               endIcon={<SendIcon />}
               type="submit"
               sx={{
-                width: '30% !important',
+                width: 'fit-content !important',
                 fontSize: ".8rem",
                 alignSelf: "center",
                 backgroundColor: "gray !important", // Applica direttamente il backgroundColor

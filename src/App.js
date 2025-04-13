@@ -12,7 +12,6 @@ import Cucito from './routes/Cucito';
 function App() {
 
   return (
-    <DataProvider>
       <BrowserRouter>
           <LayoutRoutes>
               <Routes>
@@ -25,7 +24,6 @@ function App() {
               </Routes>
           </LayoutRoutes>
       </BrowserRouter>
-    </DataProvider>
   );
 }
 

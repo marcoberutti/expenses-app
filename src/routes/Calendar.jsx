@@ -3,10 +3,10 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import NewEventModal from '../components/NewEventModal';
+import NewEventModal from '../components/calendar/NewEventModal';
 import { useData } from '../dataContext';
 import { format } from 'date-fns';
-import ModifyEventModal from '../components/ModifyEventModal';
+import ModifyEventModal from '../components/calendar/ModifyEventModal';
 import itLocale from '@fullcalendar/core/locales/it';
 
 export default function Calendar() {

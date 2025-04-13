@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useData } from '../dataContext';
+import { useData } from '../../dataContext';
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useData } from '../dataContext';
-import Loader from './Loader';
+import { useData } from '../../dataContext';
+import Loader from '../utils/Loader';
 import style from './modalRiepilogo.module.css';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import {format, parseISO} from 'date-fns'

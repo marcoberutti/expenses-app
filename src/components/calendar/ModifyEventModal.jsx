@@ -2,70 +2,74 @@ import { useState, useEffect } from "react";
 import { Box, Button, Typography, Modal, TextField, IconButton } from "@mui/material";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
 import "dayjs/locale/it"; // Import Italian locale
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
-import { useData } from "../dataContext";
+import { useData } from "../../dataContext";
+import { format } from "date-fns";
 
-// Extend dayjs with necessary plugins
+// Extend dayjs with UTC plugin
 dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(customParseFormat);
-dayjs.extend(localizedFormat);
-dayjs.locale('it'); // Set Italian locale globally
+dayjs.locale('it'); // Set Italian locale
 
-export default function NewEventModal({ open }) {
-  const {setOpenModal, colors, style, inserisciEvento} = useData();
+export default function ModifyEventModal({ open, event }) {
+  const { setOpenModalModifica, colors, style, modificaEvento } = useData();
   
+  // Initialize state with null values and update them when event changes
   const [eventName, setEventName] = useState("");
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
-  const [date, setDate] = useState(dayjs().tz("Europe/Rome")); // Initialize with Italian timezone
+  const [selectedColor, setSelectedColor] = useState("");
+  const [date, setDate] = useState(null);
   
-  // Reset date when modal opens
+  // Update state when event data changes
   useEffect(() => {
-    if (open) {
-      setDate(dayjs().tz("Europe/Rome"));
+    if (event) {
+      setEventName(event.title || "");
+      setSelectedColor(event.color || colors[0]);
+      setDate(dayjs(event.start));
+      console.log("Event loaded:", event);
     }
-  }, [open]);
+  }, [event, colors]);
   
   const handleSubmit = () => {
-    if (eventName.trim() !== "" && date) {
+    if (event && eventName.trim() !== "" && date) {
+      // Use the selected date from state, not the original event date
+      const formattedDate = format(date.toDate(), "yyyy-MM-dd HH:mm:ss");
       
-      const formattedDate = date.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-      let formattedStart = formattedDate.includes("T")
-      ? formattedDate.replace("T", " ").substring(0, 19)
-      : `${formattedDate} 00:00:00`;
-  
-      inserisciEvento(eventName, formattedStart, selectedColor);
+      const updatedEvent = {
+        title: eventName,
+        start: formattedDate,
+        color: selectedColor
+      };
+      
+      console.log("Updating event:", updatedEvent);
+      modificaEvento(updatedEvent, event.id);
       handleClose();
+    } else {
+      console.error("Cannot update event: missing required data", { event, eventName, date });
     }
   };
   
   const handleClose = () => {
-    setEventName("");
-    setSelectedColor(colors[0]);
-    setDate(dayjs().tz("Europe/Rome"));
-    setOpenModal(false);
+    setOpenModalModifica(false);
   };
   
   const handleDateChange = (newDate) => {
-    // Ensure we're working with a proper Italian timezone date
-    const italianDate = dayjs(newDate).tz("Europe/Rome");
-    setDate(italianDate);
+    console.log("Date changed:", newDate);
+    setDate(dayjs(newDate));
   };
+  
+  // If event is not defined, don't render
+  if (!event) return null;
   
   return (
     <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title">
       <Box sx={style}>
         <div style={{display:"flex", justifyContent:"space-between"}}>
           <Typography id="modal-modal-title" variant="h6">
-            Nuovo evento
+            Modifica evento
           </Typography>
-          <button onClick={handleClose} style={{fontSize:"2rem", color:"white", backgroundColor:"transparent", border:"none", cursor:"pointer"}}>
+          <button onClick={()=> handleClose()} style={{fontSize:"2rem", color:"white", backgroundColor:"transparent", border:"none", cursor:"pointer"}}>
             <i className="bi bi-x"></i>
           </button>
         </div>
@@ -86,14 +90,6 @@ export default function NewEventModal({ open }) {
             ampm={false} // Use 24-hour format for Italy
             views={['hours', 'minutes']}
             ampmInClock={false}
-            timeSteps={{ minutes: 5 }}
-            sx={{ 
-              '& .MuiPickersToolbar-root': { color: 'primary.main' },
-              '& .MuiClock-pin': { backgroundColor: 'primary.main' },
-              '& .MuiClockPointer-root': { backgroundColor: 'primary.main' },
-              '& .MuiClockPointer-thumb': { backgroundColor: 'primary.main', borderColor: 'primary.main' },
-              '& .MuiClock-clock': { backgroundColor: 'background.paper' }
-            }}
           />
         </LocalizationProvider>
         
@@ -119,7 +115,7 @@ export default function NewEventModal({ open }) {
         </Box>
         
         <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2 }}>
-          Aggiungi
+          Salva
         </Button>
       </Box>
     </Modal>

@@ -1,12 +1,10 @@
-import { useData } from "../dataContext"
+import { useData } from "../../dataContext"
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import DeleteWriteCellComponent from './DeleteWriteCellComponent';
+import DeleteWriteCellComponent from '../utils/DeleteWriteCellComponent';
 
 export default function HomeTableTbody ({filteredDatas}){
-
-  const {columnsToHide, rimuoviDati, getDataForUpdateForm, setModal, setSelect} = useData()
 
   return (
     <TableBody>

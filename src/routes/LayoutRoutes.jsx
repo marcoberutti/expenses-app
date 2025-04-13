@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import style from './layoutRoutes.module.css';
 import { useData } from "../dataContext";
-import Login from "../components/Login";
+import Login from "../components/utils/Login";
 import { useEffect, useMemo, useState } from "react"; // Add useState
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -39,12 +39,10 @@ export default function LayoutRoutes({ children }) {
       <CssBaseline />
       <Navbar isLogged={isLogged}/>
       { isLogged ?
-        <div className={style.mainContainer}>
-          <div className={style.outlet}>
+          <>
             {children}
-          </div>
-          <Footer />
-        </div>
+            <Footer />
+          </>
         :
         <Login handleLogin={loginData}/>
       }

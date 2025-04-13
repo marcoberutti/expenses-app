@@ -7,7 +7,7 @@ import UnfoldMoreRoundedIcon from "@mui/icons-material/UnfoldMoreRounded";
 import { CssTransition } from "@mui/base/Transitions";
 import { PopupContext } from "@mui/base/Unstable_Popup";
 import {useState, useEffect} from 'react'
-import { useData } from "../dataContext";
+import { useData } from "../../dataContext";
 
 export default function SelectxFormModifica({datasForUpdate, setFormData}) {
 
@@ -27,7 +27,7 @@ export default function SelectxFormModifica({datasForUpdate, setFormData}) {
   }
   
   const [selectedValue, setSelectedValue] = useState("");
-  const {valoriOutcome, valoriIncome, select} = useData();
+  const {valoriOutcome, valoriIncome, select, formData} = useData();
 
   const Select = React.forwardRef(function CustomSelect(props, ref) {
     const slots = {
@@ -245,20 +245,27 @@ export default function SelectxFormModifica({datasForUpdate, setFormData}) {
   `;
 
   useEffect(() => {
-    setSelectedValue(getCurrentTipologia()); // Ricalcola il valore selezionato se necessario
-  }, [select, datasForUpdate]); // Includi 'select' come dipendenza
+    const initialValue = getCurrentTipologia();
+    setSelectedValue(initialValue);
+  }, [select, datasForUpdate]);
 
-  const handleSelectChange = (newValue) => {
-    console.log("Valore selezionato:", newValue);
-    setSelectedValue(newValue);
-    setFormData((prev) => ({ ...prev, tipologia: newValue }));
+  const handleSelectChange = (event, newValue) => {
+    const value = newValue ?? (event?.target?.textContent ?? "");
+    if (!value) return;
+  
+    setSelectedValue(value);
+
+    
+    setFormData((prev) => ({
+      ...prev
+    }));
   };
-
+  
   return (
     <Select
       name="tipologia"
-      onChange={handleSelectChange}
       value={selectedValue}
+      onChange={(e, newValue) => handleSelectChange(e, newValue)}
     >
       {select === "outcome" ? 
       valoriOutcome.map((valore) => (

@@ -1,15 +1,16 @@
 import style from "./Intestazione.module.css"
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { useData } from "../dataContext";
+import { useData } from "../../dataContext";
+import Message from "./Message";
 
 export default function Intestazione({title, columnsToHide, handleToggleColumns}){
-  const {modal, message, handleToggleModals} = useData();
+  const {modal, handleToggleModals} = useData();
 
   return (
 
     <div className={style.intestazione}>
       <h3 className={style.titoloIntestazione}>{title}</h3>
-      {message !== '' && <h4 className={style.successAlert}>{message}</h4> }
+      <Message/>
       {columnsToHide && columnsToHide.map(column =>
         column.visible === false ? 
             <div key={column.nome}>

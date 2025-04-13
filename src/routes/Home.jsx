@@ -2,12 +2,12 @@ import {  useEffect } from "react";
 import TableCell from '@mui/material/TableCell';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import style from "./home.module.css"
-import HomeTable from "../components/HomeTable";
-import HomeForm from "../components/HomeForm";
+import HomeTable from "../components/home/HomeTable";
+import HomeForm from "../components/forms/HomeForm";
 import { useData } from "../dataContext";
-import Loader from "../components/Loader";
-import Intestazione from "../components/Intestazione";
-import HomeFormModifica from "../components/HomeFormModifica";
+import Loader from "../components/utils/Loader";
+import Intestazione from '../components/utils/Intestazione'
+import HomeFormModifica from "../components/forms/HomeFormModifica";
 
 export default function Home() {
 
@@ -77,7 +77,7 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <>
     { isLoading ? <Loader/> :
       <div>
         <Intestazione
@@ -88,6 +88,6 @@ export default function Home() {
         {setWhatModalSays()}
       </div>
     }
-    </div>
+    </>
   );
 }

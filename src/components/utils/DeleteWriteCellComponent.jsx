@@ -1,11 +1,11 @@
 import React from 'react'
-import { useData } from '../dataContext';
-import style from './HomeTable.module.css'
+import { useData } from '../../dataContext';
+import style from './deleteWriteCell.module.css'
 import { TableCell, IconButton } from '@mui/material';
 
 export default function DeleteWriteCellComponent({dato}){
   const {rimuoviDati, setSelect, getDataForUpdateForm, setModal} = useData();
-
+  
   return(
     <TableCell  sx={{p:0, width:'25px', border:"1px solid #494949"}} align="center">
       <div className={style.deleteAndDateCell}>

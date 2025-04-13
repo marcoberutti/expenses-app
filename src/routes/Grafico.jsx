@@ -2,10 +2,10 @@ import React, { useEffect, useReducer } from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useData } from "../dataContext";
-import Loader from "../components/Loader";
+import Loader from "../components/utils/Loader";
 import {dataReducer, initialState} from "../reducers/chartReducer";
-import Intestazione from "../components/Intestazione";
-import HomeForm from "../components/HomeForm";
+import Intestazione from '../components/utils/Intestazione'
+import HomeForm from "../components/forms/HomeForm";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 

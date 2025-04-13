@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import API_URL from "./config";
-import { getYear } from "date-fns";
+import { format, getYear } from "date-fns";
 
 import { useLoginApi } from "./hooks/useLoginApi"
 import { useMessage } from "./hooks/useMessage";
@@ -16,6 +16,13 @@ import { useFilterRiepilogoApi } from "./hooks/useFilterRiepilogoApi";
 
 import { useCreateEventApi } from "./hooks/useCreateEventApi";
 import { useWriteEventApi } from "./hooks/useWriteEventApi";
+
+import { useCreateCustomerApi } from "./hooks/useCreateCustomerApi";
+import { useGetCustomersApi } from "./hooks/useGetCustomersApi";
+
+import { useCreateMaterialApi } from "./hooks/useCreateMaterialApi";
+import { useGetMaterialsApi } from "./hooks/useGetMaterialsApi";
+import { useDeleteCustomerOrMaterialeApi } from "./hooks/useDeleteCustomerOrMaterialeApi";
 
 const DataContext = createContext();
 
@@ -50,9 +57,15 @@ export const DataProvider = ({ children }) => {
   const { populateProduct } = usePopulateProductApi();
   const { getProducts } = useGetProductsApi();
   const [products, setProducts] = useState([]);
-
+  
   const { createEvent } = useCreateEventApi();
   const { writeEvent } = useWriteEventApi();
+  
+  const { createCustomer } = useCreateCustomerApi();
+  const { getCustomers } = useGetCustomersApi();
+  const { createMaterial } = useCreateMaterialApi();
+  const { getMaterials } = useGetMaterialsApi();
+  const { deleteCustomerOrMateriale } = useDeleteCustomerOrMaterialeApi();
 
   const { writeData } = useWriteDataApi();
   const { handleLogin } = useLoginApi();
@@ -93,6 +106,8 @@ export const DataProvider = ({ children }) => {
   const [modalRiepilogo, setModalRiepilogo] = useState(false)
   const [openModal, setOpenModal] = useState(false);
   const [openModalModifica, setOpenModalModifica] = useState(false);
+  const [clienti, setClienti] = useState([])
+  const [materiali, setMateriali] = useState([])
 
   const handleSetTheme = (e) => {
     setTheme(e.target.checked ? "dark" : "light")
@@ -134,6 +149,7 @@ export const DataProvider = ({ children }) => {
     });
 
   };
+
   const rimuoviDati = (id) => {
     deleteData(id)
     .then(data => {
@@ -141,6 +157,7 @@ export const DataProvider = ({ children }) => {
       setTemporaryMessage(data.message)
     })
   }
+
   const modificaDati = (data, id) => {
     writeData(data, id)
     .then(data => {
@@ -149,6 +166,7 @@ export const DataProvider = ({ children }) => {
       setModal("normal")
     })
   }
+
   const loginData = (data) => {
     handleLogin(data)
     .then(data => {
@@ -159,10 +177,12 @@ export const DataProvider = ({ children }) => {
       }
     })
   }
+
   const handleRadioChange = (event) => {
     const { value } = event.target;
     setSelect(value)
   };
+
   const handleToggleModals = () => {
     switch (modal) {
       case "modifica":
@@ -177,6 +197,7 @@ export const DataProvider = ({ children }) => {
       default:
     }
   };
+
   const getDataForUpdateForm = (data) => {
     const filteredObj = Object.fromEntries(
       Object.entries(data).filter(([key, val]) => val !== null)
@@ -264,11 +285,64 @@ export const DataProvider = ({ children }) => {
       setTemporaryMessage(error || "Errore nella modifica dei dati!");
     });
   };
+
   const filterDataRiepilogo = useCallback((inizio, fine, categoria) => {
     if (!inizio || !fine || !categoria) return;
     getFilteredRiepilogo(inizio, fine, categoria)
     .then(res => setFilteredRiepilogoDatas(res))
   }, []);
+  
+  const inserisciCliente = (data) => {
+    const dataWithStato = {
+      ...data, 
+      stato:"da fare",
+      data: format(new Date(), "yyyy-MM-dd hh:mm:ss"),
+    }
+    createCustomer(dataWithStato)
+    .then(res => {
+      fetchEvents();
+      setTemporaryMessage(res.message || "Dati inseriti ok!");
+    })
+    .catch((error) => {
+      setTemporaryMessage(error || "Errore nell'inserimento dei dati!");
+    });
+  };
+
+  const getClienti = () => {
+    getCustomers()
+    .then(data => setClienti(data))
+  }
+    
+  const inserisciMateriale = (data) => {
+    createMaterial(data)
+    .then(res => {
+      fetchEvents();
+      setTemporaryMessage(res.message || "Dati inseriti ok!");
+    })
+    .catch((error) => {
+      setTemporaryMessage(error || "Errore nell'inserimento dei dati!");
+    });
+  };
+
+  const getMateriali = () => {
+    getMaterials()
+    .then(data => setMateriali(data))
+  }
+  
+  const cancellaMaterialeOCliente = (id, tabella) => {
+    deleteCustomerOrMateriale(id, tabella)
+    .then((res) => {
+      if(tabella === "materiali"){
+        getMateriali()
+      } else {
+        getClienti()
+      }
+      setTemporaryMessage(res.message || "Dati eliminati con successo!");
+    })
+    .catch((error) => {
+      setTemporaryMessage(error || "Errore nell'eliminazione dei dati!");
+    });
+  }
   
   const value = {
     columnsToHide,
@@ -316,6 +390,13 @@ export const DataProvider = ({ children }) => {
     setOpenModalModifica,
     valoriOutcome,
     valoriIncome,
+    inserisciCliente,
+    getClienti,
+    clienti,
+    inserisciMateriale,
+    getMateriali,
+    materiali,
+    cancellaMaterialeOCliente,
   }
 
 
