@@ -42,7 +42,7 @@ export default function ListaSpesa(){
 
   const handlePrezzoBlur = (id) => {
     const prezzoDaAggiornare = prezzi[id];
-    if (prezzoDaAggiornare !== undefined) {
+    if (prezzoDaAggiornare !== undefined && prezzoDaAggiornare !== "") {
       modificaProdotto(prezzoDaAggiornare, id)
     }
   };
@@ -106,20 +106,24 @@ export default function ListaSpesa(){
             <ListItem 
             key={item.data} 
             disablePadding 
+            divider={true}
             onClick={(e) => {
               if (e.target.tagName !== 'INPUT') { // Verifica se l'elemento cliccato NON è un input
                 e.stopPropagation();
                 deleteProductList(item.id);
               }
-            }} 
-            divider={true}>
-              <ListItemText inset primary={item.prodotto} />
+            }}
+            >
+              <ListItemText primary={item.prodotto} />
               <Input
                 type="number"
                 value={prezzi[item.id] === undefined ? '' : prezzi[item.id]}
                 onChange={(e) => handlePrezzoChange(item.id, e)}
                 onBlur={(e) => handlePrezzoBlur(item.id)}
                 onClick={(e) => e.stopPropagation()}
+                sx={{
+                  width:"80px"
+                }}
               />
             </ListItem>
           ))}
