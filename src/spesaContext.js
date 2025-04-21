@@ -21,10 +21,6 @@ export const SpesaProvider = ({children}) => {
     
   const fetchListSpesa = async () => {
     setIsLoading(true);
-    await getDatas("lista_prodotti")
-    .then((data) => {
-      setProducts(data)
-    })
     await getDatas("lista_spesa")
       .then((data) => {
         setListaSpesa(data);
@@ -34,6 +30,7 @@ export const SpesaProvider = ({children}) => {
   };
 
   const deleteProductList = (id) => {
+    setListaSpesa(current => current.filter(item => item.id !== id));
     deleteProduct(id)
     .then(data => {
       fetchListSpesa();
