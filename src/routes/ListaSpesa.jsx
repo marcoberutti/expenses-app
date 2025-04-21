@@ -1,60 +1,51 @@
 import { useEffect, useState } from "react";
-import style from './listaSpesa.module.css'
 import { useData } from "../dataContext"
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { IconButton } from '@mui/material';
+import { IconButton, Input } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Loader from "../components/utils/Loader"
-import API_URL from '../config'
+import { useSpesa } from "../spesaContext";
 
 export default function ListaSpesa(){
 
-  const {listaSpesa, fetchListSpesa, deleteProductList, addProductList, products} = useData();
+  const {listaSpesa, fetchListSpesa, deleteProductList, addProductList, products, modificaProdotto} = useSpesa();
   const [newProduct, setNewProduct] = useState("");
-
+  const [prezzi, setPrezzi] = useState({});
   
   useEffect(() => {
     if (listaSpesa.length === 0) {
       fetchListSpesa();
     }
-  }, []);
-
-  async function getPrice(newProduct){
-    if (!newProduct.trim()) return;
-    
-    try {
-      const response = await fetch(`${API_URL}/supermercato/${newProduct}`, {
-        method:"POST"
-      });
-      if (!response.ok) {
-        throw new Error(`Errore nel recupero dei dati: ${response.status}`);
-      }
-      
-      const data = await response.json();
-
-      let prodotti = data.displayables.entities
-      let mappedPrices = prodotti.map(prodotto => parseFloat(prodotto.label.match(/[\d,]+/g).join("").replace(",",".")))
-      const prezzoMedio = mappedPrices.reduce((somma, prezzo) => somma+prezzo,0) / mappedPrices.length
-      return prezzoMedio
-
-    } catch (error) {
-      console.error("Errore nella richiesta:", error);
-    }
-
-  }
+    const initPrezzi = {};
+    listaSpesa.forEach(item => {
+      initPrezzi[item.id] = item.prezzo || "";
+    });
+    setPrezzi(initPrezzi)
+  }, [listaSpesa]);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    let prezzoMedio = await getPrice(newProduct)
 
-    addProductList(newProduct, parseFloat(prezzoMedio).toFixed(2));
+    addProductList(newProduct);
     setNewProduct("");
-
   }
+
+  const handlePrezzoChange = (id, e) => {
+    setPrezzi(prevPrezzi => ({
+      ...prevPrezzi,
+      [id]: e.target.value,
+      }));
+  };
+
+  const handlePrezzoBlur = (id) => {
+    const prezzoDaAggiornare = prezzi[id];
+    if (prezzoDaAggiornare !== undefined) {
+      modificaProdotto(prezzoDaAggiornare, id)
+    }
+  };
 
 
   return (
@@ -110,22 +101,26 @@ export default function ListaSpesa(){
       {!listaSpesa ? (
         <Loader />
       ) : (
-        <List sx={{ width: "65%", bgcolor: "background.paper", margin: "0 auto"}} aria-label="lista-spesa">
+        <List sx={{ width: "80%", bgcolor: "background.paper", margin: "0 auto"}} aria-label="lista-spesa">
           {listaSpesa.map((item) => (
-            <ListItem key={item.data} disablePadding onClick={() => deleteProductList(item.id)} divider={true}>
-              <ListItemButton>
-                <ListItemText inset primary={item.prodotto} />
-                { item.prezzo &&
-                <ListItemText inset primary={`${item.prezzo} € / Kg, Lt`} />
-                }
-                {item.trend === "buono" ? (
-                  <i className={`bi bi-arrow-down ${style.down}`}></i> // 🔽 Prezzo basso
-                ) : item.trend === "alto" ? (
-                  <i className={`bi bi-arrow-up ${style.up}`}></i> // 🔼 Prezzo alto
-                ) : (
-                  <i className={`bi bi-arrow-right ${style.neutral}`}></i> // ➡️ Prezzo nella media
-                )}
-              </ListItemButton>
+            <ListItem 
+            key={item.data} 
+            disablePadding 
+            onClick={(e) => {
+              if (e.target.tagName !== 'INPUT') { // Verifica se l'elemento cliccato NON è un input
+                e.stopPropagation();
+                deleteProductList(item.id);
+              }
+            }} 
+            divider={true}>
+              <ListItemText inset primary={item.prodotto} />
+              <Input
+                type="number"
+                value={prezzi[item.id] === undefined ? '' : prezzi[item.id]}
+                onChange={(e) => handlePrezzoChange(item.id, e)}
+                onBlur={(e) => handlePrezzoBlur(item.id)}
+                onClick={(e) => e.stopPropagation()}
+              />
             </ListItem>
           ))}
         </List>

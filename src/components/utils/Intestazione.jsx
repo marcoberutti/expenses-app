@@ -1,43 +1,36 @@
 import style from "./Intestazione.module.css"
+import { Button } from '@mui/material'
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { useData } from "../../dataContext";
 import Message from "./Message";
+import { useConfig } from "../../configContext";
+import { useData } from "../../dataContext";
 
-export default function Intestazione({title, columnsToHide, handleToggleColumns}){
-  const {modal, handleToggleModals} = useData();
+export default function Intestazione({title}){
+  const { handleToggleModals } = useConfig();
+  const {modal } = useData();
 
   return (
 
     <div className={style.intestazione}>
       <h3 className={style.titoloIntestazione}>{title}</h3>
       <Message/>
-      {columnsToHide && columnsToHide.map(column =>
-        column.visible === false ? 
-            <div key={column.nome}>
-              <span>
-                <input 
-                type="checkbox"
-                checked={column.visible}
-                onChange={(e)=> handleToggleColumns(e)}
-                />
-                <span>{column.nome}</span>
-              </span>
-            </div>
-        : null
-      )}
-      <button 
+      <Button
+        variant="contained"
         onClick={handleToggleModals}
-        className={style.iconButton}
+        sx={{
+          backgroundColor: "gray !important",
+          fontWeight: modal === "normal" ? "normal" : "bold",
+          padding: "2px",
+          minWidth: "fit-content",
+          lineHeight: "1.1",
+          borderRadius: "50%",
+          width: "2rem",
+          height: "2rem",
+          fontSize: modal === "normal" ? "2rem" : "1rem",
+        }}
       >
-        {modal !== "normal" ? 
-          <span className={style.iconCircle}>
-            <i className="bi bi-x"></i>
-          </span> : 
-          <span className={style.iconCircle}>
-            <i className="bi bi-plus"></i>
-          </span>
-        }
-      </button>
+        {modal === "normal" ? "+" : "x"}
+      </Button>
     </div>
   )
 }

@@ -8,10 +8,13 @@ import { useData } from '../dataContext';
 import { format } from 'date-fns';
 import ModifyEventModal from '../components/calendar/ModifyEventModal';
 import itLocale from '@fullcalendar/core/locales/it';
+import { useEvent } from '../eventsContext';
 
 export default function Calendar() {
-  const { eventi, inserisciEvento, fetchEvents, modificaEvento, openModal, setOpenModal, openModalModifica, setOpenModalModifica } = useData();
+  const { eventi, fetchEvents, modificaEvento, openModal, setOpenModal, openModalModifica, setOpenModalModifica } = useEvent();
   const calendarRef = useRef(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   
   useEffect(() => {
     if (eventi.length === 0) {
@@ -19,8 +22,6 @@ export default function Calendar() {
     }
   }, []);
   
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedEvent, setSelectedEvent] = useState(null);
   
   const handleEventDrop = (info) => {
     const formattedDate = format(info.event.start, "yyyy-MM-dd HH:mm:ss");
@@ -54,9 +55,6 @@ export default function Calendar() {
   // Reset selectedEvent when modal closes
   useEffect(() => {
     if (!openModalModifica) {
-      // Optional: Reset selectedEvent when modal is closed
-      // Uncomment if you want this behavior
-      // setSelectedEvent(null);
     }
   }, [openModalModifica]);
   

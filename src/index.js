@@ -3,13 +3,19 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { DataProvider } from './dataContext';
+import { ConfigProvider } from './configContext';
+import { SharedStateProvider } from './sharedStateContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <DataProvider>
-        <App />
-    </DataProvider>
+    <SharedStateProvider>
+      <DataProvider>
+        <ConfigProvider>
+          <App/>
+        </ConfigProvider>
+      </DataProvider>
+    </SharedStateProvider>
   </React.StrictMode>
 );
 

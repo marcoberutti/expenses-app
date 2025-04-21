@@ -7,15 +7,14 @@ import {format, parseISO} from 'date-fns'
 import { it } from "date-fns/locale";
 
 export default function ModalRiepilogo() {
-  const { setModalRiepilogo, filteredRiepilogoDatas, isLoading } = useData();
+  const { setModalRiepilogo, filteredRiepilogoDatas, isLoading, titoloModaleRiepilogo, setFilteredRiepilogoDatas } = useData();
   const [titolo, setTitolo] = useState("");
 
   useEffect(() => {
     if (filteredRiepilogoDatas.length > 0) {
       let valoriTitolo = Object.values(filteredRiepilogoDatas[0]);
       let nomeMese = format(parseISO(valoriTitolo[0]), "MMMM", { locale: it });
-      let categoria = valoriTitolo[1];
-      let titoloTable = `Riepilogo ${categoria} mese di ${nomeMese}`;
+      let titoloTable = `Categoria: ${titoloModaleRiepilogo} --- Mese: ${nomeMese}`;
       setTitolo(titoloTable);
     } else {
       setTitolo("");
@@ -26,7 +25,13 @@ export default function ModalRiepilogo() {
     <div className={style.modalContainer}>
       <div className={style.closeContainer}>
         <h3>{titolo}</h3>
-        <span className={style.closeButton} onClick={() => setModalRiepilogo(false)}>
+        <span 
+          className={style.closeButton} 
+          onClick={() => {
+            setModalRiepilogo(false)
+            setFilteredRiepilogoDatas([])
+            setTitolo("")
+          }}>
           <i className="bi bi-x"></i>
         </span>
       </div>

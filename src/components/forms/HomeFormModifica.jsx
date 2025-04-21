@@ -10,9 +10,13 @@ import { format } from "date-fns";
 import SelectxFormModifica from "./SelectxFormModifica";
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
+import {IconButton } from "@mui/material";
+import { Box, display } from "@mui/system";
+import { useConfig } from "../../configContext";
 
 export default function HomeFormModifica() {
-  const { modificaDati, datasForUpdate, setFormData, formData, valoriOutcome, valoriIncome } = useData();
+  const {rimuoviDati, modificaDati, datasForUpdate, setModal } = useData();
+  const { valoriOutcome, setFormData, formData } = useConfig();
   const [selectDefaultVal, setSelectDefVal] = useState("");
 
   useEffect(() => {
@@ -70,7 +74,20 @@ export default function HomeFormModifica() {
   
   return (
     <>
-      <h1>Modifica spesa</h1>
+      <Box sx={{display:"flex", justifyContent:"center", gap:"30px", alignItems:"center"}}>
+        <h1>{datasForUpdate?.descrizione || "Nessuna descrizione"}</h1>
+        <IconButton size="small"
+            style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+            onClick={() => {
+              if (window.confirm("cancellare davvero?")) {
+                rimuoviDati(datasForUpdate.id);
+                setModal("normal")
+              }}
+            }
+            >
+            <i className={`bi-trash`} style={{fontSize:"1.5rem"}}></i>
+        </IconButton>
+      </Box>
       <div className={style.formContainer}>
         <form method="post" onSubmit={handleSubmit} className={style.form}>
           <div className={style.inputContainer}>
@@ -158,7 +175,7 @@ export default function HomeFormModifica() {
                 },
               }}
             >
-              Inserisci
+              Modifica dato
             </Button>
 
           </div>

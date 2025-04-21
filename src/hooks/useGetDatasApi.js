@@ -1,17 +1,16 @@
 import API_URL from "../config";
 
-export const useWriteDataApi = () => {
+export const useGetDatasApi = () => {
 
-  const writeData = async (data, id) => {
+  const getDatas = async (table) => {
     try {
-      const response = await fetch(`${API_URL}/writeData/${id}`, {
-        method: "PUT",
+      const response = await fetch(`${API_URL}/getDatas?table=${table}`,{
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           "x-api-key": process.env.REACT_APP_API_KEY
-        },
-        body: JSON.stringify(data)
-      });
+        }
+      })
 
       if (!response.ok) {
         throw new Error("Errore nella risposta dal server");
@@ -23,5 +22,5 @@ export const useWriteDataApi = () => {
     }
   };
 
-  return { writeData };
+  return { getDatas };
 }

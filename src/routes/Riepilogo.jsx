@@ -11,11 +11,11 @@ import ModalRiepilogo from "../components/riepilogo/ModalRiepilogo";
 
 export default function Riepilogo() {
 
-    const { datas, isLoading, fetchData, modal, message, inserisciDati, handleRadioChange, select, now, handleToggleModals, modalRiepilogo } = useData();
+    const { datas, isLoading, ottieniDati, modal, message, inserisciDati, handleRadioChange, select, now, handleToggleModals, modalRiepilogo } = useData();
   
     useEffect(() => {
       if (datas.length === 0) {
-        fetchData();
+        ottieniDati("expenses");
       }
     }, []);
 

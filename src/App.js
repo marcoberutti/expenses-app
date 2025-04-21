@@ -1,6 +1,5 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { DataProvider } from "./dataContext"; // Importa il DataProvider
 import LayoutRoutes from './routes/LayoutRoutes';
 import Riepilogo from './routes/Riepilogo';
 import Grafico from './routes/Grafico';

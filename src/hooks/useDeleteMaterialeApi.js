@@ -1,10 +1,10 @@
 import API_URL from "../config";
 
-export const useDeleteCustomerOrMaterialeApi = () => {
+export const useDeleteMaterialeApi = () => {
 
-  const deleteCustomerOrMateriale = async (id, table) => {
+  const deleteMateriale = async (id) => {
     try {
-      const response = await fetch(`${API_URL}/deleteCustomerOrMateriale/${id}/${table}`, {
+      const response = await fetch(`${API_URL}/deleteMateriale/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -22,5 +22,5 @@ export const useDeleteCustomerOrMaterialeApi = () => {
     }
   };
 
-  return { deleteCustomerOrMateriale };
+  return { deleteMateriale };
 }

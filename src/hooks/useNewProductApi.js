@@ -1,7 +1,7 @@
 import API_URL from "../config";
 
 export const useNewProductApi = () => {
-  const newProduct = async (prodotto, prezzo) => {
+  const newProduct = async (prodotto) => {
     try {
       const response = await fetch(`${API_URL}/newProductSpesa`, {
         method: 'POST',
@@ -9,7 +9,7 @@ export const useNewProductApi = () => {
           'Content-Type': 'application/json',
           'x-api-key': process.env.REACT_APP_API_KEY
         },
-        body: JSON.stringify({"prodotto": prodotto, "prezzo": parseFloat(prezzo)})
+        body: JSON.stringify({"prodotto": prodotto})
       });
 
       if (!response.ok) {

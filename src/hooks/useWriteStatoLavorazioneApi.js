@@ -1,12 +1,11 @@
 import API_URL from "../config";
 
-export const useCreateCustomerApi = () => {
-  const createCustomer = async (data) => {
-    console.log(data)
+export const useWriteStatoLavorazioneApi = () => {
+
+  const writeStatoLavorazione = async (data, id) => {
     try {
-      
-      const response = await fetch(`${API_URL}/createCustomer`, {
-        method: "POST",
+      const response = await fetch(`${API_URL}/writeStatoLavorazione/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "x-api-key": process.env.REACT_APP_API_KEY
@@ -17,15 +16,12 @@ export const useCreateCustomerApi = () => {
       if (!response.ok) {
         throw new Error("Errore nella risposta dal server");
       }
-      
       const result = await response.json();
       return result;
-      
     } catch (err) {
-      console.error("Errore nella creazione del cliente:", err);
       throw err;
     }
   };
 
-  return { createCustomer };
-};
+  return { writeStatoLavorazione };
+}

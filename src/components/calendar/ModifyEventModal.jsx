@@ -3,18 +3,21 @@ import { Box, Button, Typography, Modal, TextField, IconButton } from "@mui/mate
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import "dayjs/locale/it"; // Import Italian locale
+import { format } from "date-fns";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
-import { useData } from "../../dataContext";
-import { format } from "date-fns";
+import { useConfig } from "../../configContext";
+import { useEvent } from "../../eventsContext";
 
 // Extend dayjs with UTC plugin
 dayjs.extend(utc);
 dayjs.locale('it'); // Set Italian locale
 
 export default function ModifyEventModal({ open, event }) {
-  const { setOpenModalModifica, colors, style, modificaEvento } = useData();
+
+  const { setOpenModalModifica, modificaEvento } = useEvent();
+  const { colors, style } = useConfig();
   
   // Initialize state with null values and update them when event changes
   const [eventName, setEventName] = useState("");
@@ -27,7 +30,6 @@ export default function ModifyEventModal({ open, event }) {
       setEventName(event.title || "");
       setSelectedColor(event.color || colors[0]);
       setDate(dayjs(event.start));
-      console.log("Event loaded:", event);
     }
   }, [event, colors]);
   

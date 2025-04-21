@@ -12,6 +12,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Clienti from '../components/cucito/Clienti';
 import Materiali from '../components/cucito/Materiali';
+import { CucitoProvider } from '../cucitoContext';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,7 +45,7 @@ function a11yProps(index) {
 
 export default function Cucito(){
 
-  const { datas, isLoading, fetchData, modal, rimuoviDati, columnsToHide, setColumnsToHide } = useData();
+  const { isLoading, modal } = useData();
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -59,26 +60,29 @@ export default function Cucito(){
         return <HomeForm />
       case "normal":
         return (
-        <TableContainer component={Paper}>
-              <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Contabilità" {...a11yProps(0)} />
-                    <Tab label="Clienti" {...a11yProps(1)} />
-                    <Tab label="Materiali" {...a11yProps(2)} />
-                  </Tabs>
+        <CucitoProvider>
+          <TableContainer component={Paper}>
+                <Box sx={{ width: '100%' }}>
+                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                      <Tab label="Contabilità" {...a11yProps(0)} />
+                      <Tab label="Clienti" {...a11yProps(1)} />
+                      <Tab label="Materiali" {...a11yProps(2)} />
+                    </Tabs>
+                  </Box>
+                  <CustomTabPanel value={value} index={0}>
+                    <TableCucito />
+                  </CustomTabPanel>
+                  <CustomTabPanel value={value} index={1}>
+                    <Clienti />
+                  </CustomTabPanel>
+                  <CustomTabPanel value={value} index={2}>
+                    <Materiali />
+                  </CustomTabPanel>
                 </Box>
-                <CustomTabPanel value={value} index={0}>
-                  <TableCucito />
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
-                  <Clienti/>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
-                  <Materiali/>
-                </CustomTabPanel>
-              </Box>
-        </TableContainer>)
+          </TableContainer>
+        </CucitoProvider>
+        )
       default:
     }
   }

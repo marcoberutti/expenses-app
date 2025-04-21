@@ -14,9 +14,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useConfig } from '../../configContext';
 
 export default function HomeForm(){
-  const { inserisciDati, handleRadioChange, select, setFormData, formData,valoriOutcome, valoriIncome } = useData();
+  const { inserisciDati, handleRadioChange, select } = useData();
+  const { valoriOutcome, valoriIncome, setFormData, formData } = useConfig()
   const today = dayjs();
 
   const [valoriDropdown, setValoriDropdown] = useState([])
@@ -52,7 +54,7 @@ export default function HomeForm(){
     <>
       <h2 style={{textAlign:"center", margin:"5px 0"}}>Nuova spesa</h2>
       <form method="post" onSubmit={handleSubmit}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mx:5 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, margin: "0 20% 0 20%" }}>
           <RadioGroup
               defaultValue="outcome"
               name="tipo">

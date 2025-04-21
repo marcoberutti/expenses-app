@@ -1,16 +1,17 @@
 import API_URL from "../config";
 
-export const useGetProductsApi = () => {
+export const useWriteProductPrezzoApi = () => {
 
-  const getProducts = async () => {
+  const writeProductPrezzo = async (prezzo, id) => {
     try {
-      const response = await fetch(`${API_URL}/getProductsForSelect`,{
-        method: "GET",
+      const response = await fetch(`${API_URL}/writeProductListPrezzo/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "x-api-key": process.env.REACT_APP_API_KEY
-        }
-      })
+        },
+        body: JSON.stringify({"prezzo": prezzo})
+      });
 
       if (!response.ok) {
         throw new Error("Errore nella risposta dal server");
@@ -22,5 +23,5 @@ export const useGetProductsApi = () => {
     }
   };
 
-  return { getProducts };
+  return { writeProductPrezzo };
 }

@@ -1,16 +1,16 @@
 import API_URL from "../config";
 
-export const useGetCustomersApi = () => {
+export const useArchiveCustomerApi = () => {
 
-  const getCustomers = async () => {
+  const archiveCustomer = async (id) => {
     try {
-      const response = await fetch(`${API_URL}/getCustomers`,{
-        method: "GET",
+      const response = await fetch(`${API_URL}/archiveCustomer/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "x-api-key": process.env.REACT_APP_API_KEY
-        }
-      })
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Errore nella risposta dal server");
@@ -22,5 +22,5 @@ export const useGetCustomersApi = () => {
     }
   };
 
-  return { getCustomers };
+  return { archiveCustomer };
 }

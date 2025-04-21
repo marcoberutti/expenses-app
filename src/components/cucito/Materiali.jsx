@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react'
 import Form from './Form'
-import { useData } from '../../dataContext';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import Loader from '../utils/Loader';
+import { useCucito } from '../../cucitoContext';
 
 export default function Materiali(){
 
-  const { materiali, getMateriali, inserisciMateriale, cancellaMaterialeOCliente } = useData();
+  const { materiali, getMateriali, inserisciMateriale, cancellaMateriale } = useCucito();
 
   useEffect(() => {
     getMateriali();
-  }, []); // Esegui una sola volta il fetch all'avvio
+  }, []);
   
   function handleClick(id){
-    cancellaMaterialeOCliente(id, "materiali")
+    cancellaMateriale(id)
   }
   
 
@@ -22,7 +22,7 @@ export default function Materiali(){
       <Form 
         nomeLabel={"Materiale:"}
         nomeLavorazione={""}
-        nomeButton={"Inserisci materiale"}
+        nomeButton={"+"}
         onSubmit={inserisciMateriale}
         tipo={"materiali"}
       />

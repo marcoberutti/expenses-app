@@ -9,9 +9,9 @@ import "dayjs/locale/it"; // Import Italian locale
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
-import { useData } from "../../dataContext";
+import { useConfig } from "../../configContext";
+import { useEvent } from "../../eventsContext";
 
-// Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
@@ -19,7 +19,8 @@ dayjs.extend(localizedFormat);
 dayjs.locale('it'); // Set Italian locale globally
 
 export default function NewEventModal({ open }) {
-  const {setOpenModal, colors, style, inserisciEvento} = useData();
+  const { setOpenModal, setOpenModalModifica, inserisciEvento } = useEvent();
+  const { colors, style } = useConfig();
   
   const [eventName, setEventName] = useState("");
   const [selectedColor, setSelectedColor] = useState(colors[0]);

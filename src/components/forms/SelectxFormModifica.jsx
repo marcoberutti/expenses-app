@@ -8,6 +8,7 @@ import { CssTransition } from "@mui/base/Transitions";
 import { PopupContext } from "@mui/base/Unstable_Popup";
 import {useState, useEffect} from 'react'
 import { useData } from "../../dataContext";
+import { useConfig } from "../../configContext";
 
 export default function SelectxFormModifica({datasForUpdate, setFormData}) {
 
@@ -27,7 +28,8 @@ export default function SelectxFormModifica({datasForUpdate, setFormData}) {
   }
   
   const [selectedValue, setSelectedValue] = useState("");
-  const {valoriOutcome, valoriIncome, select, formData} = useData();
+  const {select, formData} = useData();
+  const { valoriOutcome, valoriIncome } = useConfig();
 
   const Select = React.forwardRef(function CustomSelect(props, ref) {
     const slots = {

@@ -1,10 +1,10 @@
 import React from 'react'
-import { useData } from '../../dataContext'
 import style from "./Intestazione.module.css"
+import { useSharedState } from '../../sharedStateContext'
 
 export default function Message(){
 
-  const {message} = useData()
+  const {message} = useSharedState()
 
   return(
     <>

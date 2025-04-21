@@ -1,23 +1,25 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import style from './layoutRoutes.module.css';
 import { useData } from "../dataContext";
 import Login from "../components/utils/Login";
 import { useEffect, useMemo, useState } from "react"; // Add useState
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { useConfig } from "../configContext";
+import { SpesaProvider } from "../spesaContext";
+import { EventProvider } from "../eventsContext";
+import Loader from "../components/utils/Loader";
 
 export default function LayoutRoutes({ children }) {
-  const { loginData, isLogged, setIsLogged, theme } = useData();
+  const { loginData, isLogged, setIsLogged } = useData();
+  const { theme } = useConfig();
   const [isLoading, setIsLoading] = useState(true); // Add loading state
   
   useEffect(() => {
-    // Check for token
     const token = localStorage.getItem("Token");
     if (token && !isLogged) {
       setIsLogged(true);
     }
-    // Set loading to false after checking
     setIsLoading(false);
   }, []);
   
@@ -29,23 +31,26 @@ export default function LayoutRoutes({ children }) {
     }), [theme]
   );
   
-  // Show nothing (or a loader) while checking authentication
   if (isLoading) {
-    return null; // Or return a loading spinner component
+    return <Loader/>
   }
   
   return (
-    <ThemeProvider theme={darkTheme} key={theme}>
-      <CssBaseline />
-      <Navbar isLogged={isLogged}/>
-      { isLogged ?
-          <>
-            {children}
-            <Footer />
-          </>
-        :
-        <Login handleLogin={loginData}/>
-      }
-    </ThemeProvider>
+    <SpesaProvider>
+      <EventProvider>
+        <ThemeProvider theme={darkTheme} key={theme}>
+          <CssBaseline />
+            <Navbar />
+            { isLogged ?
+                <>
+                  {children}
+                  <Footer />
+                </>
+              :
+              <Login handleLogin={loginData}/>
+            }
+        </ThemeProvider>
+      </EventProvider>
+    </SpesaProvider>
   );
 }

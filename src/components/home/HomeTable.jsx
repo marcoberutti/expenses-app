@@ -16,9 +16,13 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import { format, getYear } from "date-fns";
 import { it } from "date-fns/locale";
+import { TableCell } from "@mui/material";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import style from "../../routes/home.module.css"
 
-export default function HomeTable({ generateHeaders }) {
+export default function HomeTable() {
   const { datas, handleToggleModals } = useData();
+  
   const [filteredDatas, setFilteredDatas] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const thisYear = getYear(new Date());
@@ -281,7 +285,17 @@ export default function HomeTable({ generateHeaders }) {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableRow>{generateHeaders}</TableRow>
+            <TableRow>
+              <TableCell style={{textAlign: "center", fontSize:"1.1rem"}}><i className="bi bi-journal-text"></i></TableCell>
+              <TableCell style={{textAlign: "center", fontSize:"1.1rem"}}><i className={`bi bi-cash-coin ${style.income}`}></i></TableCell>
+              <TableCell style={{textAlign: "center", fontSize:"1.1rem"}}><i className="bi bi-cart"></i></TableCell>
+              <TableCell style={{textAlign: "center", fontSize:"1.1rem"}}><i className="bi bi-fuel-pump"></i></TableCell>
+              <TableCell style={{textAlign: "center", fontSize:"1.1rem"}}><i className="bi bi-plus-circle"></i></TableCell>
+              <TableCell style={{textAlign: "center", fontSize:"1.1rem"}}><i className="bi bi-house"></i></TableCell>
+              <TableCell style={{textAlign: "center", fontSize:"1.1rem"}}><i className="bi bi-heart-pulse"></i></TableCell>
+              <TableCell style={{textAlign: "center", fontSize:"1.1rem"}}><i className={`bi bi-currency-dollar ${style.income}`}></i></TableCell>
+              <TableCell style={{textAlign: "center", fontSize:"1.1rem"}}><i className={`bi bi-cash-coin ${style.taxes}`}></i></TableCell>
+            </TableRow>
           </TableHead>
           <HomeTableTbody
             handleToggleModals={handleToggleModals}
@@ -292,3 +306,5 @@ export default function HomeTable({ generateHeaders }) {
     </div>
   );
 }
+
+

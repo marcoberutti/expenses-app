@@ -16,10 +16,14 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import Container from '@mui/material/Container';
+import { useConfig } from "../configContext";
+import { useSpesa } from "../spesaContext";
 
-export default function Navbar({isLogged}) {
+export default function Navbar() {
 
-  const { setModal, setIsLogged, handleSetTheme, theme, listaSpesa, fetchListSpesa } = useData();
+  const { setModal, isLogged, setIsLogged } = useData();
+  const { handleSetTheme, theme } = useConfig();
+  const { listaSpesa, fetchListSpesa } = useSpesa();
 
   useEffect(() => {
     setModal("normal")    
