@@ -24,7 +24,7 @@ export default function ListaSpesa(){
       initPrezzi[item.id] = item.prezzo || "";
     });
     setPrezzi(initPrezzi)
-  }, [listaSpesa]);
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();

@@ -1,10 +1,10 @@
 import API_URL from "../config";
 
-export const useCreateCustomerApi = () => {
-  const createCustomer = async (data) => {
+export const useGirofondoApi = () => {
+  const girofondo = async (data) => {
     try {
       
-      const response = await fetch(`${API_URL}/createCustomer`, {
+      const response = await fetch(`${API_URL}/transferMoney`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,10 +21,10 @@ export const useCreateCustomerApi = () => {
       return result;
       
     } catch (err) {
-      console.error("Errore nella creazione del cliente:", err);
+      console.error("Errore nella creazione del materiale:", err);
       throw err;
     }
   };
 
-  return { createCustomer };
+  return { girofondo };
 };

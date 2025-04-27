@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import Form from './Form'
+import React, { useEffect } from 'react';
+import Form from './Form';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import Loader from '../utils/Loader';
 import { useCucito } from '../../cucitoContext';
@@ -7,28 +7,17 @@ import { Menu } from '@base-ui-components/react/menu';
 import styles from './index.module.css';
 import Archivio from './Archivio';
 
-export default function Clienti(){
-
-  const { clienti, getClienti, inserisciCliente, archiviaCliente, handleStatoLavorazione, toggleShowArchivio  } = useCucito();
-
-  const [clientiActive, setClientiActive] = useState([]);
+export default function Clienti() {
+  const { clienti, getClienti, inserisciCliente, archiviaCliente, handleStatoLavorazione, toggleShowArchivio } = useCucito();
 
   useEffect(() => {
     getClienti();
   }, []);
 
-  useEffect(() => {
-    getClienti();
-    if (clienti.length !== 0){
-      const clientiFiltrati = clienti.filter(cliente => cliente.active !== "false")
-      setClientiActive(clientiFiltrati)
-    }
-  }, [clienti]);
-  
-  function handleClick(id){
-    archiviaCliente(id)
+  function handleClick(id) {
+    archiviaCliente(id);
   }
-  
+
   function ChevronDownIcon(props) {
     return (
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none" {...props}>
@@ -36,7 +25,7 @@ export default function Clienti(){
       </svg>
     );
   }
-  
+
   return (
     <>
       {toggleShowArchivio === false ? (
@@ -48,7 +37,7 @@ export default function Clienti(){
             tipo={"clienti"}
           />
           <br />
-          {clientiActive.length !== 0 ? (
+          {clienti.filter(cliente => cliente.active !== "false").length !== 0 ? (
             <Table>
               <TableHead>
                 <TableRow>
@@ -58,42 +47,46 @@ export default function Clienti(){
                 </TableRow>
               </TableHead>
               <TableBody>
-                {clientiActive.map(cliente => (
-                  <TableRow
-                    key={cliente.id}
-                    onClick={() => handleClick(cliente.id)}
-                    sx={{
-                      '&:hover': {
-                        backgroundColor: 'rgba(77, 77, 77, 0.22)',
-                        cursor: 'pointer',
-                      },
-                    }}
-                  >
-                    <TableCell>{cliente.nome}</TableCell>
-                    <TableCell>{cliente.lavorazione}</TableCell>
-                    <TableCell sx={{ color: cliente.stato === "da fare" ? "error.main" : "success.main" }}>
-                      <Menu.Root>
-                        <Menu.Trigger className={`${styles.Button} ${cliente.stato === "da fare" ? styles.red : styles.green}`}>
-                          {cliente.stato}
-                          <ChevronDownIcon className={styles.ButtonIcon} />
-                        </Menu.Trigger>
-                        <Menu.Portal>
-                          <Menu.Positioner className={styles.Positioner} sideOffset={8}>
-                            <Menu.Popup className={styles.Popup}>
-                              <Menu.Item
-                                className={styles.Item}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleStatoLavorazione(e.target.outerText, cliente.id);
-                                }}
-                              >{cliente.stato === "da fare" ? "completato" : "da fare"}</Menu.Item>
-                            </Menu.Popup>
-                          </Menu.Positioner>
-                        </Menu.Portal>
-                      </Menu.Root>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {clienti
+                  .filter(cliente => cliente.active !== "false")
+                  .map(cliente => (
+                    <TableRow
+                      key={cliente.id}
+                      onClick={() => handleClick(cliente.id)}
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: 'rgba(77, 77, 77, 0.22)',
+                          cursor: 'pointer',
+                        },
+                      }}
+                    >
+                      <TableCell>{cliente.nome}</TableCell>
+                      <TableCell>{cliente.lavorazione}</TableCell>
+                      <TableCell sx={{ color: cliente.stato === "da fare" ? "error.main" : "success.main" }}>
+                        <Menu.Root>
+                          <Menu.Trigger className={`${styles.Button} ${cliente.stato === "da fare" ? styles.red : styles.green}`}>
+                            {cliente.stato}
+                            <ChevronDownIcon className={styles.ButtonIcon} />
+                          </Menu.Trigger>
+                          <Menu.Portal>
+                            <Menu.Positioner className={styles.Positioner} sideOffset={8}>
+                              <Menu.Popup className={styles.Popup}>
+                                <Menu.Item
+                                  className={styles.Item}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleStatoLavorazione(e.target.outerText, cliente.id);
+                                  }}
+                                >
+                                  {cliente.stato === "da fare" ? "completato" : "da fare"}
+                                </Menu.Item>
+                              </Menu.Popup>
+                            </Menu.Positioner>
+                          </Menu.Portal>
+                        </Menu.Root>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           ) : (
@@ -106,4 +99,3 @@ export default function Clienti(){
     </>
   );
 }
-

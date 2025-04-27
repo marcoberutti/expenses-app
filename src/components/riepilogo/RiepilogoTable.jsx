@@ -14,6 +14,9 @@ export default function RiepilogoTable() {
 
   const { datas, setModalRiepilogo, filterDataRiepilogo } = useData();
   const [incomeMese, setIncomePerMese] = useState({});
+  const categories = ["Income", "Spesa", "Benzina", "Extra", "Casa", "Salute", "Investimenti", "tasse"];
+
+  const averagePerCategory = {};
 
   useEffect(() => {
     const incomeMese = {}; 
@@ -50,6 +53,28 @@ export default function RiepilogoTable() {
     const beginMonth = new Date(year, month, 1, 0,0,0)
     return [endMonth, beginMonth]
   }
+
+  
+  categories.forEach(category => {
+    let somma = 0;
+    let mesiConValore = 0;
+
+    for (let i = 0; i < 12; i++) {
+      const mese = (i + 1).toString().padStart(2, '0');
+      const filteredData = datas.filter(dato => format(new Date(dato.data), "MM") === mese);
+      const valoreMese = filteredData.reduce((acc, curr) => acc + (parseInt(curr[category]) || 0), 0);
+
+      if (valoreMese > 0) {
+        somma += valoreMese;
+        mesiConValore++;
+      }
+    }
+
+    averagePerCategory[category] = mesiConValore > 0 ? Math.round(somma / mesiConValore) : 0;
+  });
+
+  const monthsWithData = Object.keys(incomeMese).filter(mese => incomeMese[mese] > 0).length;
+  const averageYearBudgetBalance = monthsWithData > 0 ? parseInt(totalYearBudgetBalance / monthsWithData) : 0;
 
   function handleClick(e, cat){
     setModalRiepilogo(true)
@@ -167,6 +192,27 @@ export default function RiepilogoTable() {
                     style.zeroBudget : 
                     totalYearBudgetBalance < 0 && style.underZeroBudget}>
               {parseInt(totalYearBudgetBalance)}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align="center" sx={{ p:1, border:"1px solid #494949" }}>Media:</TableCell>
+            {categories.map((category, index) => (
+              <TableCell align="center" key={`average-${index}`} sx={{ p:1, border:"1px solid #494949" }}>
+                {averagePerCategory[category]}
+              </TableCell>
+            ))}
+            <TableCell align="center" sx={{ p:1, border:"1px solid #494949" }}
+              className={
+                averageYearBudgetBalance > 1500 ? 
+                  style.highBudget : 
+                  averageYearBudgetBalance > 0 ? 
+                    style.lowBudget : 
+                    averageYearBudgetBalance === 0 ? 
+                      style.zeroBudget : 
+                      style.underZeroBudget
+              }
+            >
+              {averageYearBudgetBalance}
             </TableCell>
           </TableRow>
         </TableBody>

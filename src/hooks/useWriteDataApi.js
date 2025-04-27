@@ -4,7 +4,7 @@ export const useWriteDataApi = () => {
 
   const writeData = async (data, id) => {
     try {
-      const response = await fetch(`${API_URL}/writeData/${id}`, {
+      const response = await fetch(`${API_URL}/writeExpense/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

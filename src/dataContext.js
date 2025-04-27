@@ -60,16 +60,17 @@ export const DataProvider = ({ children }) => {
 
   };
 
-  const rimuoviDati = (id, table) => {
-    deleteData(id)
+  const rimuoviDati = async (id, table) => {
+    await deleteData(id)
     .then(data => {
       ottieniDati(table);
       setTemporaryMessage(data.message)
     })
   }
 
-  const modificaDati = (data, id, table) => {
-    writeData(data, id)
+  const modificaDati = async (data, id, table) => {
+    console.log(data, id, table)
+    await writeData(data, id)
     .then(data => {
       ottieniDati(table);
       setTemporaryMessage(data.message)

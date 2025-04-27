@@ -57,7 +57,7 @@ export default function HomeFormModifica() {
       descrizione: e.target.descrizione.value,
       importo: parseFloat(e.target.importo.value),
     };
-    modificaDati(newFormData, datasForUpdate.id)
+    modificaDati(newFormData, datasForUpdate.id, "expenses")
   };
 
   const handleInputChange = (e) => {
@@ -80,7 +80,7 @@ export default function HomeFormModifica() {
             style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
             onClick={() => {
               if (window.confirm("cancellare davvero?")) {
-                rimuoviDati(datasForUpdate.id);
+                rimuoviDati(datasForUpdate.id, "expenses");
                 setModal("normal")
               }}
             }

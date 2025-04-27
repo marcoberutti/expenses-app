@@ -11,24 +11,31 @@ import { useDeleteCustomerApi } from "./hooks/useDeleteCustomerApi";
 import { useCreateMaterialApi } from "./hooks/useCreateMaterialApi";
 import { useDeleteMaterialeApi } from "./hooks/useDeleteMaterialeApi";
 
+import { useGirofondoApi } from "./hooks/useGirofondoApi";
+
 import { useWriteStatoLavorazioneApi } from "./hooks/useWriteStatoLavorazioneApi";
 import { format } from "date-fns";
+import { useData } from "./dataContext";
 
 const CucitoContext = createContext();
 
 export const CucitoProvider = ({ children }) => {
 
   const { getDatas } = useGetDatasApi();
+  const { ottieniDati } = useData();
   const { setTemporaryMessage } = useSharedState();
   const [toggleShowArchivio, setToggleShowArchivio] = useState(false)
 
   const [clienti, setClienti] = useState([]);
   const [materiali, setMateriali] = useState([]);
+  const [archiviato, setArchiviato] = useState(false);
+
   const { createCustomer } = useCreateCustomerApi();
   const { archiveCustomer } = useArchiveCustomerApi();
   const { deleteCustomer } = useDeleteCustomerApi();
   const { createMaterial } = useCreateMaterialApi();
   const { deleteMateriale } = useDeleteMaterialeApi();
+  const { girofondo } = useGirofondoApi();
   const { writeStatoLavorazione } = useWriteStatoLavorazioneApi();
 
   const getClienti = () => {
@@ -41,14 +48,14 @@ export const CucitoProvider = ({ children }) => {
     .then(data => setMateriali(data))
   }
 
-  const inserisciCliente = (data) => {
+  const inserisciCliente = async (data) => {
     const dataWithStato = {
       ...data, 
       stato:"da fare",
       data: format(new Date(), "yyyy-MM-dd hh:mm:ss"),
       active: true
     }
-    createCustomer(dataWithStato)
+    await createCustomer(dataWithStato)
     .then(res => {
       setTemporaryMessage(res.message || "Dati inseriti ok!");
       getClienti();
@@ -62,7 +69,11 @@ export const CucitoProvider = ({ children }) => {
     archiveCustomer(id)
     .then(res => {
       getClienti();
-      setTemporaryMessage(res.message || "Dati modificati ok!");
+      setArchiviato(true)
+      setTimeout(() => {
+        setArchiviato(false)
+      }, 2000);
+      setTemporaryMessage(res.message || "Cliente archiviato!");
     })
     .catch((error) => {
       setTemporaryMessage(error || "Errore nell'inserimento dei dati!");
@@ -90,7 +101,6 @@ export const CucitoProvider = ({ children }) => {
       setTemporaryMessage(error || "Errore nell'inserimento dei dati!");
     });
   };
-
   
   const cancellaMateriale = (id) => {
     deleteMateriale(id)
@@ -115,6 +125,17 @@ export const CucitoProvider = ({ children }) => {
     });
   }
 
+  const trasferimento = async (data) => {
+    await girofondo(data)
+    .then(res => {
+      ottieniDati("expenses");
+      setTemporaryMessage(res.message || "Dati inseriti ok!");
+    })
+    .catch((error) => {
+      setTemporaryMessage(error || "Errore nell'inserimento dei dati!");
+    });
+  }
+
 
   const value = {
     clienti,
@@ -129,6 +150,9 @@ export const CucitoProvider = ({ children }) => {
     handleStatoLavorazione,
     toggleShowArchivio,
     setToggleShowArchivio,
+    trasferimento,
+    archiviato,
+    setArchiviato,
   }
   
   return (
