@@ -3,13 +3,9 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Message from "./Message";
 import { useConfig } from "../../configContext";
 import { useData } from "../../dataContext";
-import CustomButton from "./CustomButton.tsx";
+import CustomButton from "./CustomButton";
 
-type Props = {
-  title: string
-}
-
-export default function Intestazione({title}: Props){
+export default function Intestazione({title}){
   const { handleToggleModals } = useConfig();
   const {modal } = useData();
 

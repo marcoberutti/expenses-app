@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useData } from '../../dataContext';
 import { useConfig } from '../../configContext';
 import styles from './CustomSelect.module.css';
-import { CheckIcon, ChevronUpDownIcon } from '../utils/Arrows.tsx';
+import { CheckIcon, ChevronUpDownIcon } from '../utils/Arrows';
 
 export default function CustomSelect({ datasForUpdate, setFormData }) {
   const getCurrentTipologia = () => {
