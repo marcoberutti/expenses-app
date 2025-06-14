@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Intestazione from '../components/utils/Intestazione.tsx'
+import Intestazione from '../components/utils/Intestazione'
 import Loader from '../components/utils/Loader';
 import { useData } from '../dataContext';
 import HomeForm from '../components/forms/HomeForm';
