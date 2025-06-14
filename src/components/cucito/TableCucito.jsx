@@ -40,7 +40,7 @@ export default function TableCucito() {
 
   useEffect(() => {
     if (datas.length === 0) {
-      ottieniDati("expenses"); // O il tipo di dati corretto che carica tutto
+      ottieniDati("expenses");
     }
   }, [ottieniDati, datas.length]);
 
@@ -52,6 +52,10 @@ export default function TableCucito() {
   const handleSetFilteredDatas = (filteredDataFromMonthSelect) => {
     setMonthlyFilteredDatas(filteredDataFromMonthSelect);
   };
+
+  useEffect(() => {
+console.log(monthlyFilteredDatas)
+  }, [monthlyFilteredDatas]);
 
   const safeSum = (arr, key) => {
     if (!arr || arr.length === 0) return 0; // Gestisce caso array vuoto o null

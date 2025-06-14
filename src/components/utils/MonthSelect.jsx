@@ -30,9 +30,8 @@ export default function MonthSelect({ setFilteredDatas, cucito }) {
       if(cucito === false){
         return (dato.cucito_in === null || dato.cucito_in === undefined) && (dato.cucito_out === null || dato.cucito_out === undefined);
       } else {
-        return (dato.cucito_in !== null || dato.cucito_in !== undefined) && (dato.cucito_out !== null || dato.cucito_out !== undefined);
+        return dato.cucito_in !== null || dato.cucito_out !== null;
       }
-
     });
 
     setFilteredDatas(datasWithoutProp);
