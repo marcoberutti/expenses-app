@@ -1,5 +1,4 @@
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { useData } from "../dataContext";
 import Login from "../components/utils/Login";
 import { useEffect, useMemo, useState } from "react"; // Add useState
@@ -44,7 +43,6 @@ export default function LayoutRoutes({ children }) {
             { isLogged ?
                 <>
                   {children}
-                  <Footer />
                 </>
               :
               <Login handleLogin={loginData}/>

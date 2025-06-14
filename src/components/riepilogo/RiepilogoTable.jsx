@@ -91,7 +91,7 @@ export default function RiepilogoTable() {
             <TableCell align="center" sx={{px:1, py:0}}>Mese</TableCell>
             <TableCell align="center" sx={{px:1, py:0}}>Income</TableCell>
             <TableCell align="center" sx={{px:1, py:0}}>Spesa</TableCell>
-            <TableCell align="center" sx={{px:1, py:0}}>Benzina</TableCell>
+            <TableCell align="center" sx={{px:1, py:0}}>Macchina</TableCell>
             <TableCell align="center" sx={{px:1, py:0}}>Extra</TableCell>
             <TableCell align="center" sx={{px:1, py:0}}>Casa</TableCell>
             <TableCell align="center" sx={{px:1, py:0}}>Salute</TableCell>

@@ -1,0 +1,119 @@
+.SelectContainer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  position: relative;
+}
+
+.SelectTrigger {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  min-width: 150px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-align: left;
+  line-height: 1.5;
+  background: rgb(134, 134, 134);
+  border: 1px solid var(--mui-base-grey-200, #4b4b4b); /* Fallback */
+  color: var(--mui-base-grey-900, #141414); /* Fallback */
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0, 0.05);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 120ms;
+}
+
+.SelectTrigger[data-focused="true"] { /* Usa l'attributo data-focused */
+  outline: 0;
+  border-color: var(--mui-base-grey-400, #B0B8C4) !important;
+  box-shadow: 0 0 0 3px var(--mui-base-grey-200, #DAE2ED) !important;
+  z-index: 1;
+}
+
+.SelectIcon {
+  font-size: 1rem;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  right: 10px;
+  display: flex; /* Per centrare l'icona verticalmente */
+  align-items: center;
+}
+
+.Positioner {
+  z-index: 1000; /* Assicurati che sia sopra altri elementi */
+}
+
+.Popup {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  padding: 6px;
+  margin: 12px 0;
+  min-width: 150px;
+  border-radius: 12px;
+  overflow: auto;
+  outline: 0;
+  background: rgb(97, 97, 97);
+  border: 1px solid var(--mui-base-grey-200, #DAE2ED);
+  color: var(--mui-base-grey-900, #1C2025);
+  box-shadow: 0 2px 4px rgba(0,0,0, 0.05);
+}
+
+.Popup[data-closed="true"] {
+  opacity: 0;
+  transform: scale(0.95, 0.8);
+  transition: opacity 200ms ease-in, transform 200ms ease-in;
+}
+
+.Popup[data-open="true"] {
+  opacity: 1;
+  transform: scale(1, 1);
+  transition: opacity 100ms ease-out, transform 100ms cubic-bezier(0.43, 0.29, 0.37, 1.48);
+}
+
+.Item {
+  list-style: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; /* Abilita flexbox */
+  align-items: center;
+  justify-content: space-between; /* Sposta il contenuto agli estremi */
+  gap: 8px; /* Spazio tra icona e testo - potresti non averne più bisogno con justify-content */
+}
+
+.Item:last-of-type {
+  border-bottom: none;
+}
+
+/* Stili per Select.Item quando selezionato */
+.Item[data-selected="true"] {
+  background-color: var(--mui-base-grey-200, #DAE2ED) !important;
+  color: var(--mui-base-grey-900, #1C2025) !important;
+}
+
+/* Stili per Select.Item quando evidenziato (hover/focus) */
+.Item[data-highlighted="true"] {
+  background-color: var(--mui-base-grey-100, #E5EAF2) !important;
+  color: var(--mui-base-grey-900, #1C2025) !important;
+}
+
+/* Stili per focus degli item */
+.Item:focus-visible {
+  outline: 3px solid var(--mui-base-grey-600, #505050) !important;
+  outline-offset: 2px !important;
+}
+
+.ItemIndicator {
+  display: flex; /* Mantiene il contenuto flex se l'icona è un SVG o un componente */
+  align-items: center;
+  justify-content: center;
+  margin-left: auto; /* Questo è il trucco: spinge l'elemento più a destra possibile */
+}
+
+.ItemIndicatorIcon {
+  width: 16px;
+  height: 16px;
+}

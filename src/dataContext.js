@@ -13,6 +13,12 @@ import { useFilterRiepilogoApi } from "./hooks/useFilterRiepilogoApi";
 
 const DataContext = createContext();
 
+// export type DatasType = {
+//   cucito_in?: number,
+//   cucito_out?: number,
+//   data: string
+// }
+
 export const DataProvider = ({ children }) => {
 
   const { isLoading, setIsLoading, modal, setModal, message, setTemporaryMessage } = useSharedState();
@@ -46,6 +52,7 @@ export const DataProvider = ({ children }) => {
   };
 
   const inserisciDati = (e, table) => {
+    console.log(e)
     insertData(e)
     .then(data => {
       ottieniDati(table);
@@ -109,7 +116,8 @@ export const DataProvider = ({ children }) => {
   }, []);
   
   const value = {
-    datas, 
+    datas,
+    setDatas,
     isLoading, 
     modal, 
     setModal, 

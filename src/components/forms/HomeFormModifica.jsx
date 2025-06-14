@@ -7,12 +7,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { format } from "date-fns";
-import SelectxFormModifica from "./SelectxFormModifica";
-import Button from '@mui/material/Button';
-import SendIcon from '@mui/icons-material/Send';
-import {IconButton } from "@mui/material";
-import { Box, display } from "@mui/system";
+import { Box } from "@mui/system";
 import { useConfig } from "../../configContext";
+import CustomButton from "../utils/CustomButton.tsx";
+import CustomSelect from "./CustomSelect.tsx";
 
 export default function HomeFormModifica() {
   const {rimuoviDati, modificaDati, datasForUpdate, setModal } = useData();
@@ -32,7 +30,6 @@ export default function HomeFormModifica() {
       setSelectDefVal(singleValue.toLowerCase());
     }
 
-    // Determina la tipologia (outcome o income)
     const outcomeKey = valoriOutcome.find(
       (key) => datasForUpdate[key] !== undefined
     );
@@ -74,19 +71,14 @@ export default function HomeFormModifica() {
   
   return (
     <>
-      <Box sx={{display:"flex", justifyContent:"center", gap:"30px", alignItems:"center"}}>
-        <h1>{datasForUpdate?.descrizione || "Nessuna descrizione"}</h1>
-        <IconButton size="small"
-            style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
-            onClick={() => {
-              if (window.confirm("cancellare davvero?")) {
-                rimuoviDati(datasForUpdate.id, "expenses");
-                setModal("normal")
-              }}
-            }
-            >
-            <i className={`bi-trash`} style={{fontSize:"1.5rem"}}></i>
-        </IconButton>
+      <Box sx={{display:"flex", justifyContent:"center", gap:"30px", alignItems:"center", margin: "0 20% 0 20%"}}>
+        <h2>{datasForUpdate?.descrizione || "Nessuna descrizione"}</h2>
+        <CustomButton icon={`bi-trash`} onClick={() => {
+          if (window.confirm("cancellare davvero?")) {
+            rimuoviDati(datasForUpdate.id, "expenses");
+            setModal("normal")
+          }}
+        }/>
       </Box>
       <div className={style.formContainer}>
         <form method="post" onSubmit={handleSubmit} className={style.form}>
@@ -155,29 +147,13 @@ export default function HomeFormModifica() {
                 }}
               />
             </LocalizationProvider>
-            <SelectxFormModifica
+            <CustomSelect
               handleInputChange={handleInputChange}
               datasForUpdate={datasForUpdate}
               formData={formData}
               setFormData={setFormData}
             />
-            <Button
-              variant="contained"
-              endIcon={<SendIcon />}
-              type="submit"
-              sx={{
-                width: 'fit-content !important',
-                fontSize: ".8rem",
-                alignSelf: "center",
-                backgroundColor: "gray !important", // Applica direttamente il backgroundColor
-                '&:hover': { // Stile per lo stato di hover (opzionale)
-                  backgroundColor: "darkgray !important",
-                },
-              }}
-            >
-              Modifica dato
-            </Button>
-
+            <CustomButton title="Modifica dato" type="submit"/>
           </div>
         </form>
       </div>

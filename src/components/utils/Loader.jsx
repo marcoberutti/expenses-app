@@ -8,17 +8,15 @@ export default function Loader() {
 
   setTimeout(() => {
     setResult("nothing")
-  }, 5000);
+  }, 3000);
 
   return (
-    
-  <div className={style.loaderContainer}>
-    { result !== "nothing" ?
-    <CircularProgress disableShrink color="success" />
-    : 
-    <p>Nessun dato disponibile</p>
-    }
-  </div>
-
-);
+    <div className={style.loaderContainer}>
+      { result !== "nothing" ?
+      <CircularProgress disableShrink color="success" />
+      : 
+      <p>Nessun dato disponibile</p>
+      }
+    </div>
+  );
 }

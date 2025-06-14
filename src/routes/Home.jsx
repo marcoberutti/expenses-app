@@ -3,7 +3,7 @@ import HomeTable from "../components/home/HomeTable";
 import HomeForm from "../components/forms/HomeForm";
 import { useData } from "../dataContext";
 import Loader from "../components/utils/Loader";
-import Intestazione from '../components/utils/Intestazione'
+import Intestazione from '../components/utils/Intestazione.tsx'
 import HomeFormModifica from "../components/forms/HomeFormModifica";
 
 export default function Home() {
@@ -23,9 +23,7 @@ export default function Home() {
       case "form":
         return <HomeForm />
       case "normal":
-        return (<div>
-        <HomeTable />
-      </div>)
+        return <HomeTable /> 
       default:
     }
   }

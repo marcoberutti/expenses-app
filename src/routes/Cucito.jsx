@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import Intestazione from '../components/utils/Intestazione'
+import { useState } from 'react'
+import Intestazione from '../components/utils/Intestazione.tsx'
 import Loader from '../components/utils/Loader';
 import { useData } from '../dataContext';
 import HomeForm from '../components/forms/HomeForm';
@@ -13,6 +13,7 @@ import Box from '@mui/material/Box';
 import Clienti from '../components/cucito/Clienti';
 import Materiali from '../components/cucito/Materiali';
 import { CucitoProvider } from '../cucitoContext';
+import GraficoCucito from '../components/cucito/GraficoCucito.tsx';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -21,8 +22,7 @@ function CustomTabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={index}
       {...other}
     >
       {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
@@ -38,8 +38,7 @@ CustomTabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    id: {index},
   };
 }
 
@@ -60,28 +59,28 @@ export default function Cucito(){
         return <HomeForm />
       case "normal":
         return (
-        <CucitoProvider>
-          <TableContainer component={Paper}>
-                <Box sx={{ width: '100%' }}>
-                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                      <Tab label="Contabilità" {...a11yProps(0)} />
-                      <Tab label="Clienti" {...a11yProps(1)} />
-                      <Tab label="Materiali" {...a11yProps(2)} />
-                    </Tabs>
-                  </Box>
-                  <CustomTabPanel value={value} index={0}>
-                    <TableCucito />
-                  </CustomTabPanel>
-                  <CustomTabPanel value={value} index={1}>
-                    <Clienti />
-                  </CustomTabPanel>
-                  <CustomTabPanel value={value} index={2}>
-                    <Materiali />
-                  </CustomTabPanel>
-                </Box>
-          </TableContainer>
-        </CucitoProvider>
+          <>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', p:0 }}>
+              <Tabs value={value} onChange={handleChange} component={Paper}>
+                <Tab sx={{fontSize:"1.2rem"}} label={<i className="bi bi-currency-euro"></i>} {...a11yProps(0)}/>
+                <Tab sx={{fontSize:"1.2rem"}} label={<i className="bi bi-people"></i>} {...a11yProps(1)} />
+                <Tab sx={{fontSize:"1.2rem"}} label={<i className="bi bi-tools"></i>} {...a11yProps(2)} />
+                <Tab sx={{fontSize:"1.2rem"}} label={<i className="bi bi-graph-up-arrow"></i>} {...a11yProps(3)} />
+              </Tabs>
+            </Box>
+            <CustomTabPanel value={value} index={0}>
+              <TableCucito />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={1}>
+              <Clienti />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={2}>
+              <Materiali />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={3}>
+              <GraficoCucito />
+            </CustomTabPanel>
+          </>
         )
       default:
     }

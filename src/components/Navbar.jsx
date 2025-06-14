@@ -47,67 +47,67 @@ export default function Navbar() {
 
   return (
     <AppBar position="static">
-    <Container maxWidth="xl"sx={{padding:0}}>
-      <Toolbar disableGutters sx={{justifyContent: 'space-between', width: '100%'}}>
-        { isLogged ?
-        <>
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/"><i className="bi bi-house"></i></NavLink>
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/riepilogo"><i className="bi bi-table"></i></NavLink>
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/grafico"><i className="bi bi-graph-up-arrow"></i></NavLink>
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/page_cucito">
-            <IconButton>
-              <GestureIcon fontSize="small" sx={{color:"white"}}/>
-            </IconButton>
-          </NavLink>
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/lista_spesa">
-            <IconButton>
-              <ShoppingCartIcon fontSize="small" sx={{color:"white"}}/>
-              <CartBadge badgeContent={listaSpesa && listaSpesa.length} color={theme === "dark" ? "primary" : "info"} overlap="circular" />
-            </IconButton>
-          </NavLink>
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/calendar">
-            <IconButton>
-              <CalendarMonthIcon fontSize="small" sx={{color:"white"}}/>
-              <CartBadge
-                badgeContent={format(new Date(), "d")}
-                color={theme === "dark" ? "primary" : "info"}
-                overlap="circular"
-                sx={{
-                  "& .MuiBadge-badge": {
-                    fontSize: ".8rem", // 🔹 Rende il testo più grande
-                    width: "20px", // 🔹 Aumenta la dimensione del badge
-                    height: "20px", // 🔹 Aumenta l'altezza del badge
-                    borderRadius: "50%", // 🔹 Mantiene la forma circolare
-                    padding: "10px"
-                  }
-                }}
-              />
-            </IconButton>
-          </NavLink>
-          <FormControl component="fieldset" style={{marginLeft:"10px"}}>
-            <FormGroup aria-label="position" row>
-              <FormControlLabel
-                value="end"
-                sx={{
-                  "& .MuiFormControlLabel-label": { fontSize: ".8rem"}, 
-                  "marginRight": "5px"
-                }}
-                labelPlacement="end"
-                control={
-                <Switch 
-                  checked={theme === "dark"}
-                  color="primary"
-                  onChange={handleSetTheme}
-                />}
-              />
-            </FormGroup>
-          </FormControl>
-          <NavLink className={style.navlink} onClick={handleLogOut}><i className="bi bi-person-x" style={{fontSize:"1.3rem"}}></i></NavLink>
-        </>
-        :
-          <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/">Login</NavLink>
-        }
-      </Toolbar>
+      <Container maxWidth="xl"sx={{padding:0}}>
+        <Toolbar disableGutters sx={{justifyContent: 'space-between', width: '100%'}}>
+          { isLogged ?
+          <>
+            <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/"><i className="bi bi-house"></i></NavLink>
+            <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/riepilogo"><i className="bi bi-table"></i></NavLink>
+            <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/grafico"><i className="bi bi-graph-up-arrow"></i></NavLink>
+            <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/page_cucito">
+              <IconButton>
+                <GestureIcon fontSize="small" sx={{color:"white"}}/>
+              </IconButton>
+            </NavLink>
+            <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/lista_spesa">
+              <IconButton>
+                <ShoppingCartIcon fontSize="small" sx={{color:"white"}}/>
+                <CartBadge badgeContent={listaSpesa && listaSpesa.length} color={theme === "dark" ? "primary" : "info"} overlap="circular" />
+              </IconButton>
+            </NavLink>
+            <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/calendar">
+              <IconButton>
+                <CalendarMonthIcon fontSize="small" sx={{color:"white"}}/>
+                <CartBadge
+                  badgeContent={format(new Date(), "d")}
+                  color={theme === "dark" ? "primary" : "info"}
+                  overlap="circular"
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      fontSize: ".8rem", // 🔹 Rende il testo più grande
+                      width: "20px", // 🔹 Aumenta la dimensione del badge
+                      height: "20px", // 🔹 Aumenta l'altezza del badge
+                      borderRadius: "50%", // 🔹 Mantiene la forma circolare
+                      padding: "10px"
+                    }
+                  }}
+                />
+              </IconButton>
+            </NavLink>
+            <FormControl component="fieldset" style={{marginLeft:"10px"}}>
+              <FormGroup aria-label="position" row>
+                <FormControlLabel
+                  value="end"
+                  sx={{
+                    "& .MuiFormControlLabel-label": { fontSize: ".8rem"}, 
+                    "marginRight": "5px"
+                  }}
+                  labelPlacement="end"
+                  control={
+                  <Switch 
+                    checked={theme === "dark"}
+                    color="primary"
+                    onChange={handleSetTheme}
+                  />}
+                />
+              </FormGroup>
+            </FormControl>
+            <NavLink className={style.navlink} onClick={handleLogOut}><i className="bi bi-person-x" style={{fontSize:"1.3rem"}}></i></NavLink>
+          </>
+          :
+            <NavLink className={({ isActive }) => isActive ? style.navlinkActive : style.navlink} to="/">Login</NavLink>
+          }
+        </Toolbar>
       </Container>
     </AppBar>
   );

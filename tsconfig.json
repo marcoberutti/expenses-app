@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    // ... altre opzioni ...
+
+    "target": "es2020", // O una versione più recente
+    "module": "esnext", // O "commonjs" se usi Node.js per il backend
+    "lib": ["dom", "dom.iterable", "esnext"], // Librerie standard disponibili
+    "jsx": "react-jsx", // O "react" a seconda della versione di React e della configurazione
+
+    "allowJs": true, // Consente di includere file .js e .jsx
+    "skipLibCheck": true, // Salta il controllo dei tipi per i file di libreria (velocizza)
+    "esModuleInterop": true, // Importante per import/export tra CommonJS e ES Modules
+    "allowSyntheticDefaultImports": true, // Permette import * as React from 'react';
+
+    // *** Queste sono le più importanti per la risoluzione delle estensioni ***
+    "moduleResolution": "node", // Come TypeScript risolve i moduli (stile Node.js)
+    "resolveJsonModule": true, // Permette di importare file .json
+
+    // Le estensioni che TypeScript proverà a risolvere in ordine
+    "downlevelIteration": true, // Per iteratori su target più vecchi
+    "isolatedModules": true, // Richiede che ogni file sia un modulo
+
+    "noEmit": true, // Non emettere file JS, il bundler se ne occupa
+    "forceConsistentCasingInFileNames": true, // Assicura che i nomi dei file usino la stessa capitalizzazione
+
+    "strict": true, // Abilita tutti i controlli di tipo rigorosi (consigliato)
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noUnusedLocals": true, // Segnala variabili non usate
+    "noUnusedParameters": true, // Segnala parametri non usati
+    "noFallthroughCasesInSwitch": true, // Segnala case mancanti in switch
+
+    // Opzioni per la base URL e i percorsi (utili per gli alias)
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@/*": ["src/*"]
+    // }
+  },
+  "include": ["src"], // Includi tutti i file nella directory src
+  "exclude": ["node_modules"] // Escludi la directory node_modules
+}

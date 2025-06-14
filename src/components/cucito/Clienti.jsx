@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Form from './Form';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import Loader from '../utils/Loader';
 import { useCucito } from '../../cucitoContext';
 import { Menu } from '@base-ui-components/react/menu';
@@ -27,7 +27,7 @@ export default function Clienti() {
   }
 
   return (
-    <>
+    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", px: 2, height:"75vh" }}>
       {toggleShowArchivio === false ? (
         <>
           <Form
@@ -96,6 +96,6 @@ export default function Clienti() {
       ) : (
         <Archivio />
       )}
-    </>
+    </Box>
   );
 }

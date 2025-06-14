@@ -1,48 +1,53 @@
 import { useData } from "../../dataContext"
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import p from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import { format } from "date-fns";
+import { it } from 'date-fns/locale';
+import { formatCurrency } from "../../utils";
 
 export default function HomeTableTbody ({filteredDatas}){
 
   const {setSelect, getDataForUpdateForm, setModal} = useData();
 
   return (
-    <TableBody>
-    {filteredDatas && filteredDatas.map(data => (
-      <TableRow 
-        key={data.id}         
-        onClick={()=>{
-          if(data.Income || data.cucito_in){
-            setSelect("income")
-          } else {
-            setSelect("outcome")
+    <>
+      {filteredDatas && filteredDatas.map(data => (
+        <div 
+          key={data.id}         
+          onClick={()=>{
+            if(data.Income || data.cucito_in){
+              setSelect("income")
+            } else {
+              setSelect("outcome")
+            }
+            getDataForUpdateForm(data)
+            setModal("modifica")}
           }
-          getDataForUpdateForm(data)
-          setModal("modifica")}
-        }
-      >
-          <TableCell  sx={{p:1, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
-            {data.descrizione.length > 8 ? data.descrizione.substring(0,8) + "..." : data.descrizione}
-          </TableCell>
-          <TableCell  sx={{p:1, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
-            {data.Spesa && `${data.Spesa} €`}</TableCell>
-          <TableCell  sx={{p:1, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
-            {data.Income && `${data.Income} €`}</TableCell>
-          <TableCell  sx={{p:1, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
-            {data.Benzina && `${data.Benzina} €`}</TableCell>
-          <TableCell  sx={{p:1, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
-            {data.Extra && `${data.Extra} €`}</TableCell>
-          <TableCell  sx={{p:1, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
-            {data.Casa && `${data.Casa} €`}</TableCell>
-          <TableCell  sx={{p:1, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
-            {data.Salute && `${data.Salute} €`}</TableCell>
-          <TableCell  sx={{p:1, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
-            {data.Investimenti && `${data.Investimenti} €`}</TableCell>
-          <TableCell  sx={{p:1, fontSize:'0.8rem', width:'25px', border:"1px solid #494949"}} align="center">
-            {data.tasse && `${data.tasse} €`}</TableCell>
-      </TableRow>
-    ))}
-    </TableBody>
+          style={{display:"flex", flexDirection: "row", justifyContent: "space-around", width: "100%"}}
+        >
+            <p  sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.data && format(data.data, "d-MMM", { locale: it })}</p>
+            {data.descrizione && <p sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.descrizione}</p>}
+            {data.Income && <p sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.Income && `${formatCurrency(data.Income)}`}</p>}
+            {data.Spesa && <p sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.Spesa && `${formatCurrency(data.Spesa)}`}</p>}
+            {data.Benzina && <p sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.Benzina && `${formatCurrency(data.Benzina)}`}</p>}
+            {data.Extra && <p sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.Extra && `${formatCurrency(data.Extra)}`}</p>}
+            {data.Casa && <p sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.Casa && `${formatCurrency(data.Casa)}`}</p>}
+            {data.Salute && <p sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.Salute && `${formatCurrency(data.Salute)}`}</p>}
+            {data.Investimenti && <p sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.Investimenti && `${formatCurrency(data.Investimenti)}`}</p>}
+            {data.tasse && <p sx={{p:1, fontSize:'0.8rem', width:'25px'}} align="center">
+              {data.tasse && `${formatCurrency(data.tasse)}`}</p>}
+        </div>
+      ))}
+    </>
   )
 }

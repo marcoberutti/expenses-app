@@ -2,7 +2,7 @@ body, #root, html {
   width: 100%;
 }
 
-body, root, html, ul {
+body, #root, html, ul {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;

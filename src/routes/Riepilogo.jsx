@@ -3,13 +3,12 @@ import { setDefaultOptions } from "date-fns";
 import { it } from 'date-fns/locale';
 import { useData } from "../dataContext";
 import Loader from "../components/utils/Loader";
-import Intestazione from '../components/utils/Intestazione'
+import Intestazione from '../components/utils/Intestazione.tsx'
 import HomeForm from "../components/forms/HomeForm";
 import RiepilogoTable from "../components/riepilogo/RiepilogoTable";
 import style from './table.module.css'
 import ModalRiepilogo from "../components/riepilogo/ModalRiepilogo";
 import API_URL from "../config"
-// Importa i componenti Material-UI necessari per la tabella
 import { Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material"; 
 
 export default function Riepilogo() {
@@ -21,6 +20,7 @@ export default function Riepilogo() {
     marco: 0,
     sara: 0,
     cucito: 0,
+    totale: 0
   });
   const [modalMonthlyBalance, setModalMonthlyBalance] = useState(false);
   const [monthlyDatas, setMonthlyDatas] = useState([]); 
@@ -96,7 +96,6 @@ export default function Riepilogo() {
           :
             <HomeForm inserisciDati={inserisciDati} handleRadioChange={handleRadioChange} select={select} now={now}/>
           }
-          {/* La modale del bilancio mensile */}
           {
             <Modal
               open={modalMonthlyBalance}
@@ -104,7 +103,6 @@ export default function Riepilogo() {
               aria-labelledby="monthly-balance-modal-title"
               aria-describedby="monthly-balance-modal-description"
             >
-              {/* Utilizza Box o Paper per il contenuto della modale per uno stile MUI */}
               <Box sx={{
                   position: 'absolute',
                   top: '50%',
@@ -130,12 +128,13 @@ export default function Riepilogo() {
                           <TableCell align="right">Marco</TableCell>
                           <TableCell align="right">Sara</TableCell>
                           <TableCell align="right">Cucito</TableCell>
+                          <TableCell align="right">Totale</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {monthlyDatas.map((dato, index) => (
                           <TableRow
-                            key={index} // Usa un ID univoco se disponibile, altrimenti index
+                            key={index}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                           >
                             <TableCell component="th" scope="row">
@@ -144,6 +143,7 @@ export default function Riepilogo() {
                             <TableCell align="right">{dato.marco}</TableCell>
                             <TableCell align="right">{dato.sara}</TableCell>
                             <TableCell align="right">{dato.cucito}</TableCell>
+                            <TableCell align="right">{(parseFloat(dato.cucito)+parseFloat(dato.sara)+parseFloat(dato.marco)).toFixed(2)}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

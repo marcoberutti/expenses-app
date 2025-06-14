@@ -33,12 +33,12 @@ export default function Form({ nomeLabel, nomeLavorazione, onSubmit, tipo }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} style={{width:"100%"}}>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'space-around',
+          justifyContent: 'space-between',
           alignItems: "baseline",
           gap: 0.5,
           width: "100%",

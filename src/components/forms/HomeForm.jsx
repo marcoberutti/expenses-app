@@ -8,16 +8,16 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import Button from '@mui/material/Button';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useConfig } from '../../configContext';
+import CustomButton from '../utils/CustomButton.tsx';
 
 export default function HomeForm(){
-  const { inserisciDati, handleRadioChange, select } = useData();
+  const { inserisciDati, handleRadioChange, select, setDatas } = useData();
   const { valoriOutcome, valoriIncome, setFormData, formData } = useConfig()
   const today = dayjs();
 
@@ -40,8 +40,14 @@ export default function HomeForm(){
       importo: parseFloat(e.target.importo.value),
       tipologia: select ? e.target.tipologia?.value || "" : "",
       data: formData.data || today.format("YYYY-MM-DD")
-    });
-
+    }, "expenses");
+    setDatas(prevDatas => [...prevDatas, {
+      tipo: e.target.tipo.value,
+      descrizione: e.target.descrizione.value,
+      importo: parseFloat(e.target.importo.value),
+      tipologia: select ? e.target.tipologia?.value || "" : "",
+      data: formData.data || today.format("YYYY-MM-DD")
+    }]);
     setFormData({
       descrizione: "",
       importo: "",
@@ -166,9 +172,7 @@ export default function HomeForm(){
                 ))}
               </Select>
             </FormControl>
-          <Button type="submit" variant="contained" color="inherit"
-          sx={{width:100}}
-          >Inserisci</Button>
+          <CustomButton title="Inserisci" type="submit"/>
         </Box>
       </form>
     </>
