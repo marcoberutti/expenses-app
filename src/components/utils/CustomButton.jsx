@@ -1,13 +1,6 @@
 import { Button, IconButton } from "@mui/material"
 
-type Props = {
-  icon? : string,
-  title?: string,
-  onClick?: () => {}
-  type?: string
-}
-
-export default function CustomButton({icon, title, onClick, type}: Props){
+export default function CustomButton({icon, title, onClick, type}){
 
   return(
     <>

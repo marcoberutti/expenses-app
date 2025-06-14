@@ -3,7 +3,7 @@ import { setDefaultOptions } from "date-fns";
 import { it } from 'date-fns/locale';
 import { useData } from "../dataContext";
 import Loader from "../components/utils/Loader";
-import Intestazione from '../components/utils/Intestazione.tsx'
+import Intestazione from '../components/utils/Intestazione'
 import HomeForm from "../components/forms/HomeForm";
 import RiepilogoTable from "../components/riepilogo/RiepilogoTable";
 import style from './table.module.css'

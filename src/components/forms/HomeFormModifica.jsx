@@ -9,8 +9,8 @@ import dayjs from "dayjs";
 import { format } from "date-fns";
 import { Box } from "@mui/system";
 import { useConfig } from "../../configContext";
-import CustomButton from "../utils/CustomButton.tsx";
-import CustomSelect from "./CustomSelect.tsx";
+import CustomButton from "../utils/CustomButton";
+import CustomSelect from "./CustomSelect";
 
 export default function HomeFormModifica() {
   const {rimuoviDati, modificaDati, datasForUpdate, setModal } = useData();

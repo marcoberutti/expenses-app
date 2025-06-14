@@ -1,15 +1,10 @@
-/**
- * formatta numero in euro
- */
 export const formatCurrency = (val) => {
   return new Intl.NumberFormat("it-IT", {
     style: "currency",
     currency: "EUR",
   }).format(val);
 };
-/**
- * da euro a stringa
- */
+
 export const parseEuroString = (val) => {
   if (typeof val === "number") return val;
 

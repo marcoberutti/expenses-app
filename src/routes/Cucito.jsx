@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import Clienti from '../components/cucito/Clienti';
 import Materiali from '../components/cucito/Materiali';
 import { CucitoProvider } from '../cucitoContext';
-import GraficoCucito from '../components/cucito/GraficoCucito.tsx';
+import GraficoCucito from '../components/cucito/GraficoCucito';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;

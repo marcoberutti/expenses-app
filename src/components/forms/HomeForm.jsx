@@ -14,7 +14,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useConfig } from '../../configContext';
-import CustomButton from '../utils/CustomButton.tsx';
+import CustomButton from '../utils/CustomButton';
 
 export default function HomeForm(){
   const { inserisciDati, handleRadioChange, select, setDatas } = useData();

@@ -22,25 +22,19 @@ ChartJS.register(
   Legend
 );
 
-type CucitoDato = {
-  data: string;
-  cucito_in: string | null;
-  cucito_out: string | null;
-};
-
 export default function GraficoCucito() {
   const { datas } = useData();
-  const [datiFiltrati, setDatiFiltrati] = useState<CucitoDato[]>([]);
+  const [datiFiltrati, setDatiFiltrati] = useState([]);
 
   useEffect(() => {
     const newDatas = datas.filter(
-      (dato: CucitoDato) => dato.cucito_in !== null || dato.cucito_out !== null
+      (dato) => dato.cucito_in !== null || dato.cucito_out !== null
     );
     setDatiFiltrati(newDatas);
   }, [datas]);
 
   const chartData = useMemo(() => {
-    const monthlyData: { [key: number]: { name: string; in: number; out: number } } = {};
+    const monthlyData = {};
 
     datiFiltrati.forEach((dato) => {
       const date = parseISO(dato.data);
@@ -65,7 +59,7 @@ export default function GraficoCucito() {
 
     const sortedMonths = Object.keys(monthlyData)
       .sort((a, b) => parseInt(a) - parseInt(b))
-      .map((monthKey: string) => monthlyData[parseInt(monthKey)]);
+      .map((monthKey) => monthlyData[parseInt(monthKey)]);
 
     const labels = sortedMonths.map((data) => data.name);
     const cucitoInValues = sortedMonths.map((data) => data.in);
@@ -97,7 +91,7 @@ export default function GraficoCucito() {
     maintainAspectRatio: false, // Lascia questo a false per il controllo dell'altezza
     plugins: {
       legend: {
-        position: "top" as const,
+        position: "top",
       },
       title: {
         display: true,
@@ -105,7 +99,7 @@ export default function GraficoCucito() {
       },
       tooltip: {
         callbacks: {
-          label: function (context: import('chart.js').TooltipItem<'bar'>) {
+          label: function (context) {
             let label = context.dataset.label || '';
             if (label) {
               label += ': ';

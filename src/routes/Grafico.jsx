@@ -13,7 +13,7 @@ import { Bar, Doughnut } from "react-chartjs-2"; // Importa Doughnut
 import { useData } from "../dataContext";
 import Loader from "../components/utils/Loader";
 import { dataReducer, initialState } from "../reducers/chartReducer"; // Assicurati il percorso corretto
-import Intestazione from '../components/utils/Intestazione.tsx'; // Assicurati il percorso corretto
+import Intestazione from '../components/utils/Intestazione'; // Assicurati il percorso corretto
 import HomeForm from "../components/forms/HomeForm"; // Assicurati il percorso corretto
 import { FormControlLabel, Checkbox, Box } from '@mui/material'; // Importa i componenti MUI
 

@@ -5,7 +5,7 @@ import { format, getYear } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useData } from '../../dataContext';
 import styles from '../forms/CustomSelect.module.css';
-import { CheckIcon, ChevronUpDownIcon } from './Arrows.tsx';
+import { CheckIcon, ChevronUpDownIcon } from './Arrows';
 
 export default function MonthSelect({ setFilteredDatas, cucito }) {
   const { datas } = useData();
