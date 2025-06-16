@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useData } from '../../dataContext';
 import {
   Chart as ChartJS,
@@ -52,8 +52,16 @@ export default function GraficoCucito() {
       if (dato.cucito_in !== null) {
         monthlyData[month].in += parseFloat(dato.cucito_in);
       }
+      
+      // MODIFICA QUI: Gestisce il "girofondo"
       if (dato.cucito_out !== null) {
-        monthlyData[month].out += parseFloat(dato.cucito_out);
+        if (dato.descrizione === 'girofondo') {
+          // Se è un "girofondo", lo trattiamo come un "in" per il grafico
+          monthlyData[month].in += parseFloat(dato.cucito_out);
+        } else {
+          // Altrimenti, è un normale "out"
+          monthlyData[month].out += parseFloat(dato.cucito_out);
+        }
       }
     });
 
@@ -88,7 +96,7 @@ export default function GraficoCucito() {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Lascia questo a false per il controllo dell'altezza
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top",
@@ -133,13 +141,9 @@ export default function GraficoCucito() {
   };
 
   return (
-    // Il div contenitore può avere una larghezza e un'altezza flessibile (es. 100% di larghezza)
-    // Non gli diamo un'altezza fissa qui, lasciamo che sia il grafico a dettarla in base alla prop 'height'
     <div style={{ width: '100%', margin: '0 auto', height: "70vh" }}>
       {datiFiltrati.length > 0 && chartData.labels.length > 0 ? (
-        // Imposta l'altezza fissa desiderata direttamente sul componente Bar
-        // Chart.js userà questa altezza come "altezza desiderata" e la adatterà con responsive:true
-        <Bar data={chartData} options={options} height={500} /> 
+        <Bar data={chartData} options={options} height={500} />
       ) : (
         <p>Nessun dato cucito disponibile per il grafico.</p>
       )}
