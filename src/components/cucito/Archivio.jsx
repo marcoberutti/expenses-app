@@ -4,6 +4,7 @@ import Loader from '../utils/Loader';
 import { useCucito } from '../../cucitoContext';
 import { Menu } from '@base-ui-components/react/menu';
 import styles from './index.module.css';
+import CustomButton from '../utils/CustomButton';
 
 export default function Archivio(){
 
@@ -31,26 +32,12 @@ export default function Archivio(){
     <>
       <Box sx={{
         display:"flex",
-        justifyContent: "space-evenly",
+        justifyContent: "space-between",
         alignItems: "center",
+        width: "100%"
       }}>
         <h3>Archivio</h3>
-        <Button
-          variant="contained"
-          onClick={() => setToggleShowArchivio(false)}
-          sx={{
-            backgroundColor: "gray ! important",
-            fontSize: "1.5rem",
-            padding: "2px",
-            minWidth: "fit-content",
-            lineHeight: "1.1",
-            borderRadius: "50%",
-            width: "2rem",
-            height: "2rem",
-          }}
-        >
-        x
-        </Button>
+        <CustomButton icon={"bi bi-dash-circle-fill"} onClick={() => setToggleShowArchivio(false)}/>
       </Box>
       {clientiArchiviati.length !== 0 ? (
         <Table>

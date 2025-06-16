@@ -24,8 +24,7 @@ export default function Grafico() {
   const [state, dispatch] = useReducer(dataReducer, initialState);
   const { graficoData, doughnutChartData, barOptions, doughnutOptions } = state; // Destruttura doughnutChartData e le opzioni specifiche
 
-  // Stato per il tipo di grafico selezionato ('bar' o 'doughnut')
-  const [chartType, setChartType] = useState('pie');
+  const [chartType, setChartType] = useState('doughnut');
 
   useEffect(() => {
     if (datas.length === 0) {
@@ -67,7 +66,7 @@ export default function Grafico() {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={chartType === 'pie'}
+                      checked={chartType === 'doughnut'}
                       onChange={handleDoughnutChange}
                       name="chartTypeDoughnut"
                       color="primary"

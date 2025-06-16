@@ -10,7 +10,7 @@ import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import MonthSelect from '../utils/MonthSelect'; // Assicurati che il percorso sia corretto
+import MonthSelect from '../utils/MonthSelect';
 
 const style = {
   position: 'absolute',
@@ -70,12 +70,12 @@ console.log(monthlyFilteredDatas)
 
     if (inputValue <= (totalCucitoIn - totalCucitoOut)) {
       const data = {
-        data: format(new Date(), "yyyy-MM-dd HH:mm:ss"), // Formato corretto per data e ora
+        data: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
         descrizione: "girofondo",
         importo: inputValue,
       };
       trasferimento(data);
-      handleClose(); // Chiudi il modal dopo il trasferimento
+      handleClose();
     } else {
       setErroreTrasferimento(true);
       setTimeout(() => {
@@ -86,8 +86,11 @@ console.log(monthlyFilteredDatas)
 
   return (
     <>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", px: 2 }}>
-        <p>Income netto: {formatCurrency((safeSum(allCucitoDatas, 'cucito_in') - safeSum(allCucitoDatas, 'cucito_out')))}</p>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", p: 1 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <p style={{margin: "2px"}}>Income totale: {formatCurrency((safeSum(allCucitoDatas, 'cucito_in') - safeSum(allCucitoDatas, 'cucito_out')))}</p>
+        <p style={{margin: "2px"}}>Income mensile: {formatCurrency((safeSum(monthlyFilteredDatas, 'cucito_in') - safeSum(monthlyFilteredDatas, 'cucito_out')))}</p>
+        </Box>
         <Button
           onClick={handleOpen}
           style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "5px" }}
@@ -102,14 +105,14 @@ console.log(monthlyFilteredDatas)
         onClose={handleClose}
       >
         <Box sx={style} style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-          <Box style={{ display: "flex", justifyContent: "center", gap: "10px", alignItems: "center" }}> {/* Aggiunto gap e allineamento */}
+          <Box style={{ display: "flex", justifyContent: "center", gap: "10px", alignItems: "center" }}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Importo da prelevare
             </Typography>
             <Input
-              type="number" // Imposta il tipo a number per una migliore UX
+              type="number"
               onChange={(e) => setInputValue(e.target.value)}
-              value={inputValue} // Assicurati che l'input sia controllato
+              value={inputValue}
             />
             <Button
               onClick={() => handleSubmit()}
@@ -118,7 +121,7 @@ console.log(monthlyFilteredDatas)
             </Button>
           </Box>
           {erroreTrasferimento &&
-            <Box style={{ display: "flex", justifyContent: "center", mt: 2 }}> {/* Aggiunto mt per spazio */}
+            <Box style={{ display: "flex", justifyContent: "center", mt: 2 }}>
               <p style={{ backgroundColor: "red", width: "fit-content", borderRadius: "6px", padding: "8px", color: "white" }}>
                 Importo superiore al guadagnato!
               </p>
@@ -135,7 +138,7 @@ console.log(monthlyFilteredDatas)
               <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <span>In</span>
                 <span style={{ color: "white", fontWeight: "normal", fontSize: ".8rem" }}>
-                  Tot: {formatCurrency(safeSum(allCucitoDatas, 'cucito_in'))}
+                  Tot: {formatCurrency(safeSum(monthlyFilteredDatas, 'cucito_in'))}
                 </span>
               </Box>
             </TableCell>
@@ -144,7 +147,7 @@ console.log(monthlyFilteredDatas)
               <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <span>Out</span>
                 <span style={{ color: "white", fontWeight: "normal", fontSize: ".8rem" }}>
-                  Tot: {formatCurrency(safeSum(allCucitoDatas, 'cucito_out'))}
+                  Tot: {formatCurrency(safeSum(monthlyFilteredDatas, 'cucito_out'))}
                 </span>
               </Box>
             </TableCell>

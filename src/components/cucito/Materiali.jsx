@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Form from './Form'
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import Loader from '../utils/Loader';
 import { useCucito } from '../../cucitoContext';
 
@@ -18,7 +18,15 @@ export default function Materiali(){
   
 
   return(
-    <>
+    <Box 
+      sx={{
+        display:"flex",
+        flexDirection:"column",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        px:1
+      }}>
       <Form 
         nomeLabel={"Materiale:"}
         nomeLavorazione={""}
@@ -50,6 +58,6 @@ export default function Materiali(){
       </Table> 
       : 
       <Loader/>}
-    </>
+    </Box>
   )
 }
