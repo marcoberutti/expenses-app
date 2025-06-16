@@ -54,25 +54,36 @@ export default function TableCucito() {
   };
 
   useEffect(() => {
-console.log(monthlyFilteredDatas)
+    console.log(monthlyFilteredDatas)
   }, [monthlyFilteredDatas]);
 
+  // Modified safeSum to handle "girofondo" as income for total calculation
   const safeSum = (arr, key) => {
-    if (!arr || arr.length === 0) return 0; // Gestisce caso array vuoto o null
+    if (!arr || arr.length === 0) return 0; // Handles empty or null array case
     return arr.reduce((acc, curr) => {
-      return acc + parseEuroString(curr[key]);
+      let value = parseEuroString(curr[key]);
+
+      // If it's a 'cucito_out' and the description is 'girofondo', treat it as a positive income.
+      // This applies specifically to the total income/outcome calculation where 'girofondo' is a "withdrawal" from cucito.
+      if (key === 'cucito_out' && curr.descrizione === 'girofondo') {
+        value = -value; // Negate the value so it acts as an "in" when calculating net.
+      }
+      return acc + value;
     }, 0);
   };
 
   function handleSubmit() {
-    const totalCucitoIn = safeSum(allCucitoDatas, 'cucito_in');
-    const totalCucitoOut = safeSum(allCucitoDatas, 'cucito_out');
+    // When checking against the balance for withdrawal, girofondo should still be considered an actual "out"
+    // So, we use a separate sum for this check or be careful with the safeSum logic.
+    // For this specific check, we need the *true* total of cucito_in and cucito_out without girofondo negation.
+    const trueTotalCucitoIn = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_in), 0);
+    const trueTotalCucitoOut = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_out), 0);
 
-    if (inputValue <= (totalCucitoIn - totalCucitoOut)) {
+    if (inputValue <= (trueTotalCucitoIn - trueTotalCucitoOut)) {
       const data = {
         data: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
         descrizione: "girofondo",
-        importo: inputValue,
+        importo: inputValue, // inputValue is already positive, it will be saved as cucito_out
       };
       trasferimento(data);
       handleClose();
@@ -84,12 +95,31 @@ console.log(monthlyFilteredDatas)
     }
   }
 
+  // Calculate the adjusted total income for display
+  const adjustedTotalCucitoIn = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_in), 0);
+  const adjustedTotalCucitoOutExcludingGirofondo = allCucitoDatas.reduce((acc, curr) => {
+    if (curr.descrizione === 'girofondo') {
+      return acc; // Don't include girofondo in the 'out' sum for this specific total calculation
+    }
+    return acc + parseEuroString(curr.cucito_out);
+  }, 0);
+  // Sum of girofondo (treated as positive for total income)
+  const totalGirofondoAsIncome = allCucitoDatas.reduce((acc, curr) => {
+    if (curr.descrizione === 'girofondo') {
+      return acc + parseEuroString(curr.cucito_out); // Girofondo amount itself (positive)
+    }
+    return acc;
+  }, 0);
+
+  const totalNetCucitoIncome = (adjustedTotalCucitoIn - adjustedTotalCucitoOutExcludingGirofondo) + totalGirofondoAsIncome;
+
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", p: 1 }}>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-        <p style={{margin: "2px"}}>Income totale: {formatCurrency((safeSum(allCucitoDatas, 'cucito_in') - safeSum(allCucitoDatas, 'cucito_out')))}</p>
-        <p style={{margin: "2px"}}>Income mensile: {formatCurrency((safeSum(monthlyFilteredDatas, 'cucito_in') - safeSum(monthlyFilteredDatas, 'cucito_out')))}</p>
+          {/* Display Income totale with girofondo treated as positive */}
+          <p style={{ margin: "2px" }}>Income totale: {formatCurrency(totalNetCucitoIncome)}</p>
+          <p style={{ margin: "2px" }}>Income mensile: {formatCurrency((safeSum(monthlyFilteredDatas, 'cucito_in') - safeSum(monthlyFilteredDatas, 'cucito_out')))}</p>
         </Box>
         <Button
           onClick={handleOpen}
@@ -147,7 +177,11 @@ console.log(monthlyFilteredDatas)
               <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <span>Out</span>
                 <span style={{ color: "white", fontWeight: "normal", fontSize: ".8rem" }}>
-                  Tot: {formatCurrency(safeSum(monthlyFilteredDatas, 'cucito_out'))}
+                  {/* For the 'Out' column in the table, 'girofondo' is still an actual 'out' visually,
+                      so we don't apply the negation here. */}
+                  Tot: {formatCurrency(
+                    monthlyFilteredDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_out), 0)
+                  )}
                 </span>
               </Box>
             </TableCell>
