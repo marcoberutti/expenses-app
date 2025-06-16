@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useData } from '../../dataContext';
 import {
   Chart as ChartJS,
@@ -53,15 +53,12 @@ export default function GraficoCucito() {
         monthlyData[month].in += parseFloat(dato.cucito_in);
       }
       
-      // MODIFICA QUI: Gestisce il "girofondo"
+      // MODIFICA QUI: Esclude il "girofondo" dai dati "out" del grafico
       if (dato.cucito_out !== null) {
-        if (dato.descrizione === 'girofondo') {
-          // Se è un "girofondo", lo trattiamo come un "in" per il grafico
-          monthlyData[month].in += parseFloat(dato.cucito_out);
-        } else {
-          // Altrimenti, è un normale "out"
+        if (dato.descrizione !== 'girofondo') { // Se NON è un "girofondo", aggiungi a "out"
           monthlyData[month].out += parseFloat(dato.cucito_out);
         }
+        // Se è un "girofondo", non facciamo nulla, lo escludiamo dall'out e non lo aggiungiamo all'in
       }
     });
 
@@ -84,7 +81,7 @@ export default function GraficoCucito() {
           borderWidth: 1,
         },
         {
-          label: 'Cucito out',
+          label: 'Cucito out (esclusi girofondi)', // Etichetta più chiara
           data: cucitoOutValues,
           backgroundColor: 'rgba(255, 99, 132, 0.6)',
           borderColor: 'rgba(255, 99, 132, 1)',

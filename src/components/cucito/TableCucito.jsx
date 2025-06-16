@@ -57,33 +57,36 @@ export default function TableCucito() {
     console.log(monthlyFilteredDatas)
   }, [monthlyFilteredDatas]);
 
-  // Modified safeSum to handle "girofondo" as income for total calculation
+  // safeSum for general use (e.g., individual row display, or where girofondo is a true out)
   const safeSum = (arr, key) => {
-    if (!arr || arr.length === 0) return 0; // Handles empty or null array case
+    if (!arr || arr.length === 0) return 0;
     return arr.reduce((acc, curr) => {
-      let value = parseEuroString(curr[key]);
+      return acc + parseEuroString(curr[key]);
+    }, 0);
+  };
 
-      // If it's a 'cucito_out' and the description is 'girofondo', treat it as a positive income.
-      // This applies specifically to the total income/outcome calculation where 'girofondo' is a "withdrawal" from cucito.
+  // Helper to calculate sums EXCLUDING girofondo for 'out'
+  const sumExcludingGirofondo = (arr, key) => {
+    if (!arr || arr.length === 0) return 0;
+    return arr.reduce((acc, curr) => {
       if (key === 'cucito_out' && curr.descrizione === 'girofondo') {
-        value = -value; // Negate the value so it acts as an "in" when calculating net.
+        return acc; // Exclude girofondo from 'out' sum
       }
-      return acc + value;
+      return acc + parseEuroString(curr[key]);
     }, 0);
   };
 
   function handleSubmit() {
-    // When checking against the balance for withdrawal, girofondo should still be considered an actual "out"
-    // So, we use a separate sum for this check or be careful with the safeSum logic.
-    // For this specific check, we need the *true* total of cucito_in and cucito_out without girofondo negation.
-    const trueTotalCucitoIn = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_in), 0);
-    const trueTotalCucitoOut = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_out), 0);
+    // For the withdrawal check, we need the *true* current balance
+    // This balance should NOT exclude girofondo, as girofondo is an actual 'out' from the cucito account for withdrawal purposes
+    const totalCucitoInForCheck = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_in), 0);
+    const totalCucitoOutForCheck = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_out), 0);
 
-    if (inputValue <= (trueTotalCucitoIn - trueTotalCucitoOut)) {
+    if (inputValue <= (totalCucitoInForCheck - totalCucitoOutForCheck)) {
       const data = {
         data: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
         descrizione: "girofondo",
-        importo: inputValue, // inputValue is already positive, it will be saved as cucito_out
+        importo: inputValue,
       };
       trasferimento(data);
       handleClose();
@@ -95,31 +98,24 @@ export default function TableCucito() {
     }
   }
 
-  // Calculate the adjusted total income for display
-  const adjustedTotalCucitoIn = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_in), 0);
-  const adjustedTotalCucitoOutExcludingGirofondo = allCucitoDatas.reduce((acc, curr) => {
-    if (curr.descrizione === 'girofondo') {
-      return acc; // Don't include girofondo in the 'out' sum for this specific total calculation
-    }
-    return acc + parseEuroString(curr.cucito_out);
-  }, 0);
-  // Sum of girofondo (treated as positive for total income)
-  const totalGirofondoAsIncome = allCucitoDatas.reduce((acc, curr) => {
-    if (curr.descrizione === 'girofondo') {
-      return acc + parseEuroString(curr.cucito_out); // Girofondo amount itself (positive)
-    }
-    return acc;
-  }, 0);
+  // Calculate Income totale (total net balance, excluding girofondo from "out")
+  const totalIncomeCucito = safeSum(allCucitoDatas, 'cucito_in');
+  const totalOutcomeCucito = sumExcludingGirofondo(allCucitoDatas, 'cucito_out'); // Use the new helper here
+  const netTotalCucitoIncome = totalIncomeCucito - totalOutcomeCucito;
 
-  const totalNetCucitoIncome = (adjustedTotalCucitoIn - adjustedTotalCucitoOutExcludingGirofondo) + totalGirofondoAsIncome;
+  // Calculate Monthly Income (net balance for filtered month, excluding girofondo from "out")
+  const monthlyIncomeCucito = safeSum(monthlyFilteredDatas, 'cucito_in');
+  const monthlyOutcomeCucito = sumExcludingGirofondo(monthlyFilteredDatas, 'cucito_out'); // Use the new helper here
+  const netMonthlyCucitoIncome = monthlyIncomeCucito - monthlyOutcomeCucito;
 
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", p: 1 }}>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          {/* Display Income totale with girofondo treated as positive */}
-          <p style={{ margin: "2px" }}>Income totale: {formatCurrency(totalNetCucitoIncome)}</p>
-          <p style={{ margin: "2px" }}>Income mensile: {formatCurrency((safeSum(monthlyFilteredDatas, 'cucito_in') - safeSum(monthlyFilteredDatas, 'cucito_out')))}</p>
+          {/* Display Income totale (which now correctly excludes girofondo from "out") */}
+          <p style={{ margin: "2px" }}>Income totale: {formatCurrency(netTotalCucitoIncome)}</p>
+          {/* Display Income mensile (also correctly excludes girofondo from "out") */}
+          <p style={{ margin: "2px" }}>Income mensile: {formatCurrency(netMonthlyCucitoIncome)}</p>
         </Box>
         <Button
           onClick={handleOpen}
@@ -177,11 +173,8 @@ export default function TableCucito() {
               <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <span>Out</span>
                 <span style={{ color: "white", fontWeight: "normal", fontSize: ".8rem" }}>
-                  {/* For the 'Out' column in the table, 'girofondo' is still an actual 'out' visually,
-                      so we don't apply the negation here. */}
-                  Tot: {formatCurrency(
-                    monthlyFilteredDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_out), 0)
-                  )}
+                  {/* For the 'Out' column in the table, girofondo should NOT be counted as a regular 'out' */}
+                  Tot: {formatCurrency(sumExcludingGirofondo(monthlyFilteredDatas, 'cucito_out'))}
                 </span>
               </Box>
             </TableCell>
@@ -205,6 +198,7 @@ export default function TableCucito() {
                 <TableCell>{format(data.data, "dd-MMM", { locale: it })}</TableCell>
                 <TableCell>{data && data.descrizione}</TableCell>
                 <TableCell>{data.cucito_in && formatCurrency(data.cucito_in)}</TableCell>
+                {/* Display cucito_out normally, even if it's a girofondo, as it's the actual value from DB */}
                 <TableCell>{data.cucito_out && formatCurrency(data.cucito_out)}</TableCell>
               </TableRow>
             ))
