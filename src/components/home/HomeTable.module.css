@@ -1,5 +1,5 @@
 .homeContainer {
-  padding: 12px;
+  padding: 0 20%;
 }
 
 /* Celle della tabella più compatte */
@@ -181,4 +181,10 @@
 
 .cardGrid {
   padding: 0 !important;
+}
+
+@media (max-width: 1200px) {
+  .homeContainer {
+    padding: 0 5px;
+  }
 }
