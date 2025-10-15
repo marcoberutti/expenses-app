@@ -3,7 +3,6 @@ import Intestazione from '../components/utils/Intestazione'
 import Loader from '../components/utils/Loader';
 import { useData } from '../dataContext';
 import HomeForm from '../components/forms/HomeForm';
-import HomeFormModifica from '../components/forms/HomeFormModifica';
 import TableCucito from '../components/cucito/TableCucito';
 import { Paper, TableContainer } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -54,9 +53,9 @@ export default function Cucito(){
   function setWhatModalSays(){
     switch (modal) {
       case "modifica":
-        return <HomeFormModifica /> 
+        return <HomeForm mode="edit" />
       case "form":
-        return <HomeForm />
+        return <HomeForm mode="create" />
       case "normal":
         return (
           <>

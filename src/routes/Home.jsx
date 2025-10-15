@@ -4,7 +4,7 @@ import HomeForm from "../components/forms/HomeForm";
 import { useData } from "../dataContext";
 import Loader from "../components/utils/Loader";
 import Intestazione from '../components/utils/Intestazione'
-import HomeFormModifica from "../components/forms/HomeFormModifica";
+// ...existing code...
 
 export default function Home() {
 
@@ -19,11 +19,11 @@ export default function Home() {
   function setWhatModalSays(){
     switch (modal) {
       case "modifica":
-        return <HomeFormModifica /> 
+        return <HomeForm mode="edit" />
       case "form":
-        return <HomeForm />
+        return <HomeForm mode="create" />
       case "normal":
-        return <HomeTable /> 
+        return <HomeTable />
       default:
     }
   }
