@@ -35,7 +35,6 @@ export default function TableCucito() {
   const [open, setOpen] = useState(false);
   const [erroreTrasferimento, setErroreTrasferimento] = useState(false);
 
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
@@ -53,11 +52,6 @@ export default function TableCucito() {
     setMonthlyFilteredDatas(filteredDataFromMonthSelect);
   };
 
-  useEffect(() => {
-    console.log(monthlyFilteredDatas)
-  }, [monthlyFilteredDatas]);
-
-  // safeSum for general use (e.g., individual row display, or where girofondo is a true out)
   const safeSum = (arr, key) => {
     if (!arr || arr.length === 0) return 0;
     return arr.reduce((acc, curr) => {
@@ -81,12 +75,26 @@ export default function TableCucito() {
     // This balance should NOT exclude girofondo, as girofondo is an actual 'out' from the cucito account for withdrawal purposes
     const totalCucitoInForCheck = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_in), 0);
     const totalCucitoOutForCheck = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_out), 0);
-
-    if (inputValue <= (totalCucitoInForCheck - totalCucitoOutForCheck)) {
+    
+    // Il valore disponibile effettivo (calcolato direttamente qui)
+    const availableAmount = totalCucitoInForCheck - totalCucitoOutForCheck;
+    
+    // Converti l'input in un numero con precisione a 2 decimali
+    const inputValueAsNumber = parseFloat(parseFloat(inputValue).toFixed(2));
+    
+    console.log("Debug valori:", { 
+      inputValue: inputValue,
+      inputValueAsNumber: inputValueAsNumber,
+      availableAmount: availableAmount,
+      netRemaining: netRemaining
+    });
+    
+    // Confronta usando una piccola tolleranza per problemi di arrotondamento
+    if (inputValueAsNumber <= (availableAmount + 0.01)) {
       const data = {
         data: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
         descrizione: "girofondo",
-        importo: inputValue,
+        importo: inputValueAsNumber, // Usiamo il valore numerico formattato correttamente
       };
       trasferimento(data);
       handleClose();
@@ -102,21 +110,36 @@ export default function TableCucito() {
   const totalIncomeCucito = safeSum(allCucitoDatas, 'cucito_in');
   const totalOutcomeCucito = sumExcludingGirofondo(allCucitoDatas, 'cucito_out'); // Use the new helper here
   const netTotalCucitoIncome = totalIncomeCucito - totalOutcomeCucito;
+  
+  // Calculate total of all 'girofondo' withdrawals
+  const totalGirofondo = allCucitoDatas
+    .filter(item => item.descrizione === 'girofondo')
+    .reduce((acc, curr) => acc + parseEuroString(curr.cucito_out), 0);
 
   // Calculate Monthly Income (net balance for filtered month, excluding girofondo from "out")
   const monthlyIncomeCucito = safeSum(monthlyFilteredDatas, 'cucito_in');
   const monthlyOutcomeCucito = sumExcludingGirofondo(monthlyFilteredDatas, 'cucito_out'); // Use the new helper here
+  const netRemaining = netTotalCucitoIncome - totalGirofondo
   const netMonthlyCucitoIncome = monthlyIncomeCucito - monthlyOutcomeCucito;
+
+  const handleOpen = () => {
+    // Calcoliamo direttamente il valore disponibile per maggiore precisione
+    const totalIn = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_in), 0);
+    const totalOut = allCucitoDatas.reduce((acc, curr) => acc + parseEuroString(curr.cucito_out), 0);
+    const exactAvailable = totalIn - totalOut;
+    
+    // Impostiamo il valore con precisione a 2 decimali
+    setInputValue(exactAvailable.toFixed(2));
+    setOpen(true);
+  };
 
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", p: 1 }}>
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          {/* Display Income totale (which now correctly excludes girofondo from "out") */}
-          <p style={{ margin: "2px" }}>Income totale: {formatCurrency(netTotalCucitoIncome)}</p>
-          {/* Display Income mensile (also correctly excludes girofondo from "out") */}
-          <p style={{ margin: "2px" }}>Income mensile: {formatCurrency(netMonthlyCucitoIncome)}</p>
-        </Box>
+        <p style={{ margin: "2px" }}>Income totale: {formatCurrency(netTotalCucitoIncome)}</p>
+        <p style={{ margin: "2px" }}>Totale prelievi: {formatCurrency(totalGirofondo)}</p>
+        <p style={{ margin: "2px" }}>Netto in cassa: {formatCurrency(netRemaining)}</p>
+        <p style={{ margin: "2px" }}>Income mensile netto: {formatCurrency(netMonthlyCucitoIncome)}</p>
         <Button
           onClick={handleOpen}
           style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "5px" }}
